@@ -1,0 +1,41 @@
+{
+    "authHost": "http://dixwix.com",
+    "authEndpoint": "/broadcasting/auth",
+    "clients": [
+        {
+            "appId": "3cf0c466a6751ab0",
+            "key": "f92dc63a038a54f89d904118a411ed58",
+            "secret": "a88b5918c84d76bf4ab980c13e6d2f3a37f312764a5ffe154f716f6074b843bc"
+        }
+    ],
+    "database": "redis",
+    "databaseConfig": {
+        "redis": {
+            "host": "127.0.0.1",
+            "port": 6379
+        },
+        "sqlite": {
+            "databasePath": "/database/laravel-echo-server.sqlite"
+        }
+    },
+    "devMode": false,
+    "host": "0.0.0.0",
+    "port": "6001",
+    "protocol": "http",
+    "socketio": {},
+    "secureOptions": 0,
+    "sslCertPath": "",
+    "sslKeyPath": "",
+    "sslCertChainPath": "",
+    "sslPassphrase": "",
+    "subscribers": {
+        "http": true,
+        "redis": true
+    },
+    "apiOriginAllow": {
+        "allowCors": true,
+        "allowOrigin": "http://dixwix.com",
+        "allowMethods": "GET, POST, PUT, DELETE",
+        "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+    }
+}
