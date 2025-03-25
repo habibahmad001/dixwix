@@ -132,6 +132,7 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
                             <div>
                                 <h3 class="lead main-heading">Select Group</h3>
                                 <select class="form-control allinput" id="group_id" name="book[group_id]">
+                                    <option value="">My Items Group</option>
                                     @foreach($data["groups"] as $group)
                                     <option value="{{ $group['id'] }}" {{ isset($book) ? ($book['group_id'] === $group['id'] ? 'selected' : '') : '' }}>{{ $group['title'] }}</option>
                                     @endforeach
@@ -785,7 +786,7 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
         });
 
     });
-  
+
   document.getElementById('price').addEventListener('input', function(e) {
         let value = e.target.value;
         if (value.includes('.')) {
