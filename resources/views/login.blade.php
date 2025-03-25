@@ -153,10 +153,14 @@
                             </div>
                             <div class="fieldset">
                                 <img src="assets/media/password.png">
-                                <input type="password" id="signin_password" name="password" class="form-control" placeholder="Password" />
+{{--                                <input type="password" id="signin_password" name="password" class="form-control" placeholder="Password" />--}}
+                                <input type="password" id="signin_password" name="password" class="form-control" placeholder="Password">
                                 <span id="togglePassword" class="toggle-password">
                                     <i class="fa fa-eye"></i>
                                 </span>
+                                <small id="password_error" style="color: red; display: none;">
+                                    Password must be at least 6 characters long, include 1 capital letter, 1 number, and 1 special character.
+                                </small>
                             </div>
                             <div class="remember_wrap">
                                 <span class="checkbox">
@@ -265,12 +269,27 @@
             });
         });
 
-        document.getElementById('togglePassword').addEventListener('click', function(e) {
-            const passwordInput = document.getElementById('signin_password');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.querySelector('i').classList.toggle('fa-eye');
-            this.querySelector('i').classList.toggle('fa-eye-slash');
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("signin_password");
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            this.querySelector("i").classList.toggle("fa-eye");
+            this.querySelector("i").classList.toggle("fa-eye-slash");
+        });
+
+        // Password validation logic
+        document.getElementById("signin_password").addEventListener("input", function () {
+            const password = this.value;
+            const errorMsg = document.getElementById("password_error");
+
+            // Regex: At least 6 characters, 1 uppercase letter, 1 number, and 1 special character
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+
+            if (passwordPattern.test(password)) {
+                errorMsg.style.display = "none"; // Hide error if valid
+            } else {
+                errorMsg.style.display = "block"; // Show error if invalid
+            }
         });
 
     </script>
