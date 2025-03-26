@@ -1594,6 +1594,7 @@ class BookController extends Controller
             return response()->json([
                 'error'  => $validator->errors(),
                 'status' => false,
+                'item_id' => generateUniqueId('book', 'item_id', 12),
             ], 400);
         }
 
@@ -1656,11 +1657,12 @@ class BookController extends Controller
             }
 
             $group = $book->group;
-            if($group->status == 1 && count($group->members)>0){
-                dispatch(new SendGroupNotification($group, $book));
-            }else{
-                $book->update(['is_notify' => 1]);
-            }
+            dispatch(new SendGroupNotification($group, $book));
+//            if($group->status == 1 && count($group->members)>0){
+//                dispatch(new SendGroupNotification($group, $book));
+//            }else{
+//                $book->update(['is_notify' => 1]);
+//            }
 
         } catch (Exception $e) {
             return response()->json([
