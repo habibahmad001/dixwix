@@ -672,6 +672,7 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
                 }
                 , error: function(xhr) {
                     $("#form-submit-btn").attr("disabled", false).text("Submit");
+                    $("#item_id").val(xhr.responseJSON.item_id);
                     const errors = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : {};
                     $('.error_msg').empty();
 
