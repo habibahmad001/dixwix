@@ -180,7 +180,11 @@
                             <div class="item {{ $wgroup["status"] == '0'?'disabled-card':'' }}"">
                                 <div class="pad15">
                                     <div class="innerheader">
-                                        <h3 class="lead main-heading"><?= $wgroup["title"] ?></h3>
+                                        <h3 class="lead main-heading">
+                                            <a href="<?= route('show-group', ["id" => $wgroup["id"]]) ?>" style="color: #094042">
+                                                <?= $wgroup["title"] ?>
+                                            </a>
+                                        </h3>
                                         <div class="post_image">
                                              @if($joined)
                                             <a href="<?= route('show-group', ["id" => $wgroup["id"]]) ?>">

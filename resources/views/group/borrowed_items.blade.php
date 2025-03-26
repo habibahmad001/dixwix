@@ -62,11 +62,14 @@
                         @if ($book['state'] == 'return-request')
                         <span class="badge badge-warning px-4 py-2">Return Pending</span>
                         @else
-                        <a href="javascript:void(0)" onclick="returnBook({{ $book['id'] }},{{ $book['book']['id'] }},this)" class="btn btn-danger btn-sm">
-                            Return
+                        <a href="javascript:void(0)" onclick="returnBook({{ $book['id'] }},{{ $book['book']['id'] }},this)" title="Return" class="btn btn-danger btn-sm">
+                            <i class="fa fa-power-off" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0)" id="renewID-{!! $book['id'] !!}" title="Renew" data-book_id="{!! $book['id'] !!}" class="btn btn-info btn-sm renewID">
+                            <i class="fa fa-bell" aria-hidden="true"></i>
                         </a>
                         @endif
-                        <a href="{{ route('reviews', $book['book']['id']) }}" class="btn btn-warning btn-sm mt-2">
+                        <a href="{{ route('reviews', $book['book']['id']) }}" title="Reviews" class="btn btn-warning btn-sm">
                             Reviews
                         </a>
                     </td>
@@ -80,6 +83,32 @@
         No borrowed items found.
     </div>
     @endif
+</div>
+
+
+<div class="modal" id="dixwix_book_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body py-4" id="modal_body" style="overflow-y: scroll; max-height: 450px;">
+                <form id="book-status-form" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="book_id" id="book_id" value="" />
+                    <div class="col">
+                        <label for="book_duration">Select Duration</label>
+                        <select class="form-control" name="duration" id="book_duration">
+                            @foreach ($data['loanRules'] as $rule)
+                                <option value="{{ $rule['id'] }}">{{ $rule['title'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col mt-4">
+                        <button class="btn btn-secondary" id="reserve-book-btn">Reserve</button>
+                        <button type="button" id="close-modal-reserve-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @include('group.scripts')

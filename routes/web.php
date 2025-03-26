@@ -155,6 +155,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/search-item', [BookController::class, 'ShowSearchItems'])->name("search-item");
     Route::post('/import-item', [BookController::class, 'ImportFromCSV'])->name("import-item-csv");
     Route::post('/set-book-status', [BookController::class, 'SetBookStatus']);
+    Route::post('/renew-book-status', [BookController::class, 'RenewBookStatus']);
     Route::post('/return-book', [BookController::class, 'ReturnBook']);
     Route::post('/admin-return-book', [BookController::class, 'AdminReturnBook']);
     Route::post('/reserve-approval', [BookController::class, 'ApproveDisapproveReservation'])->name("reserve-approval");

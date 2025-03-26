@@ -5,6 +5,61 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        /******* Renew ********/
+        $('.renewID').click(function(){
+            $("#book_id").val($(this).data("book_id"));
+            jQuery('#dixwix_book_modal').modal('show');
+        });
+
+        $(document).on("click", "#reserve-book-btn", function (event) {
+            event.preventDefault();
+
+            const form = $(this).closest("form")[0]; // Get the form element
+            const formData = new FormData(form); // Pass the correct form
+
+            $("#form-submit-btn").attr("disabled", true).text("Submitting...");
+
+            $.ajax({
+                type: "POST",
+                url: "/renew-book-status",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $("#form-submit-btn").attr("disabled", false).text("Submit");
+                    const resultJson = JSON.parse(response);
+                    if (resultJson.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: response.message,
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    $("#form-submit-btn").attr("disabled", false).text("Submit");
+
+                    const errors = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : {};
+                    $(".error_msg").empty();
+
+                    $.each(errors, function (key, message) {
+                        const field = key.split(".").pop();
+                        $(`#error_${field}`).text(message[0]);
+                    });
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please fill all mandatory fields!",
+                    });
+                },
+            });
+        });
+
     })
 
     function showCopies(bookId) {

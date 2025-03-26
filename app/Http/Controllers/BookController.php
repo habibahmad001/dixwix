@@ -737,6 +737,10 @@ class BookController extends Controller
             ->where('reserved_by', auth()->id())
             ->get();
 
+        $loan_rules = LoanRule::orderBy('duration')->get()->toArray();
+
+        $data["loanRules"] = $loan_rules;
+
         return view('with_login_common', compact('data', 'borrowedItems'));
     }
 
@@ -1092,6 +1096,63 @@ class BookController extends Controller
             return json_encode(["success" => false, "message" => "An error occurred while processing your request."]);
         }
 
+    }
+
+    public function RenewBookStatus(Request $request)
+    {
+        $book = Book::with('entries')->where('id', $request['book_id'])->firstOrFail();
+        DB::beginTransaction();
+
+        try {
+            if ($book->created_by == auth()->user()->id) {
+                return json_encode(["success" => false, "message" => "You have created this book"]);
+            }
+
+            foreach ($book->toArray()['entries'] as $entry) {
+                if ($entry['is_reserved'] == 1 && $entry['reserved_by'] == auth()->user()->id) {
+                    return json_encode(["success" => false, "message" => "You have already reserved this book"]);
+                }
+            }
+
+            $book_copies = $book->copies;
+
+            if ($book_copies == 0 && $book) {
+                return json_encode(["success" => false, "message" => "This book is completely reserved"]);
+            }
+
+            // Update the entry where id matches book_id
+            $entry = Entries::where('id', $request['book_id'])->first();
+
+            if ($entry) {
+                // Increment the is_renew value
+                $newIsRenewValue = $entry->is_renew + 1;
+
+                // Get the duration from the request
+                $duration = (int) $request->input('duration'); // Assuming duration is sent in the request
+
+                // Calculate the due_date based on the duration
+                $dueDate = Carbon::now()->addWeeks($duration);
+
+                // Update the entry
+                $entry->update([
+                    "renew_date" => Carbon::now(),
+                    "due_date" => $dueDate, // Update the due_date
+                    "is_reserved" => 2,
+                    "is_renew" => $newIsRenewValue
+                ]);
+            } else {
+                return json_encode(["success" => false, "message" => "Entry not found."]);
+            }
+
+            DB::commit();
+
+            return json_encode(["success" => true, "message" => "Book status updated successfully"]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            logger()->error('Error in RenewBookStatus: ' . $e->getMessage());
+            return json_encode(["success" => false, "message" => "An error occurred while processing your request."]);
+        }
     }
 
     public function ApproveDisapproveReservation(Request $request)
