@@ -183,9 +183,21 @@
                         <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
                     </div>
                     <div class="form-group mt-3">
-                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" value="1" onclick="javascript:$('.gifto_data_div').toggle('slow')" />
+                        <label for="gifto_checkbox">Also Send Gifto</label>
+                    </div>
+                    <div class="gifto_data_div" style="display: none;">
+                        <div class="form-group mt-3">
+                            <label for="gifto_msg">Gifto Message</label>
+                            <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="gifto_amount">Gifto Amount</label>
+                            <input type="text" id="gifto_amount" name="gifto_amount" value="" class="form-control" placeholder="$ {!! $gifto_funds ?? 0.00 !!}" />
+                        </div>
                     </div>
                 </div>
+                <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
                 <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -248,6 +260,9 @@
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
             let points = $('#user_points').val();
+            let is_gifto = $('#gifto_checkbox').val();
+            let gifto_msg = $('#gifto_msg').val();
+            let gifto_price = $('#gifto_amount').val();
 
             if (!selectedUser) {
                 Swal.fire({
@@ -268,11 +283,14 @@
 
             $.ajax({
                 url: "{{ url('assign-points') }}"
-                , method: 'POST'
-                , data: {
-                    _token: "{{ csrf_token() }}"
-                    , user_id: selectedUser
-                    , points: points
+                , method: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    user_id: selectedUser,
+                    points: points,
+                    is_gifto: is_gifto,
+                    gifto_msg: gifto_msg,
+                    gifto_price:gifto_price
                 , }
                 , success: function(response) {
                     if (response.success === true) {

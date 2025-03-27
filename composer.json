@@ -7,7 +7,7 @@
     "require": {
         "php": "^8.1",
         "giauphan/laravel-qr-code": "^1.0",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.13",

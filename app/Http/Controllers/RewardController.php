@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CoinPackage;
 use App\Models\Point;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Http;
 use App\Models\TransferRequest;
 use App\Models\User;
 use App\Services\StripeService;
@@ -12,15 +13,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use App\Services\GiftoGramService;
 use function Symfony\Component\String\u;
 
 class RewardController extends Controller
 {
     protected $stripeService;
+    protected $giftoGramService;
 
-    public function __construct(StripeService $stripeService)
+    public function __construct(StripeService $stripeService, GiftoGramService $giftoGramService)
     {
         $this->stripeService = $stripeService;
+        $this->giftoGramService = $giftoGramService;
     }
 
     public function ShowMyRewards(Request $request)
@@ -43,7 +47,30 @@ class RewardController extends Controller
             'template' => 'reward.main',
         ];
 
-        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id'));
+        // Send Gift using GiftoGram Service
+//        $giftoGramResponse = app(GiftoGramService::class)->sendGift(
+//            "habibahmed001@gmail.com",
+//            100,
+//            "Enjoy your gift!"
+//        );
+//
+//        if (!$giftoGramResponse['success']) {
+//            return response()->json([
+//                'success' => false,
+//                'error' => $giftoGramResponse['error']
+//            ], 400);
+//        }
+//
+//        dd($giftoGramResponse);
+
+        $funding = $this->giftoGramService->getFunding();
+//        dd($funding);
+
+//        $orders = $this->giftoGramService->getOrders();
+//        dd($orders);
+        $gifto_funds = $funding["data"]["data"]["credit_available"];
+
+        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds'));
     }
 
     public function purchasePoints(Request $request)
@@ -253,10 +280,21 @@ class RewardController extends Controller
             ]);
         }
 
+        /******** Send Request To Gifto *******/
+        $giftoGramResponse = "";
+        if($request->is_gifto == 1) {
+            $giftoGramResponse = app(GiftoGramService::class)->sendGift(
+                $user->email,
+                $request->gifto_price,
+                $request->gifto_msg
+            );
+        }
+        /******** Send Request To Gifto *******/
+
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
 
-        return response()->json(['success' => true, 'message' => 'Points gifted successfully!']);
+        return response()->json(['success' => true, 'message' => 'Points gifted successfully!', 'gifto' => $giftoGramResponse]);
     }
 
     private function processPointTransfer($fromUser, $toUser, $points)

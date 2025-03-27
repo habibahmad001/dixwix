@@ -41,6 +41,10 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
-
+    'giftoGram' => [
+        'api_key' => env('GIFTOGRAM_API_KEY'),
+        'api_secret' => env('GIFTOGRAM_API_SECRET'),
+        'base_url' => env('GIFTOGRAM_API_BASE_URL'),
+    ],
 
 ];
