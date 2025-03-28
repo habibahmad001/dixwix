@@ -205,10 +205,14 @@
 
                     <div class="row gifto_data_div" style="display: none;">
                         <div class="form-group col-12 mt-3">
-                            <p>
-                                <input type="radio" name="comp" id="comp" checked />
-                                {!! $campaigns["data"]["data"][0]["name"] !!}
-                            </p>
+                            @if(count($campaigns["data"]["data"])> 0)
+                                @foreach($campaigns["data"]["data"] as $campaign)
+                                    <p>
+                                        <input type="radio" name="comp" id="comp" value="{!! $campaign["id"] !!}" checked />
+                                        {!! $campaign["name"] !!}
+                                    </p>
+                                @endforeach
+                            @endif
                         </div>
 
                         <div class="form-group col-12 mt-3">
