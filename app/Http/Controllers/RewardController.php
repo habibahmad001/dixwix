@@ -68,9 +68,12 @@ class RewardController extends Controller
 
 //        $orders = $this->giftoGramService->getOrders();
 //        dd($orders);
+        $campaigns = $this->giftoGramService->getCampaigns();
+//        dd($campaigns);
+
         $gifto_funds = $funding["data"]["data"]["credit_available"];
 
-        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds'));
+        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns'));
     }
 
     public function purchasePoints(Request $request)
@@ -245,7 +248,7 @@ class RewardController extends Controller
 
         $credit = $authUser->points()->where('type', 'credit')->sum('points');
         $debit = $authUser->points()->where('type', 'debit')->sum('points');
-        $availablePoints = $credit - $debit;
+        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
         $transferCoinLimit = getSetting('user_transfer_coint_limit');
 
         if ($availablePoints < $request->points) {

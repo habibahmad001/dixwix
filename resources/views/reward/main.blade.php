@@ -1,3 +1,19 @@
+<style>
+    .a-bal {
+        margin: 25% 0 0 0;
+    }
+
+    .a-bal sub {
+        color: #963c45;
+        font-size: 11px;
+    }
+
+    .red-msg {
+        color: #963c45;
+        font-size: 11px;
+    }
+</style>
+
 <div class="content">
     <div class="container">
         <div class="heading mb-4">
@@ -186,14 +202,26 @@
                         <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" value="1" onclick="javascript:$('.gifto_data_div').toggle('slow')" />
                         <label for="gifto_checkbox">Also Send Gifto</label>
                     </div>
-                    <div class="gifto_data_div" style="display: none;">
-                        <div class="form-group mt-3">
+
+                    <div class="row gifto_data_div" style="display: none;">
+                        <div class="form-group col-12 mt-3">
+                            <p>
+                                <input type="radio" name="comp" id="comp" checked />
+                                {!! $campaigns["data"]["data"][0]["name"] !!}
+                            </p>
+                        </div>
+
+                        <div class="form-group col-12 mt-3">
                             <label for="gifto_msg">Gifto Message</label>
                             <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
                         </div>
-                        <div class="form-group mt-3">
+                        <div class="form-group col-7 mt-3">
                             <label for="gifto_amount">Gifto Amount</label>
-                            <input type="text" id="gifto_amount" name="gifto_amount" value="" class="form-control" placeholder="$ {!! $gifto_funds ?? 0.00 !!}" />
+                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="1" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />
+                            <sub class="red-msg">Amount must be a multiple of 5.</sub>
+                        </div>
+                        <div class="form-group col-4">
+                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>
                         </div>
                     </div>
                 </div>
