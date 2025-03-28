@@ -15,6 +15,7 @@ use App\Models\Importedfile;
 use App\Models\ItemRejectedRequest;
 use App\Models\LoanHistory;
 use App\Models\LoanRule;
+use App\Models\Review;
 use App\Models\Setting;
 use App\Models\Ticket;
 use App\Models\TrustScore;
@@ -963,31 +964,36 @@ class BookController extends Controller
         $data['template'] = 'book.show';
 
       /******** Get group Comments ********/
-        $group_id = $retdata["book"]->group->id;
-        if (auth()->user()->hasRole('admin')) {
-            $enabled_member = Group::find($group_id);
-        } else {
-            $enabled_member = Group::whereHas('groupMember', function ($qu) use ($group_id) {
-                $qu->where('member_id', auth()->user()->id);
-                $qu->where('group_id', $group_id);
-                $qu->where('activated', 1);
-            })->find($group_id);
-        }
-//        $group = Group::with('grouptype')->where("id", $id)->firstOrFail();
-        $group = Group::with('grouptype')->where("id", $group_id)->firstOrFail();
-        if ($enabled_member || $group['created_by'] == auth()->id() || auth()->user()->hasRole('admin')) {
-            $posts = Post::with(['comments', 'comments.user:id,name', 'user:id,name'])->whereHas('user')->where('group_id', $group['id'])
-                ->get()->toArray();
-        } else {
-            $posts = [];
+        $itemId = $id;
+        $book = Book::with([
+            'group',
+            'reviews' => function ($query) {
+                $query->whereHas('user')->with('user:id,name')->latest('id');
+            },
+        ])->findOrFail($itemId);
+
+        $status = user_in_group($book->group);
+
+        if (! auth()->user()->hasRole('admin') && (empty($status) || ! $status->activated)) {
+            if (auth()->id() != $book->created_by && auth()->id() != $book['group']->created_by) {
+                abort(403, 'Unauthorized action.');
+            }
         }
 
-        $data['posts'] = $posts;
-        $data['created_by'] = $group['created_by'];
-//        dd($retdata["book"]->group->id, $data['posts']);
+        $reviews = $book->reviews;
+
+        $averageRating = Review::where('item_id', $itemId)->avg('rating');
+
+        $canAddReview = false;
+
+        if (Entries::where("book_id", $book->id)->where("reserved_by", auth()->id())->where("is_reserved", 1)->exists()) {
+            $canAddReview = true;
+        } elseif ((auth()->user()->hasRole('admin') || auth()->id() == $book->created_by) || auth()->id() == $book->group->created_by || (! empty($status) && $status->activated && $status->member_role == 'admin')) {
+            $canAddReview = true;
+        }
         /******** Get group Comments ********/
 
-        return view('with_login_common', compact('data', 'retdata'));
+        return view('with_login_common', compact('data', 'retdata', 'reviews', 'book', 'averageRating', 'status', 'canAddReview'));
     }
 
 
