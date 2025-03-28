@@ -984,7 +984,7 @@ class BookController extends Controller
 
         $averageRating = Review::where('item_id', $itemId)->avg('rating');
 
-        $canAddReview = false;
+        $canAddReview = true;
 
         if (Entries::where("book_id", $book->id)->where("reserved_by", auth()->id())->where("is_reserved", 1)->exists()) {
             $canAddReview = true;
