@@ -259,7 +259,7 @@ class RewardController extends Controller
             ]);
         }
 
-        if($request->is_gifto == 1) {
+        if($request->is_gifto) {
             if ($availablePoints < ($request->points + $request->gifto_price)) {
                 return response()->json([
                     'success' => false,
@@ -295,7 +295,7 @@ class RewardController extends Controller
 
         /******** Send Request To Gifto *******/
         $giftoGramResponse = "";
-        if($request->is_gifto == 1) {
+        if($request->is_gifto) {
             $giftoGramResponse = app(GiftoGramService::class)->sendGift(
                 $user->email,
                 $request->gifto_price/100,

@@ -199,7 +199,7 @@
                         <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
                     </div>
                     <div class="form-group mt-3">
-                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" value="1" onclick="javascript:$('.gifto_data_div').toggle('slow')" />
+                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />
                         <label for="gifto_checkbox">Also Send Gifto</label>
                     </div>
 
@@ -249,6 +249,13 @@
     }
 
     $(document).ready(function() {
+
+        // Reset checkbox when modal is closed
+        $('#dixwix_modal1').on('hidden.bs.modal', function () {
+            $('#gifto_checkbox').prop('checked', false); // Uncheck checkbox
+            $('.gifto_data_div').hide(); // Hide associated div if applicable
+        });
+
         $('#search_user').on('input', function() {
             let searchQuery = $(this).val().trim();
 
@@ -294,11 +301,12 @@
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
             let points = $('#user_points').val();
-            let is_gifto = $('#gifto_checkbox').val();
+            let is_gifto = $('#gifto_checkbox').prop('checked') ? true : false;
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
             let comp = $('input[name="comp"]').val();
-
+            console.log(is_gifto);
+            return false;
             if (!selectedUser) {
                 Swal.fire({
                     title: "Error"
