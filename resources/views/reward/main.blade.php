@@ -262,6 +262,8 @@
     function validateInput(input) {
         const value = parseInt(input.value, 10);
         const step = 500;
+        const min = parseInt(input.min, 10);
+        const max = parseInt(input.max, 10);
 
         // Check if the value is a multiple of 500
         if (value % step !== 0) {
@@ -269,13 +271,18 @@
             const roundedValue = Math.round(value / step) * step;
 
             // Ensure the rounded value is within the min and max limits
-            if (roundedValue < parseInt(input.min, 10)) {
-                input.value = input.min;
-            } else if (roundedValue > parseInt(input.max, 10)) {
-                input.value = input.max;
+            if (roundedValue < min) {
+                input.value = min;
+            } else if (roundedValue > max) {
+                input.value = max;
             } else {
                 input.value = roundedValue;
             }
+        }
+
+        // Ensure the value does not exceed the max limit
+        if (value > max) {
+            input.value = max;
         }
 
         // Update the displayed value
