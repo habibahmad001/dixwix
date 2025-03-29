@@ -264,6 +264,7 @@ class RewardController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => "Must have more then 500 points to send card",
+                    'xx' => $request->is_gifto,
                 ]);
             }
         }
