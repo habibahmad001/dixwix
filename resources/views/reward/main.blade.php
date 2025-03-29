@@ -221,11 +221,13 @@
                         </div>
                         <div class="form-group col-7 mt-3">
                             <label for="gifto_amount">Gifto Amount</label>
-                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="1" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />
-                            <sub class="red-msg">Amount must be a multiple of 5.</sub>
+{{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
+                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />
+                            <sub class="red-msg">100 points is equal 1$ and min 5$ charged for one order</sub>
                         </div>
                         <div class="form-group col-4">
-                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>
+{{--                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>--}}
+                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>
                         </div>
                     </div>
                 </div>
