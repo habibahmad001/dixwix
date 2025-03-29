@@ -259,15 +259,6 @@ class RewardController extends Controller
             ]);
         }
 
-        if ($request->is_gifto == 1) {
-            if ($availablePoints < ($request->points + $request->gifto_price)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Must have more then 500 points to send card"
-                ]);
-            }
-        }
-
         if ($request->points > $transferCoinLimit) {
 
             $checkExistsReq = $authUser->transferPointRequestFromUser()
@@ -294,15 +285,12 @@ class RewardController extends Controller
         }
 
         /******** Send Request To Gifto *******/
-        $giftoGramResponse = "";
-        if ($request->is_gifto == 1) {
-            $giftoGramResponse = app(GiftoGramService::class)->sendGift(
-                $user->email,
-                $request->gifto_price/100,
-                $request->gifto_msg,
-                $request->comp
-            );
-        }
+        $giftoGramResponse = app(GiftoGramService::class)->sendGift(
+            $user->email,
+            $request->points/100,
+            $request->gifto_msg,
+            $request->comp
+        );
         /******** Send Request To Gifto *******/
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);

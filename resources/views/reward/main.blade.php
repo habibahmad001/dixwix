@@ -194,16 +194,16 @@
                             <option value="">No users found</option>
                         </select>
                     </div>
-                    <div class="form-group mt-3">
-                        <label for="user_points">Enter Points</label>
-                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />
-                        <label for="gifto_checkbox">Also Send Gifto</label>
-                    </div>
+{{--                    <div class="form-group mt-3">--}}
+{{--                        <label for="user_points">Enter Points</label>--}}
+{{--                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />--}}
+{{--                    </div>--}}
+{{--                    <div class="form-group mt-3">--}}
+{{--                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />--}}
+{{--                        <label for="gifto_checkbox">Also Send Gifto</label>--}}
+{{--                    </div>--}}
 
-                    <div class="row gifto_data_div" style="display: none;">
+                    <div class="row gifto_data_div">
                         <div class="form-group col-12 mt-3">
                             @if(count($campaigns["data"]["data"])> 0)
                                 @foreach($campaigns["data"]["data"] as $campaign)
@@ -220,7 +220,7 @@
                             <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
                         </div>
                         <div class="form-group col-7 mt-3">
-                            <label for="gifto_amount">Gifto Amount</label>
+                            <label for="gifto_amount">Points</label>
 {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
                             <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
                             <sub class="red-msg">For gift cart points must be multiple of 500</sub>
@@ -249,13 +249,6 @@
     }
 
     $(document).ready(function() {
-
-        // Reset checkbox when modal is closed
-        $('#dixwix_modal1').on('hidden.bs.modal', function () {
-            $('#gifto_checkbox').prop('checked', false); // Uncheck checkbox
-            $('.gifto_data_div').hide(); // Hide associated div if applicable
-        });
-
         $('#search_user').on('input', function() {
             let searchQuery = $(this).val().trim();
 
@@ -300,8 +293,10 @@
 
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
-            let points = $('#user_points').val();
-            let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
+            // let points = $('#user_points').val();
+            let points = $('#gifto_amount').val();
+            // let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
+            let is_gifto = 1; // Ensure it sends 1 or 0
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
             let comp = $('input[name="comp"]').val();
