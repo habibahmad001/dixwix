@@ -248,12 +248,18 @@ class RewardController extends Controller
 
         $credit = $authUser->points()->where('type', 'credit')->sum('points');
         $debit = $authUser->points()->where('type', 'debit')->sum('points');
-//        if($request->is_gifto == 1) {
-//            $availablePoints = ($credit - ($request->gifto_price * 100)) - $debit;
-//        } else {
-//            $availablePoints = $credit - $debit;
-//        }
-        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
+        if($request->is_gifto == 1) {
+            $availablePoints = ($credit - ($request->gifto_price * 100)) - $debit;
+            if ($availablePoints < $request->points) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Must have more then 500 points to send card",
+                ]);
+            }
+        } else {
+            $availablePoints = $credit - $debit;
+        }
+//        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
         $transferCoinLimit = getSetting('user_transfer_coint_limit');
 
         if ($availablePoints < $request->points) {
