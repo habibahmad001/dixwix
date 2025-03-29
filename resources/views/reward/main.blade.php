@@ -265,24 +265,27 @@
         const min = parseInt(input.min, 10);
         const max = parseInt(input.max, 10);
 
+        // Ensure max is a multiple of 500
+        const adjustedMax = Math.floor(max / step) * step;
+
         // Check if the value is a multiple of 500
         if (value % step !== 0) {
             // If not, round it to the nearest multiple of 500
             const roundedValue = Math.round(value / step) * step;
 
-            // Ensure the rounded value is within the min and max limits
+            // Ensure the rounded value is within the min and adjusted max limits
             if (roundedValue < min) {
                 input.value = min;
-            } else if (roundedValue > max) {
-                input.value = max;
+            } else if (roundedValue > adjustedMax) {
+                input.value = adjustedMax;
             } else {
                 input.value = roundedValue;
             }
         }
 
-        // Ensure the value does not exceed the max limit
-        if (value > max) {
-            input.value = max;
+        // Ensure the value does not exceed the adjusted max limit
+        if (value > adjustedMax) {
+            input.value = adjustedMax;
         }
 
         // Update the displayed value
