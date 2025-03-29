@@ -100,6 +100,11 @@
             margin-top: 5px;
         }
 
+        #password_error {
+            font-size: 11px;
+            margin-top: 4%;
+        }
+
     </style>
 </head>
 <body>
