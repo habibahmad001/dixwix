@@ -1875,7 +1875,7 @@ class BookController extends Controller
         return view('with_login_common', compact('data', 'items', 'groups', 'categories'));
     }
 
-  	public function bulkItemsDeleteWorking(Request $request)
+  	public function bulkItemsDelete(Request $request)
     {
         $request->validate([
             'ids' => 'required|string',

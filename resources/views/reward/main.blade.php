@@ -208,7 +208,7 @@
                             @if(count($campaigns["data"]["data"])> 0)
                                 @foreach($campaigns["data"]["data"] as $campaign)
                                     <p>
-                                        <input type="radio" name="comp" id="comp" value="{!! $campaign["id"] !!}" checked />
+                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />
                                         {!! $campaign["name"] !!}
                                     </p>
                                 @endforeach
@@ -295,6 +295,7 @@
             let is_gifto = $('#gifto_checkbox').val();
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
+            let comp = $('input[name="comp"]').val();
 
             if (!selectedUser) {
                 Swal.fire({
@@ -322,7 +323,8 @@
                     points: points,
                     is_gifto: is_gifto,
                     gifto_msg: gifto_msg,
-                    gifto_price:gifto_price
+                    gifto_price: gifto_price,
+                    comp: comp
                 , }
                 , success: function(response) {
                     if (response.success === true) {

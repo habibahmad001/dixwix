@@ -289,7 +289,8 @@ class RewardController extends Controller
             $giftoGramResponse = app(GiftoGramService::class)->sendGift(
                 $user->email,
                 $request->gifto_price,
-                $request->gifto_msg
+                $request->gifto_msg,
+                $request->comp
             );
         }
         /******** Send Request To Gifto *******/

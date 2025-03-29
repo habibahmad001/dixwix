@@ -140,7 +140,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/my-items', [BookController::class, 'ShowMyBooks'])->name("my-items");
     Route::get('/borrowed-items', [BookController::class, 'BorrowedItems'])->name("borrowed-items");
     Route::get('/bulk-items-edit', [BookController::class, 'bulkItemsEdit'])->name("bulk-items-edit");
-    Route::get('/bulk-items-delete', [BookController::class, 'bulkItemsDeleteWorking'])->name("bulk-items-delete");
+    Route::get('/bulk-items-delete', [BookController::class, 'bulkItemsDelete'])->name("bulk-items-delete");
     Route::post('/bulk-update-items', [BookController::class, 'bulkUpdateItems'])->name('bulk-update-items');
     Route::post('/search-items', [BookController::class, 'searchItems'])->name('search-items');
     Route::post('/add-to-group', [BookController::class, 'addToGroup'])->name('add-to-group');
