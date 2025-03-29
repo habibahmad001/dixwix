@@ -305,8 +305,7 @@
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
             let comp = $('input[name="comp"]').val();
-            console.log(is_gifto);
-            return false;
+
             if (!selectedUser) {
                 Swal.fire({
                     title: "Error"
