@@ -227,7 +227,7 @@
                         </div>
                         <div class="form-group col-4">
 {{--                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>--}}
-                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>
+{{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
                         </div>
                     </div>
                 </div>
