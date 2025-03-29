@@ -222,11 +222,11 @@
                         <div class="form-group col-7 mt-3">
                             <label for="gifto_amount">Points</label>
 {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
-                            <sub class="red-msg">For gift cart points must be multiple of 500</sub>
+                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
+                            <sub class="red-msg">Points must be multiple of 500.</sub>
                         </div>
                         <div class="form-group col-4">
-{{--                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>--}}
+                            <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
 {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
                         </div>
                     </div>
@@ -245,8 +245,43 @@
         userSelect.append(
             `<option value="">Select User</option>`
         );
-        jQuery('#dixwix_modal1').modal('show');
+        if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
+            Swal.fire({
+                title: "Insufficient Points",
+                text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        } else {
+            jQuery('#dixwix_modal1').modal('show');
+        }
     }
+
+    /******* Logic for Multiple of 500 *******/
+    function validateInput(input) {
+        const value = parseInt(input.value, 10);
+        const step = 500;
+
+        // Check if the value is a multiple of 500
+        if (value % step !== 0) {
+            // If not, round it to the nearest multiple of 500
+            const roundedValue = Math.round(value / step) * step;
+
+            // Ensure the rounded value is within the min and max limits
+            if (roundedValue < parseInt(input.min, 10)) {
+                input.value = input.min;
+            } else if (roundedValue > parseInt(input.max, 10)) {
+                input.value = input.max;
+            } else {
+                input.value = roundedValue;
+            }
+        }
+
+        // Update the displayed value
+        $('.peice').text(input.value / 100);
+    }
+    /******* Logic for Multiple of 500 *******/
 
     $(document).ready(function() {
         $('#search_user').on('input', function() {
