@@ -248,17 +248,7 @@ class RewardController extends Controller
 
         $credit = $authUser->points()->where('type', 'credit')->sum('points');
         $debit = $authUser->points()->where('type', 'debit')->sum('points');
-        if($request->is_gifto == 1) {
-            $availablePoints = ($credit - ($request->gifto_price * 100)) - $debit;
-            if ($availablePoints < $request->points) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Must have more then 500 points to send card",
-                ]);
-            }
-        } else {
-            $availablePoints = $credit - $debit;
-        }
+        $availablePoints = $credit - $debit;
 //        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
         $transferCoinLimit = getSetting('user_transfer_coint_limit');
 
@@ -267,6 +257,15 @@ class RewardController extends Controller
                 'success' => false,
                 'message' => "You don't have enough points to gift.",
             ]);
+        }
+
+        if($request->is_gifto == 1) {
+            if ($availablePoints < ($request->points + $request->gifto_price)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Must have more then 500 points to send card",
+                ]);
+            }
         }
 
         if ($request->points > $transferCoinLimit) {
@@ -299,7 +298,7 @@ class RewardController extends Controller
         if($request->is_gifto == 1) {
             $giftoGramResponse = app(GiftoGramService::class)->sendGift(
                 $user->email,
-                $request->gifto_price,
+                $request->gifto_price/100,
                 $request->gifto_msg,
                 $request->comp
             );

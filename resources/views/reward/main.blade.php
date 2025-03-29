@@ -222,8 +222,8 @@
                         <div class="form-group col-7 mt-3">
                             <label for="gifto_amount">Gifto Amount</label>
 {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />
-                            <sub class="red-msg">100 points is equal 1$ and min 5$ charged for one order</sub>
+                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
+                            <sub class="red-msg">For gift cart points must be multiple of 500</sub>
                         </div>
                         <div class="form-group col-4">
 {{--                            <div class="a-bal"> $ <span class="peice">{!! round(($reward_balance/100) - 5, 2) !!}</span> <sub>Available balance</sub></div>--}}
