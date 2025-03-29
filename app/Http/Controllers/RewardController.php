@@ -282,25 +282,6 @@ class RewardController extends Controller
                 ]);
             }
 
-            /******** Send Request To Gifto *******/
-            $giftoGramResponse = "";
-            if($request->is_gifto == 1) {
-                $giftoGramResponse = app(GiftoGramService::class)->sendGift(
-                    $user->email,
-                    $request->gifto_price,
-                    $request->gifto_msg,
-                    $request->comp
-                );
-
-                if(!$giftoGramResponse) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'To send card gifto amount must be multiple of 5.',
-                    ]);
-                }
-            }
-            /******** Send Request To Gifto *******/
-
             TransferRequest::create([
                 'from_user_id' => $authUser->id,
                 'to_user_id' => $user->id,
@@ -313,6 +294,17 @@ class RewardController extends Controller
             ]);
         }
 
+        /******** Send Request To Gifto *******/
+        $giftoGramResponse = "";
+        if($request->is_gifto == 1) {
+            $giftoGramResponse = app(GiftoGramService::class)->sendGift(
+                $user->email,
+                $request->gifto_price,
+                $request->gifto_msg,
+                $request->comp
+            );
+        }
+        /******** Send Request To Gifto *******/
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
 
