@@ -301,7 +301,7 @@
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
             let points = $('#user_points').val();
-            let is_gifto = $('#gifto_checkbox').prop('checked') ? true : false;
+            let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
             let comp = $('input[name="comp"]').val();
