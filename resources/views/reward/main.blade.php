@@ -278,6 +278,7 @@
                 input.value = min;
             } else if (roundedValue > adjustedMax) {
                 input.value = adjustedMax;
+                showAlert();
             } else {
                 input.value = roundedValue;
             }
@@ -286,10 +287,20 @@
         // Ensure the value does not exceed the adjusted max limit
         if (value > adjustedMax) {
             input.value = adjustedMax;
+            showAlert();
         }
 
         // Update the displayed value
         $('.peice').text(input.value / 100);
+    }
+
+    function showAlert() {
+        Swal.fire({
+            title: "Insufficient Points",
+            text: "You do not have enough points for this conversion. Please purchase additional points to proceed.",
+            icon: "warning",
+            confirmButtonText: "OK"
+        });
     }
     /******* Logic for Multiple of 500 *******/
 
