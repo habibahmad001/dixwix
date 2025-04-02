@@ -272,11 +272,11 @@ class RewardController extends Controller
                 ]);
             }
 
-            TransferRequest::create([
-                'from_user_id' => $authUser->id,
-                'to_user_id' => $user->id,
-                'points' => $request->points,
-            ]);
+//            TransferRequest::create([
+//                'from_user_id' => $authUser->id,
+//                'to_user_id' => $user->id,
+//                'points' => $request->points,
+//            ]);
 
             return response()->json([
                 'success' => true,
