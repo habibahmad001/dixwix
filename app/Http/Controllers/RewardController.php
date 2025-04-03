@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CoinPackage;
 use App\Models\Point;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Http;
 use App\Models\TransferRequest;
 use App\Models\User;
 use App\Services\StripeService;
@@ -13,18 +12,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
-use App\Services\GiftoGramService;
 use function Symfony\Component\String\u;
 
 class RewardController extends Controller
 {
     protected $stripeService;
-    protected $giftoGramService;
 
-    public function __construct(StripeService $stripeService, GiftoGramService $giftoGramService)
+    public function __construct(StripeService $stripeService)
     {
         $this->stripeService = $stripeService;
-        $this->giftoGramService = $giftoGramService;
     }
 
     public function ShowMyRewards(Request $request)
@@ -47,33 +43,7 @@ class RewardController extends Controller
             'template' => 'reward.main',
         ];
 
-        // Send Gift using GiftoGram Service
-//        $giftoGramResponse = app(GiftoGramService::class)->sendGift(
-//            "habibahmed001@gmail.com",
-//            100,
-//            "Enjoy your gift!"
-//        );
-//
-//        if (!$giftoGramResponse['success']) {
-//            return response()->json([
-//                'success' => false,
-//                'error' => $giftoGramResponse['error']
-//            ], 400);
-//        }
-//
-//        dd($giftoGramResponse);
-
-        $funding = $this->giftoGramService->getFunding();
-//        dd($funding);
-
-//        $orders = $this->giftoGramService->getOrders();
-//        dd($orders);
-        $campaigns = $this->giftoGramService->getCampaigns();
-//        dd($campaigns);
-
-        $gifto_funds = $funding["data"]["data"]["credit_available"];
-
-        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns'));
+        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id'));
     }
 
     public function purchasePoints(Request $request)
@@ -249,7 +219,6 @@ class RewardController extends Controller
         $credit = $authUser->points()->where('type', 'credit')->sum('points');
         $debit = $authUser->points()->where('type', 'debit')->sum('points');
         $availablePoints = $credit - $debit;
-//        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
         $transferCoinLimit = getSetting('user_transfer_coint_limit');
 
         if ($availablePoints < $request->points) {
@@ -272,11 +241,11 @@ class RewardController extends Controller
                 ]);
             }
 
-//            TransferRequest::create([
-//                'from_user_id' => $authUser->id,
-//                'to_user_id' => $user->id,
-//                'points' => $request->points,
-//            ]);
+            TransferRequest::create([
+                'from_user_id' => $authUser->id,
+                'to_user_id' => $user->id,
+                'points' => $request->points,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -284,18 +253,10 @@ class RewardController extends Controller
             ]);
         }
 
-        /******** Send Request To Gifto *******/
-        $giftoGramResponse = app(GiftoGramService::class)->sendGift(
-            $user->email,
-            $request->points/100,
-            $request->gifto_msg,
-            $request->comp
-        );
-        /******** Send Request To Gifto *******/
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
 
-        return response()->json(['success' => true, 'message' => 'Points gifted successfully!', 'gifto' => $giftoGramResponse]);
+        return response()->json(['success' => true, 'message' => 'Points gifted successfully!']);
     }
 
     private function processPointTransfer($fromUser, $toUser, $points)

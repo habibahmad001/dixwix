@@ -1,19 +1,3 @@
-<style>
-    .a-bal {
-        margin: 25% 0 0 0;
-    }
-
-    .a-bal sub {
-        color: #963c45;
-        font-size: 11px;
-    }
-
-    .red-msg {
-        color: #963c45;
-        font-size: 11px;
-    }
-</style>
-
 <div class="content">
     <div class="container">
         <div class="heading mb-4">
@@ -194,45 +178,15 @@
                             <option value="">No users found</option>
                         </select>
                     </div>
-{{--                    <div class="form-group mt-3">--}}
-{{--                        <label for="user_points">Enter Points</label>--}}
-{{--                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />--}}
-{{--                    </div>--}}
-{{--                    <div class="form-group mt-3">--}}
-{{--                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />--}}
-{{--                        <label for="gifto_checkbox">Also Send Gifto</label>--}}
-{{--                    </div>--}}
-
-                    <div class="row gifto_data_div">
-                        <div class="form-group col-12 mt-3">
-                            @if(count($campaigns["data"]["data"])> 0)
-                                @foreach($campaigns["data"]["data"] as $campaign)
-                                    <p>
-                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />
-                                        {!! $campaign["name"] !!}
-                                    </p>
-                                @endforeach
-                            @endif
-                        </div>
-
-                        <div class="form-group col-12 mt-3">
-                            <label for="gifto_msg">Gifto Message</label>
-                            <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
-                        </div>
-                        <div class="form-group col-7 mt-3">
-                            <label for="gifto_amount">Points</label>
-{{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
-                            <sub class="red-msg">Points must be multiple of 500.</sub>
-                        </div>
-                        <div class="form-group col-4">
-                            <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
-{{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
-                        </div>
+                    <div class="form-group mt-3">
+                        <label for="user_points">Enter Points</label>
+                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
+                    </div>
+                    <div class="form-group mt-3">
+                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                        <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
-                <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -245,64 +199,8 @@
         userSelect.append(
             `<option value="">Select User</option>`
         );
-        if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
-            Swal.fire({
-                title: "Insufficient Points",
-                text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",
-                icon: "error",
-                confirmButtonText: "OK"
-            });
-            return;
-        } else {
-            jQuery('#dixwix_modal1').modal('show');
-        }
+        jQuery('#dixwix_modal1').modal('show');
     }
-
-    /******* Logic for Multiple of 500 *******/
-    function validateInput(input) {
-        const value = parseInt(input.value, 10);
-        const step = 500;
-        const min = parseInt(input.min, 10);
-        const max = parseInt(input.max, 10);
-
-        // Ensure max is a multiple of 500
-        const adjustedMax = Math.floor(max / step) * step;
-
-        // Check if the value is a multiple of 500
-        if (value % step !== 0) {
-            // If not, round it to the nearest multiple of 500
-            const roundedValue = Math.round(value / step) * step;
-
-            // Ensure the rounded value is within the min and adjusted max limits
-            if (roundedValue < min) {
-                input.value = min;
-            } else if (roundedValue > adjustedMax) {
-                input.value = adjustedMax;
-                showAlert();
-            } else {
-                input.value = roundedValue;
-            }
-        }
-
-        // Ensure the value does not exceed the adjusted max limit
-        if (value > adjustedMax) {
-            input.value = adjustedMax;
-            showAlert();
-        }
-
-        // Update the displayed value
-        $('.peice').text(input.value / 100);
-    }
-
-    function showAlert() {
-        Swal.fire({
-            title: "Insufficient Points",
-            text: "You do not have enough points for this conversion. Please purchase additional points to proceed.",
-            icon: "warning",
-            confirmButtonText: "OK"
-        });
-    }
-    /******* Logic for Multiple of 500 *******/
 
     $(document).ready(function() {
         $('#search_user').on('input', function() {
@@ -349,13 +247,7 @@
 
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
-            // let points = $('#user_points').val();
-            let points = $('#gifto_amount').val();
-            // let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
-            let is_gifto = 1; // Ensure it sends 1 or 0
-            let gifto_msg = $('#gifto_msg').val();
-            let gifto_price = $('#gifto_amount').val();
-            let comp = $('input[name="comp"]').val();
+            let points = $('#user_points').val();
 
             if (!selectedUser) {
                 Swal.fire({
@@ -376,15 +268,11 @@
 
             $.ajax({
                 url: "{{ url('assign-points') }}"
-                , method: 'POST',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    user_id: selectedUser,
-                    points: points,
-                    is_gifto: is_gifto,
-                    gifto_msg: gifto_msg,
-                    gifto_price: gifto_price,
-                    comp: comp
+                , method: 'POST'
+                , data: {
+                    _token: "{{ csrf_token() }}"
+                    , user_id: selectedUser
+                    , points: points
                 , }
                 , success: function(response) {
                     if (response.success === true) {
