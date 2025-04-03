@@ -168,6 +168,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/payment-error', [RewardController::class, 'paymentError'])->name('payment-error');
     Route::get('find-users', [RewardController::class, 'findUsers']);
     Route::post('assign-points', [RewardController::class, 'assignPoints']);
+    Route::post('gifto-assign-points', [RewardController::class, 'assignGiftoPoints']);
 
     Route::get('/my-groups', [GroupController::class, 'ShowMyGroups'])->name("my-groups");
     Route::get('/search-users', [GroupController::class, 'searchUsers']);

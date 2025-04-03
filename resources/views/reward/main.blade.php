@@ -1,3 +1,19 @@
+<style>
+    .a-bal {
+        margin: 25% 0 0 0;
+    }
+
+    .a-bal sub {
+        color: #963c45;
+        font-size: 11px;
+    }
+
+    .red-msg {
+        color: #963c45;
+        font-size: 11px;
+    }
+</style>
+
 <div class="content">
     <div class="container">
         <div class="heading mb-4">
@@ -98,10 +114,11 @@
                             <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
                         </div>
                         <div class="imagesection d-flex justify-content-center">
-                            <form method="POST" action="{{ route('redeem-rewards') }}" class="w-100">
+                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('redeem-rewards') }}" class="w-100">
                                 @csrf
                                 <input type="hidden" name="redeem_coins" value="{{ $reward_balance }}">
-                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
+{{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>--}}
+                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
                             </form>
                         </div>
                     </div>
@@ -123,7 +140,7 @@
                             <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
                         </div>
                         <div class="imagesection d-flex justify-content-center">
-                            <button onclick="openmodal()" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
+                            <button onclick="javascript: openmodal()" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
                         </div>
                     </div>
                 </div>
@@ -192,7 +209,102 @@
     </div>
 </div>
 
+{{--/*********** gifto model ***********/--}}
+<div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="modal_body">
+                <div class="container mt-5">
+                    <div class="form-group">
+                        <label for="gifto_search_user">Search User</label>
+                        <div class="input-group">
+                            <input type="text" id="gifto_search_user" class="form-control" placeholder="Enter name or email to search" />
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="user_select">Select User</label>
+                        <select id="gifto_user_select" class="form-control" disabled>
+                            <option value="">No users found</option>
+                        </select>
+                    </div>
+                    {{--                    <div class="form-group mt-3">--}}
+                    {{--                        <label for="user_points">Enter Points</label>--}}
+                    {{--                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />--}}
+                    {{--                    </div>--}}
+                    {{--                    <div class="form-group mt-3">--}}
+                    {{--                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />--}}
+                    {{--                        <label for="gifto_checkbox">Also Send Gifto</label>--}}
+                    {{--                    </div>--}}
+
+                    <div class="row gifto_data_div">
+                        <div class="form-group col-12 mt-3">
+                            @if(count($campaigns["data"]["data"])> 0)
+                                @foreach($campaigns["data"]["data"] as $campaign)
+                                    <p>
+                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />
+                                        {!! $campaign["name"] !!}
+                                    </p>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="form-group col-12 mt-3">
+                            <label for="gifto_msg">Gifto Message</label>
+                            <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
+                        </div>
+                        <div class="form-group col-7 mt-3">
+                            <label for="gifto_amount">Points</label>
+{{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
+                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
+                            <sub class="red-msg">Points must be multiple of 500.</sub>
+                        </div>
+                        <div class="form-group col-4">
+                            <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
+{{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success" id="sendgift_button" disabled>Send Gift Card</button>
+                <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--/*********** gifto model ***********/--}}
+
 <script>
+    function opengiftomodal(e) {
+        Swal.fire({
+            title: "Choose an Option",
+            text: "Would you like to send a Redeem Request or send a Gift Card?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Redeem Request",
+            cancelButtonText: "Send Gift Card",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user selects "Redeem Request", submit the form
+                document.querySelector("#redeemfrm").submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // If user selects "Send Gift Card", check the reward balance
+                if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
+                    Swal.fire({
+                        title: "Insufficient Points",
+                        text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                } else {
+                    // Show the modal if the balance is sufficient
+                    jQuery('#dixwix_gifto_modal1').modal('show');
+                }
+            }
+        });
+    }
+
+
+
     function openmodal() {
         let userSelect = $('#user_select');
         userSelect.empty();
@@ -201,6 +313,41 @@
         );
         jQuery('#dixwix_modal1').modal('show');
     }
+
+    /******* Logic for Multiple of 500 *******/
+    function validateInput(input) {
+        const value = parseInt(input.value, 10);
+        const step = 500;
+        const min = parseInt(input.min, 10);
+        const max = parseInt(input.max, 10);
+
+        // Ensure max is a multiple of 500
+        const adjustedMax = Math.floor(max / step) * step;
+
+        // Check if the value is a multiple of 500
+        if (value % step !== 0) {
+            // If not, round it to the nearest multiple of 500
+            const roundedValue = Math.round(value / step) * step;
+
+            // Ensure the rounded value is within the min and adjusted max limits
+            if (roundedValue < min) {
+                input.value = min;
+            } else if (roundedValue > adjustedMax) {
+                input.value = adjustedMax;
+            } else {
+                input.value = roundedValue;
+            }
+        }
+
+        // Ensure the value does not exceed the adjusted max limit
+        if (value > adjustedMax) {
+            input.value = adjustedMax;
+        }
+
+        // Update the displayed value
+        $('.peice').text(input.value / 100);
+    }
+    /******* Logic for Multiple of 500 *******/
 
     $(document).ready(function() {
         $('#search_user').on('input', function() {
@@ -245,6 +392,51 @@
             , });
         });
 
+        /********** Gifto Search user *********/
+        $('#gifto_search_user').on('input', function() {
+            let searchQuery = $(this).val().trim();
+
+            if (!searchQuery) {
+                alert("Please enter a search query.");
+                return;
+            }
+
+            $.ajax({
+                url: "{{ url('find-users') }}"
+                , method: 'GET'
+                , data: {
+                    search_user: searchQuery
+                    , }
+                , success: function(response) {
+                    if (response.success && response.data.length > 0) {
+                        let userSelect = $('#gifto_user_select');
+                        userSelect.empty();
+                        userSelect.append(
+                            `<option value="">Select User</option>`
+                        );
+                        $.each(response.data, function(index, user) {
+                            userSelect.append(
+                                // `<option value="${user.id}">${user.name} (${user.email})</option>`
+                                `<option value="${user.id}">${user.email}</option>`
+                            );
+                        });
+                        userSelect.prop('disabled', false);
+                        $('#gifto_user_select').prop('disabled', false);
+                        $('#sendgift_button').prop('disabled', false);
+
+                    } else {
+                        $('#gifto_user_select').html('<option value="">No users found</option>').prop('disabled', true);
+                        $('#gifto_user_points').val('').prop('disabled', true);
+                        $('#gifto_assign_button').prop('disabled', true);
+                    }
+                }
+                , error: function() {
+                    console.error("An error occurred while fetching users.");
+                }
+                , });
+        });
+        /********** Gifto Search user *********/
+
         $('#assign_button').on('click', function() {
             let selectedUser = $('#user_select').val();
             let points = $('#user_points').val();
@@ -270,9 +462,75 @@
                 url: "{{ url('assign-points') }}"
                 , method: 'POST'
                 , data: {
-                    _token: "{{ csrf_token() }}"
-                    , user_id: selectedUser
-                    , points: points
+                    _token: "{{ csrf_token() }}",
+                    user_id: selectedUser,
+                    points: points
+                , }
+                , success: function(response) {
+                    if (response.success === true) {
+                        Swal.fire({
+                            title: "Success"
+                            , text: response.message
+                            , icon: "success"
+                        , }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error"
+                            , text: response.message
+                            , icon: "error"
+                        , });
+                    }
+                }
+                , error: function() {
+                    Swal.fire({
+                        title: "Error"
+                        , text: "Something went wrong. Please try again."
+                        , icon: "error"
+                    , });
+                    console.error("An error occurred while assigning points.");
+                }
+            , });
+        });
+
+        $('#sendgift_button').on('click', function() {
+            let selectedUser = $('#gifto_user_select').val();
+            let points = $('#gifto_amount').val();
+            // let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
+            let is_gifto = 1; // Ensure it sends 1 or 0
+            let gifto_msg = $('#gifto_msg').val();
+            let gifto_price = $('#gifto_amount').val();
+            let comp = $('input[name="comp"]').val();
+
+            if (!selectedUser) {
+                Swal.fire({
+                    title: "Error"
+                    , text: "Please select a user."
+                    , icon: "error"
+                , });
+                return;
+            }
+            if (!gifto_price || gifto_price <= 0) {
+                Swal.fire({
+                    title: "Error"
+                    , text: "Please enter a valid number of points."
+                    , icon: "error"
+                , });
+                return;
+            }
+
+            $.ajax({
+                url: "{{ url('gifto-assign-points') }}"
+                , method: 'POST'
+                , data: {
+                    _token: "{{ csrf_token() }}",
+                    user_id: selectedUser,
+                    points: points,
+                    is_gifto: is_gifto,
+                    gifto_msg: gifto_msg,
+                    gifto_price: gifto_price,
+                    comp: comp
                 , }
                 , success: function(response) {
                     if (response.success === true) {
