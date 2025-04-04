@@ -7,20 +7,24 @@ use App\Mail\RedeemRewardMail;
 use App\Models\Point;
 use App\Models\RewardTransaction;
 use App\Models\User;
+use App\Models\Setting;
 use App\Notifications\GeneralNotification;
 use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Services\GiftoGramService;
 use Stripe\Exception\ApiErrorException;
 
 
 class RedeemRequestController extends Controller
 {
     protected $stripeService;
+    protected $giftoGramService;
 
-    public function __construct(StripeService $stripeService)
+    public function __construct(StripeService $stripeService, GiftoGramService $giftoGramService)
     {
         $this->stripeService = $stripeService;
+        $this->giftoGramService = $giftoGramService;
     }
 
     public function index()
@@ -32,6 +36,16 @@ class RedeemRequestController extends Controller
         return view('with_login_common', compact('data', 'transactions'));
     }
 
+    public function GiftoCampaign()
+    {
+        $data['title'] = 'Gifto Campaign';
+        $data['template'] = 'admin.reward.gifto-list';
+        $transactions = RewardTransaction::orderBy('created_at', 'desc')->get();
+        $campaigns = ($this->giftoGramService->getCampaigns())["data"]["data"];
+
+        return view('with_login_common', compact('data', 'transactions', 'campaigns'));
+    }
+
     public function edit($id)
     {
         $transaction = RewardTransaction::findOrFail($id);
@@ -39,6 +53,37 @@ class RedeemRequestController extends Controller
         $data['template'] = 'admin.reward.edit-redeem-request';
 
         return view('with_login_common', compact('data', 'transaction'));
+    }
+
+    public function Giftoedit($id)
+    {dd($id);
+        $transaction = RewardTransaction::findOrFail($id);
+        $data['title'] = 'Edit Redeem Request';
+        $data['template'] = 'admin.reward.edit-redeem-request';
+
+        return view('with_login_common', compact('data', 'transaction'));
+    }
+
+    public function ChangeGiftoStatus($id)
+    {
+        try {
+
+//            $transaction = RewardTransaction::findOrFail($id);
+            $data['title'] = 'Change Campaign Status';
+            $data['template'] = 'admin.reward.edit-redeem-request';
+
+            Setting::updateOrCreate(
+                ['name' => "gifto_gram_uuid"],
+                ['value' => $id]
+            );
+
+            $compaingnName = ($this->giftoGramService->getCampaignById($id))["data"]["data"]["name"];
+
+            return redirect()->back()->with('success', "$compaingnName is now activated!");
+
+        } catch (ApiErrorException $e) {
+            return back()->with('error', 'Stripe error: ' . $e->getMessage());
+        }
     }
 
     public function update(Request $request, $id)

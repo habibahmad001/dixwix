@@ -322,6 +322,17 @@ if (!function_exists('getSetting')) {
     }
 }
 
+if (!function_exists('setSetting')) {
+    function setSetting($key, $value)
+    {
+        return Setting::updateOrCreate(
+            ['name' => $key],
+            ['value' => $value]
+        );
+    }
+}
+
+
 if (!function_exists('calculateTotalAmount')) {
     function calculateTotalAmount($coinValue)
     {

@@ -333,7 +333,7 @@ class RewardController extends Controller
             $user->email,
             $request->points/100,
             $request->gifto_msg,
-            $request->comp
+            getSetting('gifto_gram_uuid')
         );
         /******** Send Request To Gifto *******/
         // Directly transfer points if within limit

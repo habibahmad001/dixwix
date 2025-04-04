@@ -247,6 +247,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/redeem-requests/{id}', [RedeemRequestController::class, 'edit'])->name("edit-redeem-requests");
         Route::put('/redeem-requests/{id}', [RedeemRequestController::class, 'update'])->name("update-redeem-requests");
 
+        Route::any('/gifto-campaign', [RedeemRequestController::class, 'GiftoCampaign'])->name("gifto-campaign");
+        Route::any('/gifto-requests/{id}', [RedeemRequestController::class, 'Giftoedit'])->name("edit-gifto-requests");
+        Route::any('/gifto-change-status/{id}', [RedeemRequestController::class, 'ChangeGiftoStatus'])->name("update-gifto-requests");
+
         Route::get('/transfer-point-requests', [TransferRequestController::class, 'index'])->name("transfer-requests");
         Route::get('/transfer-point-requests/{id}', [TransferRequestController::class, 'edit'])->name("edit-transfer-requests");
         Route::put('/transfer-point-requests/{id}', [TransferRequestController::class, 'update'])->name("update-transfer-requests");

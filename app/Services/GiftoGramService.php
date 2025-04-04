@@ -98,6 +98,19 @@ class GiftoGramService
             : ['success' => false, 'error' => $response->body()];
     }
 
+    public function getCampaignById($id)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => $this->apiKey,
+            'Accept' => 'application/json',
+        ])->get("{$this->baseUrl}campaigns/{$id}");
+
+        return $response->successful()
+            ? ['success' => true, 'data' => $response->json()]
+            : ['success' => false, 'error' => $response->body()];
+    }
+
+
 }
 
 

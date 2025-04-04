@@ -237,16 +237,16 @@
                     {{--                    </div>--}}
 
                     <div class="row gifto_data_div">
-                        <div class="form-group col-12 mt-3">
-                            @if(count($campaigns["data"]["data"])> 0)
-                                @foreach($campaigns["data"]["data"] as $campaign)
-                                    <p>
-                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />
-                                        {!! $campaign["name"] !!}
-                                    </p>
-                                @endforeach
-                            @endif
-                        </div>
+{{--                        <div class="form-group col-12 mt-3">--}}
+{{--                            @if(count($campaigns["data"]["data"])> 0)--}}
+{{--                                @foreach($campaigns["data"]["data"] as $campaign)--}}
+{{--                                    <p>--}}
+{{--                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />--}}
+{{--                                        {!! $campaign["name"] !!}--}}
+{{--                                    </p>--}}
+{{--                                @endforeach--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
 
                         <div class="form-group col-12 mt-3">
                             <label for="gifto_msg">Gifto Message</label>
@@ -501,7 +501,6 @@
             let is_gifto = 1; // Ensure it sends 1 or 0
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
-            let comp = $('input[name="comp"]').val();
 
             if (!selectedUser) {
                 Swal.fire({
@@ -529,8 +528,7 @@
                     points: points,
                     is_gifto: is_gifto,
                     gifto_msg: gifto_msg,
-                    gifto_price: gifto_price,
-                    comp: comp
+                    gifto_price: gifto_price
                 , }
                 , success: function(response) {
                     if (response.success === true) {

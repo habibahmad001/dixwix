@@ -544,6 +544,13 @@
             </li>
 
             <li class="nav-item">
+                <a href="{{ route('gifto-campaign') }}" {!! ($data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                    <img src="<?= url('assets/media/rewards.png') ?>">
+                    <span>Gifto Campaign {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="{{ route('transfer-requests') }}" {!! ($data['title']==="Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/plans.png') ?>">
                     <span>Transfer Point Requests {!! ($data['title'] === "Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
