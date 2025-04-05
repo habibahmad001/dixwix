@@ -1,6 +1,7 @@
 
 <?php
 use App\Mail\MailService;
+use App\Models\GiftoCampaign;
 use App\Models\Groupmember;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -319,6 +320,13 @@ if (!function_exists('getSetting')) {
         }
 
         return $setting;
+    }
+}
+
+if (!function_exists('getCampaignUUID')) {
+    function getCampaignUUID($uuid)
+    {
+        return GiftoCampaign::where('compaign_uuid', $uuid)->first();
     }
 }
 

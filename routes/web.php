@@ -18,11 +18,13 @@ use App\Http\Controllers\RewardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RentalController;
+
 use App\Http\Controllers\HowDoesItController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\SubscriptionPlanController;
+use App\Http\Controllers\GiftoCampaignController;
 use App\Http\Controllers\RewardPlanController;
 use App\Http\Controllers\RedeemRequestController;
 use App\Http\Controllers\TransferRequestController;
@@ -250,6 +252,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::any('/gifto-campaign', [RedeemRequestController::class, 'GiftoCampaign'])->name("gifto-campaign");
         Route::any('/gifto-requests/{id}', [RedeemRequestController::class, 'Giftoedit'])->name("edit-gifto-requests");
         Route::any('/gifto-change-status/{id}', [RedeemRequestController::class, 'ChangeGiftoStatus'])->name("update-gifto-requests");
+
+        /***** Manage Gifto *******/
+        Route::resource('gifto-campaigns', GiftoCampaignController::class);
+        Route::get('/setup-campaign-view/{id}', [GiftoCampaignController::class, 'setupCampaignView'])->name("campaign-configuration-view");
+        Route::post('/setup-campaign/', [GiftoCampaignController::class, 'setupCampaign'])->name("campaign-configuration");
+        /***** Manage Gifto *******/
 
         Route::get('/transfer-point-requests', [TransferRequestController::class, 'index'])->name("transfer-requests");
         Route::get('/transfer-point-requests/{id}', [TransferRequestController::class, 'edit'])->name("edit-transfer-requests");

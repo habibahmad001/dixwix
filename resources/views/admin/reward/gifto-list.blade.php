@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th scope="col">Campaign Name</th>
-{{--                <th scope="col">Campaign Status</th>--}}
+                <th scope="col">Campaign Status</th>
                 <th scope="col" class="text-center">Action</th>
             </tr>
         </thead>
@@ -21,7 +21,7 @@
             @foreach($campaigns as $campaign)
             <tr>
                 <td>{{ $campaign["name"] }}</td>
-                <td class="text-center">
+                <td>
                     @if(getSetting('gifto_gram_uuid') === $campaign["id"])
                         <a href="{{ route('update-gifto-requests', ['id' => $campaign["id"]])  }}" title="Click here to enable it.">
                             <span class="badge badge-success p-2">Enabled</span>
@@ -32,13 +32,19 @@
                         </a>
                     @endif
                 </td>
-{{--                <td>--}}
-{{--                    <div class="d-flex justify-content-center">--}}
-{{--                        <a href="{{ route('edit-gifto-requests', ['id' => $campaign["id"]])  }}">--}}
-{{--                            <img src="{{ url("assets/media/edit-orange.png") }}" width="15px" height="15px" />--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </td>--}}
+                <td>
+                    <div class="d-flex justify-content-center">
+                        @if(getCampaignUUID($campaign["id"]))
+                            <a href="{{ route('campaign-configuration-view', ['id' => $campaign["id"]])  }}">
+                                <img src="{{ url("assets/media/edit-orange.png") }}" width="15px" height="15px" />
+                            </a>
+                        @else
+                            <a href="{{ route('campaign-configuration-view', ['id' => $campaign["id"]])  }}">
+                                <img src="{{ url("assets/media/settings.png") }}" width="15px" height="15px" />
+                            </a>
+                        @endif
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>

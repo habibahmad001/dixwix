@@ -262,6 +262,16 @@
                             <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
 {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
                         </div>
+                        <div class="form-group col-4">
+                            <label for="gifto_amount">Gift Card</label>
+                            <div>
+                                @if(getCampaignUUID(getSetting('gifto_gram_uuid')))
+                                    <img id="preview-image" src="{{ asset("/storage/" . getCampaignUUID(getSetting('gifto_gram_uuid'))?->card_bg) }}" class="img-fluid rounded shadow" style="max-width: 150px; max-height: 150px; object-fit: cover;" alt="Placeholder">
+                                @else
+                                    <img id="preview-image" src="https://placehold.co/150x150?text=No Card Preview" class="img-fluid rounded shadow" style="max-width: 150px; max-height: 150px; object-fit: cover;" alt="Placeholder">
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <button class="btn btn-success" id="sendgift_button" disabled>Send Gift Card</button>
