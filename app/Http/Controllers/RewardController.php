@@ -303,7 +303,7 @@ class RewardController extends Controller
         $debit = $authUser->points()->where('type', 'debit')->sum('points');
         $availablePoints = $credit - $debit;
 //        $availablePoints = ($request->is_gifto == 1) ? (($credit - ($request->gifto_price * 100)) - $debit) : ($credit - $debit);
-        $transferCoinLimit = getSetting('user_transfer_coint_limit');
+        $transferCoinLimit = getSetting('user_transfer_coint_limit_gifto');
 
         if ($availablePoints < $request->points) {
             return response()->json([
