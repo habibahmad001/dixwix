@@ -814,7 +814,7 @@ class BookController extends Controller
             $data['title']         = 'Searched Items';
             $data['template']      = 'book.list';
             $data['script_file']   = 'listing';
-            $data['books']         = $books;
+            $data['books']         = $books->unique('name')->values(); // 👈 fixed here
             $data['search_action'] = 'my-items';
             $data['search-item']   = $search_data;
             return view('with_login_common', compact('data'));

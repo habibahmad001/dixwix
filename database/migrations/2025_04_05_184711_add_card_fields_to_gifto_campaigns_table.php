@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('gifto_campaigns', function (Blueprint $table) {
-            $table->string('card_bg', 256)->nullable()->after('compaign_status');
+            $table->text('card_bg')->nullable()->after('compaign_status');
             $table->string('card_title', 256)->nullable()->after('card_bg');
             $table->text('card_message')->nullable()->after('card_title');
         });

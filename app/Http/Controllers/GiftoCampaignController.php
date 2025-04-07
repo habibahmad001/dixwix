@@ -102,7 +102,8 @@ class GiftoCampaignController extends Controller
             'group_id' => 'required|numeric', // group_id is a single ID, not array
             'card_title' => 'required|string|max:255', // card_title is required based on frontend validation
             'card_message' => 'nullable|string',
-            'card_bg' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif|max:25600', // 25MB = 25600KB
+            'card_bg' => 'nullable|array', // Expecting an array of images
+            'card_bg.*' => 'image|mimes:jpg,jpeg,png,bmp,gif|max:25600', // Each image must be valid
         ]);
 
         try {
@@ -125,10 +126,16 @@ class GiftoCampaignController extends Controller
                 'compaign_status' => (bool) $campaignData['data']['data']['active'],
             ];
 
-            // Handle card background image upload
+            // Handle card background image uploads
             if ($request->hasFile('card_bg')) {
-                $cardBgPath = $request->file('card_bg')->store('campaign/card/bg', 'public');
-                $campaignAttributes['card_bg'] = $cardBgPath;
+                $cardBgPaths = [];
+                foreach ($request->file('card_bg') as $file) {
+                    // Get the original file name without the extension
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    // Store the file path with the original name as the key
+                    $cardBgPaths[$originalName] = $file->store('campaign/card/bg', 'public');
+                }
+                $campaignAttributes['card_bg'] = json_encode($cardBgPaths); // Store paths as JSON
             }
 
             // Save or update the campaign

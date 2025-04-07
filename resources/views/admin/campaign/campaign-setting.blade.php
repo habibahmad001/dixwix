@@ -29,7 +29,7 @@
             <label for="card_title" class="form-label">Card Title <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="card_title" name="card_title" value="{{ $giftoInfo?->card_title }}" placeholder="Enter Card Title" required>
             @error('card_title')
-                <div class="text-danger">{{ $message }}</div>
+            <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -42,7 +42,7 @@
                 @endforeach
             </select>
             @error('group_id')
-                <div class="text-danger">{{ $message }}</div>
+            <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -50,26 +50,39 @@
             <label for="card_message" class="form-label">Card Message (Optional)</label>
             <textarea class="form-control" id="card_message" name="card_message" rows="4" placeholder="Enter Card Message">{{ $giftoInfo?->card_message }}</textarea>
             @error('card_message')
-                <div class="text-danger">{{ $message }}</div>
+            <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="form-group mb-4">
             <label for="card_bg" class="form-label">Card Background Image <span class="text-danger">*</span></label>
-            <div class="input-group">
-                <input type="file" class="form-control" id="card_bg" name="card_bg" accept="image/*" required>
-                <button class="btn btn-outline-secondary" type="button" id="browseButton">
-                    <i class="bi bi-folder"></i> Browse
-                </button>
+            <input type="file" multiple class="form-control" id="card_bg" name="card_bg[]" accept="image/*" required style="display: none;">
+
+            <!-- Drag and Drop Zone -->
+            <div id="drop-zone" class="border border-dashed p-4 text-center my-3" style="cursor: pointer;">
+                <p>Drag and drop files here or click to upload</p>
             </div>
-            <small class="text-muted">Max file size 25MB. Formats: jpg, jpeg, png, bmp, gif</small>
+            <small class="text-muted">Max file size 25MB each. Formats: jpg, jpeg, png, bmp, gif</small>
             @error('card_bg')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
 
         <!-- Image preview -->
-            <div class="mb-1">
-                <img id="preview-image" src="{{ $giftoInfo?->card_bg ? asset("/storage/" . $giftoInfo?->card_bg) : "https://placehold.co/250x250?text=Preview+Image" }}" class="img-fluid rounded shadow" style="max-width: 250px; max-height: 250px; object-fit: cover;" alt="Placeholder">
+            <div class="mb-1" id="image-preview-container">
+                @if($giftoInfo?->card_bg)
+                    @php
+                        $cardBgPaths = json_decode($giftoInfo->card_bg, true);
+                        $limitedCardBgPaths = array_slice($cardBgPaths, 0, 5); // Limit to first 5 images
+                    @endphp
+                    @foreach($limitedCardBgPaths as $name => $path)
+                        <img src="{{ asset('/storage/' . $path) }}" class="img-fluid rounded shadow" style="max-width: 250px; max-height: 250px; object-fit: cover; margin: 5px;" alt="{{ $name }}">
+                    @endforeach
+                    @if (count($cardBgPaths) > 5)
+                        <p style="color: red; margin-top: 10px;">Only the first 5 images are shown.</p>
+                    @endif
+                @else
+                    <img id="preview-image" src="https://placehold.co/250x250?text=Preview+Image" class="img-fluid rounded shadow" style="max-width: 250px; max-height: 250px; object-fit: cover;" alt="Placeholder">
+                @endif
             </div>
         </div>
 
@@ -100,10 +113,12 @@
 
             let fileInput = $('#card_bg')[0];
             if (fileInput.files.length > 0) {
-                let fileSize = fileInput.files[0].size / 1024 / 1024; // in MB
-                if (fileSize > 25) {
-                    isValid = false;
-                    alert('Image size must be less than 25MB.');
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    let fileSize = fileInput.files[i].size / 1024 / 1024; // in MB
+                    if (fileSize > 25) {
+                        isValid = false;
+                        alert('Each image size must be less than 25MB.');
+                    }
                 }
             }
 
@@ -113,15 +128,91 @@
         });
 
         // Live preview of image
-        $('#card_bg').change(function() {
-            const file = this.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#preview-image').attr('src', e.target.result);
+        // function updateImagePreview(files) {
+        //     $('#image-preview-container').empty(); // Clear previous previews
+        //     for (let i = 0; i < files.length; i++) {
+        //         const file = files[i];
+        //         if (file) {
+        //             let reader = new FileReader();
+        //             reader.onload = function(e) {
+        //                 const img = $('<img>').attr('src', e.target.result).addClass('img-fluid rounded shadow').css({
+        //                     'max-width': '250px',
+        //                     'max-height': '250px',
+        //                     'object-fit': 'cover',
+        //                     'margin': '5px'
+        //                 });
+        //                 $('#image-preview-container').append(img);
+        //             }
+        //             reader.readAsDataURL(file);
+        //         }
+        //     }
+        // }
+
+        // Live preview of images
+        function updateImagePreview(files) {
+            $('#image-preview-container').empty(); // Clear previous previews
+            const maxFiles = 5; // Maximum number of files to show
+            const filesToShow = files.length > maxFiles ? maxFiles : files.length; // Determine how many files to show
+
+            for (let i = 0; i < filesToShow; i++) {
+                const file = files[i];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = $('<img>').attr('src', e.target.result).addClass('img-fluid rounded shadow').css({
+                            'max-width': '250px',
+                            'max-height': '250px',
+                            'object-fit': 'cover',
+                            'margin': '5px'
+                        });
+                        $('#image-preview-container').append(img);
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
             }
+
+            // If there are more than 5 files, show a message
+            if (files.length > maxFiles) {
+                const message = $('<p>').text('Only the first 5 images are shown.').css({
+                    'color': 'red',
+                    'margin-top': '10px'
+                });
+                $('#image-preview-container').append(message);
+            }
+        }
+
+        $('#card_bg').change(function() {
+            updateImagePreview(this.files);
+        });
+
+        // Drag and Drop functionality
+        const dropZone = $('#drop-zone');
+
+        dropZone.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.addClass('bg-light');
+        });
+
+        dropZone.on('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.removeClass('bg-light');
+        });
+
+        dropZone.on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.removeClass('bg-light');
+
+            const files = e.originalEvent.dataTransfer.files;
+            $('#card_bg')[0].files = files; // Set the files to the input
+            updateImagePreview(files); // Update the preview
+        });
+
+        // Click event to open file dialog
+        dropZone.click(function() {
+            $('#card_bg').click();
         });
     });
 </script>

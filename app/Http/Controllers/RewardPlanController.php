@@ -66,4 +66,17 @@ class RewardPlanController extends Controller
 
         return redirect()->back()->with('success', 'Reward updated successfully!');
     }
+
+    public function destroy(string $id)
+    {
+        try {
+            $coinpackage = CoinPackage::findOrFail($id);
+            $coinpackage->delete();
+
+            return redirect()->back()->with('success', 'Reward deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting Reward: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete Reward.');
+        }
+    }
 }

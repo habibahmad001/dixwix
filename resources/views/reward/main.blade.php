@@ -262,13 +262,35 @@
                             <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
 {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group col-12">
                             <label for="gifto_amount">Gift Card</label>
                             <div>
                                 @if(getCampaignUUID(getSetting('gifto_gram_uuid')))
-                                    <img id="preview-image" src="{{ asset("/storage/" . getCampaignUUID(getSetting('gifto_gram_uuid'))?->card_bg) }}" class="img-fluid rounded shadow" style="max-width: 150px; max-height: 150px; object-fit: cover;" alt="Placeholder">
+                                    @php
+                                        $cardBgPaths = json_decode(getCampaignUUID(getSetting('gifto_gram_uuid'))?->card_bg, true);
+                                        // Check if $cardBgPaths is an array and not empty, otherwise initialize as an empty array
+                                        $limitedCardBgPaths = (is_array($cardBgPaths) && !empty($cardBgPaths)) ? array_slice($cardBgPaths, 0, 5) : []; // Limit to first 5 images
+                                    @endphp
+
+                                    @if(count($limitedCardBgPaths) > 0)
+                                        <div class="row">
+                                            @foreach($limitedCardBgPaths as $name => $path)
+                                                <div class="col-2"> <!-- Each image takes up 20% of the row -->
+                                                    <img src="{{ asset('/storage/' . $path) }}" class="img-fluid rounded shadow" style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;" alt="{{ $name }}">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                                            <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                                            <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
+                                        </div>
+                                    @endif
                                 @else
-                                    <img id="preview-image" src="https://placehold.co/150x150?text=No Card Preview" class="img-fluid rounded shadow" style="max-width: 150px; max-height: 150px; object-fit: cover;" alt="Placeholder">
+                                    <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                                        <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                                        <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
+                                    </div>
                                 @endif
                             </div>
                         </div>

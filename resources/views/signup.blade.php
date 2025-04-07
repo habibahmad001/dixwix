@@ -123,6 +123,7 @@
                                 <span>or</span>
                                 <hr>
                             </div>
+                            <div class="error_msg" id="email_error_message"></div>
                         </div>
                     @endif
                     <?php $password_guidelines = "Password Must Criteria: &#013;Atleast 6 Character&#013;Atleast 1 Capital Letter&#013;Atleast 1 special character&#013;Atleast 1 number"; ?>
@@ -142,7 +143,7 @@
                             <img src="{{ url('assets/media/email.png') }}">
                             <input required type="email" id="user_email" name="user[email]" autocomplete="email" value="{{ (isset($data['email_id']) ? $data['email_id'] : '') }}" class="form-control" placeholder="Email" {{ (isset($data['referrer_id']) ? "readonly" : "") }} />
                         </div>
-                        <div class="error_msg" id="email_error_message"></div>
+
                         @if (isset($errs['email']))
                             <div class="error_msg">*{{ $errs['email'] }}</div>
                         @endif

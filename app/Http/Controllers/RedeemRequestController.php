@@ -97,7 +97,7 @@ class RedeemRequestController extends Controller
 //        $user = $transaction->user;
         $user =  User::find($transaction->user_id);
 
-        $paymentMethod = $user->paymentMethods()->where('default', true)->first();
+        $paymentMethod = $user?->paymentMethods()->where('default', true)->first();
 
         if (!$paymentMethod && $request->status == RewardTransaction::APPROVED) {
             return back()->with('error', "User has not set a default payment method. Please set the default payment method before approving the request.");

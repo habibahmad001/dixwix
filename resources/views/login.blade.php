@@ -130,7 +130,6 @@
                 @elseif (isset($retdata['err_message']))
                 <span id="error-message" class="error_msg" style="position: absolute;text-align: center;top: 10px;left: 30%;transform: translateX(-50%);">*{{ $retdata['err_message'] }}</span>
                 @endif
-                <div id="client_error_message" style="position: absolute;text-align: center;top: 30px;left: 30%;transform: translateX(-50%);"></div>
                 <div class="form_image">
                     <img src="assets/media/account.png" alt="Image Description">
                 </div>
@@ -146,8 +145,10 @@
                             <div class="divider">
                                 <hr>
                                 <span>or</span>
+
                                 <hr>
                             </div>
+                            <div id="client_error_message" style="text-align: center;top: 30px;"></div>
                         </div>
                         <form name="login-form" id="login-form" method="post">
                             @csrf

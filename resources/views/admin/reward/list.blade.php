@@ -1,3 +1,18 @@
+<div class="mt-4">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+</div>
+
+
 <div class="inner_content_table_actions d-flex flex-column flex-md-row mt-4">
     <h4 class="inner_content_title">{{ $data['title'] }}</h4>
 </div>
@@ -22,6 +37,9 @@
                 <td>{{ $package->created_at }}</td>
                 <td>
                     <div class="d-flex justify-content-center">
+                        <a href="{{ route("delete-reward",["id"=>$package->id]) }}">
+                            <img src="{{ url("assets/media/delete.png") }}" width="15px" height="15px" />
+                        </a>
                         <a href="{{ route("edit-reward",["id"=>$package->id]) }}">
                             <img src="{{ url("assets/media/edit-orange.png") }}" width="15px" height="15px" />
                         </a>

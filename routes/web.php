@@ -244,6 +244,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/store/reward-plans', [RewardPlanController::class, 'store'])->name("store-reward");
         Route::get('/reward-plans/{id}', [RewardPlanController::class, 'edit'])->name("edit-reward");
         Route::put('/reward-plans/{id}', [RewardPlanController::class, 'update'])->name("update-reward");
+        Route::any('/delete-reward-plans/{id}', [RewardPlanController::class, 'destroy'])->name("delete-reward");
 
         Route::get('/redeem-requests', [RedeemRequestController::class, 'index'])->name("redeem-requests");
         Route::get('/redeem-requests/{id}', [RedeemRequestController::class, 'edit'])->name("edit-redeem-requests");
