@@ -129,14 +129,22 @@ class GiftoCampaignController extends Controller
             // Handle card background image uploads
             if ($request->hasFile('card_bg')) {
                 $cardBgPaths = [];
-                foreach ($request->file('card_bg') as $file) {
-                    // Get the original file name without the extension
+                foreach ($request->file('card_bg') as $index => $file) {
+                    // Get the original file name without extension
                     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    // Store the file path with the original name as the key
-                    $cardBgPaths[$originalName] = $file->store('campaign/card/bg', 'public');
+
+                    // Build structured array for each image
+                    $cardBgPaths[$originalName] = [
+                        'id' => $index + 1,
+                        'name' => $request->image_name[$index] ?? $originalName, // fallback if name missing
+                        'path' => $file->store('campaign/card/bg', 'public'),
+                        'filename' => $originalName,
+                        'price' => $request->image_price[$index] ?? null,
+                    ];
                 }
-                $campaignAttributes['card_bg'] = json_encode($cardBgPaths); // Store paths as JSON
+                $campaignAttributes['card_bg'] = json_encode($cardBgPaths); // Store as JSON
             }
+
 
             // Save or update the campaign
             $campaign = GiftoCampaign::updateOrCreate(

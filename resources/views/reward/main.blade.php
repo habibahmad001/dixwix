@@ -255,7 +255,7 @@
                         <div class="form-group col-7 mt-3">
                             <label for="gifto_amount">Points</label>
 {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" />
+                            <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
                             <sub class="red-msg">Points must be multiple of 500.</sub>
                         </div>
                         <div class="form-group col-4">
@@ -274,10 +274,42 @@
 
                                     @if(count($limitedCardBgPaths) > 0)
                                         <div class="row">
-                                            @foreach($limitedCardBgPaths as $name => $path)
-                                                <div class="col-2"> <!-- Each image takes up 20% of the row -->
-                                                    <img src="{{ asset('/storage/' . $path) }}" class="img-fluid rounded shadow" style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;" alt="{{ $name }}">
-                                                </div>
+                                            @foreach($limitedCardBgPaths as $originalName => $data)
+                                                @if(is_array($data) && isset($data['path']))
+                                                    <div class="col-2 text-center" style="position: relative;"> <!-- Center text under image -->
+                                                        <label style="cursor: pointer; display: block;">
+                                                            <!-- Hidden checkbox -->
+                                                            <input
+                                                                type="checkbox"
+                                                                name="selected_card[]"
+                                                                value="{{ $originalName }}"
+                                                                data-price="{{ $data['price'] ?? 0 }}"
+                                                                onchange="updateGiftoAmount(this)"
+                                                                style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px;"
+                                                            >
+
+                                                            <!-- Image -->
+                                                            <img
+                                                                src="{{ asset('/storage/' . $data['path']) }}"
+                                                                class="img-fluid rounded shadow"
+                                                                style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;"
+                                                                alt="{{ $data['name'] ?? $originalName }}"
+                                                            >
+
+                                                            <!-- Price Text -->
+                                                            <div style="margin-top: 5px; font-weight: bold; color: #333;">
+                                                                {{ isset($data['price']) ? '$' . number_format($data['price'], 2) : 'No Price' }}
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                @else
+                                                    <div class="col-2">
+                                                        <div class="alert alert-warning" style="font-size: 12px;">
+                                                            Invalid image data
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             @endforeach
                                         </div>
                                     @else
@@ -286,6 +318,7 @@
                                             <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
                                         </div>
                                     @endif
+
                                 @else
                                     <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
                                         <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
@@ -335,7 +368,25 @@
         });
     }
 
+    function updateGiftoAmount(checkbox) {
+        let price = parseFloat(checkbox.dataset.price) || 0;
+        let input = document.getElementById('gifto_amount');
+        let currentAmount = parseFloat(input.value) || 0;
 
+        if (checkbox.checked) {
+            // Add price when checkbox is selected
+            currentAmount += price;
+        } else {
+            // Subtract price when checkbox is deselected
+            currentAmount -= price;
+        }
+
+        // Optional: Boundaries (if you still want min 500 and max 9440)
+        if (currentAmount < 500) currentAmount = 500;
+        if (currentAmount > 9440) currentAmount = 9440;
+
+        input.value = currentAmount;
+    }
 
     function openmodal() {
         let userSelect = $('#user_select');

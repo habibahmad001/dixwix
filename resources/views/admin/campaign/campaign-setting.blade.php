@@ -1,3 +1,4 @@
+<form class="main-form" name="setup-campaign-form" enctype="multipart/form-data" id="setup-campaign-form" method="POST" action="{{ route('campaign-configuration') }}">
 <div class="container py-5">
     <div class="heading mb-4">
         <h2>{{ $data['title'] }}</h2>
@@ -20,7 +21,6 @@
     </div>
 
     <!-- Form to setup campaign -->
-    <form class="main-form" name="setup-campaign-form" enctype="multipart/form-data" id="setup-campaign-form" method="POST" action="{{ route('campaign-configuration') }}">
         @csrf
 
         <input type="hidden" name="compaign_uuid" id="compaign_uuid" value="{!! $id !!}">
@@ -74,10 +74,23 @@
                         $cardBgPaths = json_decode($giftoInfo->card_bg, true);
                         $limitedCardBgPaths = array_slice($cardBgPaths, 0, 5); // Limit to first 5 images
                     @endphp
-                    @foreach($limitedCardBgPaths as $name => $path)
-                        <img src="{{ asset('/storage/' . $path) }}" class="img-fluid rounded shadow" style="max-width: 250px; max-height: 250px; object-fit: cover; margin: 5px;" alt="{{ $name }}">
+                    @foreach($limitedCardBgPaths as $originalName => $data)
+                        @if(is_array($data) && isset($data['path']))
+                            <img
+                                src="{{ asset('/storage/' . $data['path']) }}"
+                                class="img-fluid rounded shadow"
+                                style="max-width: 250px; max-height: 250px; object-fit: cover; margin: 5px;"
+                                alt="{{ $data['name'] ?? $originalName }}"
+                            >
+                        @else
+                            {{-- Fallback if somehow $data is not properly structured --}}
+                            <div class="alert alert-warning">
+                                Invalid image data for "{{ $originalName }}".
+                            </div>
+                        @endif
                     @endforeach
-                    @if (count($cardBgPaths) > 5)
+
+                @if (count($cardBgPaths) > 5)
                         <p style="color: red; margin-top: 10px;">Only the first 5 images are shown.</p>
                     @endif
                 @else
@@ -89,12 +102,41 @@
         <div class="form-group">
             <button type="submit" class="btn btn-lg btn-primary px-5">Save Campaign</button>
         </div>
-    </form>
 </div>
 
-<!-- jQuery CDN (for frontend validation and image preview) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!-- Bootstrap Modal for Images Table -->
+<div class="modal fade" id="imagesModal" tabindex="-1" aria-labelledby="imagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imagesModalLabel">Manage Uploaded Images</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="imagesTable" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Thumbnail</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows will be dynamically inserted -->
+                    </tbody>
+                </table>
+            </div>
+{{--            <div class="modal-footer">--}}
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Done</button>
+{{--            </div>--}}
+        </div>
+    </div>
+</div>
+</form>
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+<script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
         // Instant client-side form validation
@@ -124,6 +166,48 @@
 
             if (!isValid) {
                 e.preventDefault();
+            }
+        });
+
+        let imageFiles = [];
+
+        // Initialize DataTable
+        let imagesTable = $('#imagesTable').DataTable({
+            "paging": false,
+            "info": false,
+            "searching": false
+        });
+
+        function openModalWithImages(files) {
+            imagesTable.clear().draw();
+            const maxFiles = 5;
+            const filesToShow = Math.min(files.length, maxFiles);
+
+            for (let i = 0; i < filesToShow; i++) {
+                let file = files[i];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    imagesTable.row.add([
+                        `<img src="${e.target.result}" class="img-thumbnail" style="max-width: 100px;">`,
+                        `<input type="text" class="form-control" name="image_name[]" placeholder="Enter Name">`,
+                        `<input type="number" step="500" onchange="javascript:validateInput(this);" value="500" class="form-control" name="image_price[]" placeholder="Enter Price">`
+                    ]).draw(false);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            if (files.length > maxFiles) {
+                alert('Only the first 5 images are shown.');
+            }
+
+            let modal = new bootstrap.Modal(document.getElementById('imagesModal'));
+            modal.show();
+        }
+
+        $('#card_bg').change(function () {
+            imageFiles = this.files;
+            if (imageFiles.length > 0) {
+                openModalWithImages(imageFiles);
             }
         });
 
@@ -215,4 +299,43 @@
             $('#card_bg').click();
         });
     });
+
+    function closepopup() {
+        $('#imagesModal').modal('hide');
+    }
+
+    /******* Logic for Multiple of 500 *******/
+    function validateInput(input) {
+        const value = parseInt(input.value, 10);
+        const step = 500;
+        const min = parseInt(input.min, 10);
+        const max = parseInt(input.max, 10);
+
+        // Ensure max is a multiple of 500
+        const adjustedMax = Math.floor(max / step) * step;
+
+        // Check if the value is a multiple of 500
+        if (value % step !== 0) {
+            // If not, round it to the nearest multiple of 500
+            const roundedValue = Math.round(value / step) * step;
+
+            // Ensure the rounded value is within the min and adjusted max limits
+            if (roundedValue < min) {
+                input.value = min;
+            } else if (roundedValue > adjustedMax) {
+                input.value = adjustedMax;
+            } else {
+                input.value = roundedValue;
+            }
+        }
+
+        // Ensure the value does not exceed the adjusted max limit
+        if (value > adjustedMax) {
+            input.value = adjustedMax;
+        }
+
+        // Update the displayed value
+        $('.peice').text(input.value / 100);
+    }
+    /******* Logic for Multiple of 500 *******/
 </script>
