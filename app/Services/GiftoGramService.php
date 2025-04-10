@@ -16,7 +16,7 @@ class GiftoGramService
         $this->campaignId = env('GIFTOGRAM_CAMPAIGN_ID');
     }
 
-    public function sendGift($email, $amount, $message, $campaignId)
+    public function sendGift($email, $amount, $message, $campaignId, $notes="Sending a gift", $name="John Doe")
     {
         // Ensure the denomination is a multiple of 5
         if ($amount % 5 !== 0) {
@@ -33,14 +33,14 @@ class GiftoGramService
             "external_id" => uniqid(),
 //            "campaign_id" => $this->campaignId,
             "campaign_id" => $campaignId,
-            "notes" => "Sending a gift",
+            "notes" => $notes,
             "reference_number" => "ORDER" . rand(1000, 9999),
             "message" => $message,
             "subject" => "Your Giftogram Reward",
             "recipients" => [
                 [
                     "email" => $email,
-                    "name" => "John Doe"
+                    "name" => $name
                 ]
             ],
             "denomination" => (string) $amount, // Ensure it's a string

@@ -544,10 +544,22 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('gifto-campaign') }}" {!! ($data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="Gifto Campaign" || $data['title'] === "Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
                     <span>Gifto Campaign {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                 </a>
+                <ul class="sub-menu collapse {{ ($data['title'] === "Gifto Orders") ? "show" : "" }}" id="gifto_sub_menu">
+                    <li>
+                        <a href="{{ route('gifto-campaign') }}" {!! $data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>Gifto Campaign Listing</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('gifto-orders') }}" {!! $data['title']==="Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>Gifto Order's</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="nav-item">

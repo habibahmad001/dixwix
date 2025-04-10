@@ -8,6 +8,7 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Http;
 use App\Models\TransferRequest;
 use App\Models\User;
+use App\Models\GiftoOrder;
 use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use App\Services\GiftoGramService;
 use function Symfony\Component\String\u;
+use Illuminate\Support\Facades\Auth;
 
 class RewardController extends Controller
 {
@@ -333,9 +335,27 @@ class RewardController extends Controller
             $user->email,
             $request->points/100,
             $request->gifto_msg,
-            getSetting('gifto_gram_uuid')
+            getSetting('gifto_gram_uuid'),
+            json_encode($request->selected_card),
+            Auth::user()->name,
         );
         /******** Send Request To Gifto *******/
+
+        /******** Store Order In DB ******/
+        $order = new GiftoOrder();
+
+        $order->user_id = Auth::user()->id;
+        $order->userName = Auth::user()->name;
+        $order->userEmail = $user->email;
+        $order->points = $request->points;
+        $order->giftoAmount = $request->points/100;
+        $order->giftoMsg = $request->gifto_msg;
+        $order->campaignUuid = getSetting('gifto_gram_uuid');
+        $order->selectedCard = json_encode($request->selected_card);
+        $order->cardPath = json_encode($request->card_path);
+
+        $order->save();
+        /******** Store Order In DB ******/
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
 

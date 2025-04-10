@@ -18,6 +18,7 @@ use App\Http\Controllers\RewardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\GiftoOrderController;
 
 use App\Http\Controllers\HowDoesItController;
 use App\Http\Controllers\MembershipController;
@@ -258,6 +259,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('gifto-campaigns', GiftoCampaignController::class);
         Route::get('/setup-campaign-view/{id}', [GiftoCampaignController::class, 'setupCampaignView'])->name("campaign-configuration-view");
         Route::post('/setup-campaign/', [GiftoCampaignController::class, 'setupCampaign'])->name("campaign-configuration");
+
+        Route::resource('gifto-orders', GiftoOrderController::class);
         /***** Manage Gifto *******/
 
         Route::get('/transfer-point-requests', [TransferRequestController::class, 'index'])->name("transfer-requests");

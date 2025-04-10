@@ -281,9 +281,12 @@
                                                             <!-- Hidden checkbox -->
                                                             <input
                                                                 type="checkbox"
+                                                                id="selected_card-{{ $data['id'] ?? 0 }}"
                                                                 name="selected_card[]"
                                                                 value="{{ $originalName }}"
                                                                 data-price="{{ $data['price'] ?? 0 }}"
+                                                                data-paths="{{ asset('/storage/' . $data['path']) }}"
+                                                                class="selected_card"
                                                                 onchange="updateGiftoAmount(this)"
                                                                 style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px;"
                                                             >
@@ -298,7 +301,7 @@
 
                                                             <!-- Price Text -->
                                                             <div style="margin-top: 5px; font-weight: bold; color: #333;">
-                                                                {{ isset($data['price']) ? '$' . number_format($data['price'], 2) : 'No Price' }}
+                                                                {{ isset($data['price']) ? '' . number_format($data['price'], 2) : 'No Price' }}
                                                             </div>
                                                         </label>
                                                     </div>
@@ -386,6 +389,8 @@
         if (currentAmount > 9440) currentAmount = 9440;
 
         input.value = currentAmount;
+        // Update the displayed value
+        $('.peice').text(currentAmount / 100);
     }
 
     function openmodal() {
@@ -580,66 +585,89 @@
         $('#sendgift_button').on('click', function() {
             let selectedUser = $('#gifto_user_select').val();
             let points = $('#gifto_amount').val();
-            // let is_gifto = $('#gifto_checkbox').prop('checked') ? 1 : 0; // Ensure it sends 1 or 0
-            let is_gifto = 1; // Ensure it sends 1 or 0
+            let is_gifto = 1; // Always sending 1
             let gifto_msg = $('#gifto_msg').val();
             let gifto_price = $('#gifto_amount').val();
 
+            // Get all checked selected_card[] values
+            let selected_cards = [];
+            $('.selected_card:checked').each(function() {
+                selected_cards.push($(this).val());
+            });
+
+            if (selected_cards.length === 0) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Please select at least one card.",
+                    icon: "error",
+                });
+                return;
+            }
+
+            // path's
+            let selected_card_paths = [];
+            $('.selected_card:checked').each(function() {
+                selected_card_paths.push($(this).data("paths"));
+            });
+
             if (!selectedUser) {
                 Swal.fire({
-                    title: "Error"
-                    , text: "Please select a user."
-                    , icon: "error"
-                , });
+                    title: "Error",
+                    text: "Please select a user.",
+                    icon: "error",
+                });
                 return;
             }
             if (!gifto_price || gifto_price <= 0) {
                 Swal.fire({
-                    title: "Error"
-                    , text: "Please enter a valid number of points."
-                    , icon: "error"
-                , });
+                    title: "Error",
+                    text: "Please enter a valid number of points.",
+                    icon: "error",
+                });
                 return;
             }
 
             $.ajax({
-                url: "{{ url('gifto-assign-points') }}"
-                , method: 'POST'
-                , data: {
+                url: "{{ url('gifto-assign-points') }}",
+                method: 'POST',
+                data: {
                     _token: "{{ csrf_token() }}",
                     user_id: selectedUser,
                     points: points,
                     is_gifto: is_gifto,
                     gifto_msg: gifto_msg,
-                    gifto_price: gifto_price
-                , }
-                , success: function(response) {
+                    selected_card: selected_cards, // Pass the array
+                    gifto_price: gifto_price,
+                    card_path: selected_card_paths
+                },
+                success: function(response) {
                     if (response.success === true) {
                         Swal.fire({
-                            title: "Success"
-                            , text: response.message
-                            , icon: "success"
-                        , }).then(() => {
+                            title: "Success",
+                            text: response.message,
+                            icon: "success",
+                        }).then(() => {
                             window.location.reload();
                         });
                     } else {
                         Swal.fire({
-                            title: "Error"
-                            , text: response.message
-                            , icon: "error"
-                        , });
+                            title: "Error",
+                            text: response.message,
+                            icon: "error",
+                        });
                     }
-                }
-                , error: function() {
+                },
+                error: function() {
                     Swal.fire({
-                        title: "Error"
-                        , text: "Something went wrong. Please try again."
-                        , icon: "error"
-                    , });
+                        title: "Error",
+                        text: "Something went wrong. Please try again.",
+                        icon: "error",
+                    });
                     console.error("An error occurred while assigning points.");
                 }
-            , });
+            });
         });
+
 
         // let $pointsInput = $("#user_points");
         // // Restrict input value to the max limit
