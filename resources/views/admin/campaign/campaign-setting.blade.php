@@ -127,9 +127,9 @@
                     </tbody>
                 </table>
             </div>
-{{--            <div class="modal-footer">--}}
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Done</button>
-{{--            </div>--}}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+            </div>
         </div>
     </div>
 </div>

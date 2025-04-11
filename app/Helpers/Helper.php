@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\Setting;
 use App\Models\IntuitToken;
+use App\Services\GiftoGramService;
 
 function cleanNameString($string)
 {
@@ -320,6 +321,19 @@ if (!function_exists('getSetting')) {
         }
 
         return $setting;
+    }
+}
+
+if (!function_exists('getCampaign')) {
+    function getCampaign($id)
+    {
+        $giftoGramService = new GiftoGramService();
+        $campaign = $giftoGramService->getCampaignById($id);
+
+        if (empty($campaign) || !isset($campaign['data'])) {
+            return redirect()->back()->with('error', "Campaign not found!");
+        }
+        return $campaign;
     }
 }
 

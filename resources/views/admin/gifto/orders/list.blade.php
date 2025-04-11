@@ -42,8 +42,9 @@
                 <td>
                     <a href="javascript:void(0);" class="view-card" data-images="{{ $order->cardPath }}">View Card</a>
                 </td>
-                <td><span class="badge badge-success">{{ $order->orderStatus }}</span></td>
-                <td>{{ date("m/d/Y",strtotime($order->created_at)) }}</td>
+{{--                <td><span class="badge badge-success">{{ $order->orderStatus }}</span></td>--}}
+                <td><span class="badge badge-success">{!! (getCampaign($order->campaignUuid))['data']['data']['active'] == 1 ? "Active" : "Inactive" !!}</span></td>
+                <td>{{ date("F j, Y",strtotime($order->created_at)) }}</td>
             </tr>
             @endforeach
         </tbody>
