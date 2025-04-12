@@ -390,6 +390,20 @@
                     <span>Account {!! ($data['title'] === "My Account" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="Gifto Campaign" || $data['title'] === "My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                    <img src="<?= url('assets/media/rewards.png') ?>">
+                    <span>My Gifto {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <i class="fa fa-chevron-down"></i>
+                </a>
+                <ul class="sub-menu collapse {{ ($data['title'] === "My Orders") ? "show" : "" }}" id="gifto_sub_menu">
+                    <li>
+                        <a href="{{ url('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>My Order's</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             @endif
 
             @if (Auth::user()->hasRole('admin'))
@@ -547,6 +561,7 @@
                 <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="Gifto Campaign" || $data['title'] === "Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
                     <span>Gifto Campaign {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <i class="fa fa-chevron-down"></i>
                 </a>
                 <ul class="sub-menu collapse {{ ($data['title'] === "Gifto Orders") ? "show" : "" }}" id="gifto_sub_menu">
                     <li>

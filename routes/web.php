@@ -227,6 +227,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/settings/store-settings', [AdminController::class, 'StoreSettings'])->name("store-settings");
     Route::get('/settings/view-all-settings', [AdminController::class, 'ViewAllSettings'])->name("view-all-settings");
 
+    /******* Gifto Orders **********/
+    Route::resource('gifto-user-orders', GiftoOrderController::class);
+    Route::any('my-orders', [GiftoOrderController::class, "MyOrders"]);
+    /******* Gifto Orders **********/
+
     Route::middleware('isAdmin')->group(function () {
 
         Route::get('/users/all-users', [AdminController::class, 'allUsers'])->name("all-users");

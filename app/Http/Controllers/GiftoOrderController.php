@@ -28,6 +28,23 @@ class GiftoOrderController extends Controller
         }
     }
 
+
+    public function MyOrders()
+    {
+        try {
+
+            $data['title'] = 'My Orders';
+            $data['template'] = 'admin.gifto.orders.list';
+
+            $orders = GiftoOrder::where('user_id', Auth::user()->id)->latest()->get();
+
+            return view('with_login_common', compact('data', 'orders'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching campaign: ' . $e->getMessage());
+            return response()->json(['error' => 'Campaign not found.'], 404);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
