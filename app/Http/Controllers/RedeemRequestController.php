@@ -42,8 +42,10 @@ class RedeemRequestController extends Controller
         $data['template'] = 'admin.reward.gifto-list';
         $transactions = RewardTransaction::orderBy('created_at', 'desc')->get();
         $campaigns = ($this->giftoGramService->getCampaigns())["data"]["data"];
+        $funds = ($this->giftoGramService->getFunding())["data"]["data"]["credit_available"];
+        $points = (($this->giftoGramService->getFunding())["data"]["data"]["credit_available"]) * 100;
 
-        return view('with_login_common', compact('data', 'transactions', 'campaigns'));
+        return view('with_login_common', compact('data', 'transactions', 'campaigns', 'funds', 'points'));
     }
 
     public function edit($id)
@@ -56,7 +58,7 @@ class RedeemRequestController extends Controller
     }
 
     public function Giftoedit($id)
-    {dd($id);
+    {
         $transaction = RewardTransaction::findOrFail($id);
         $data['title'] = 'Edit Redeem Request';
         $data['template'] = 'admin.reward.edit-redeem-request';

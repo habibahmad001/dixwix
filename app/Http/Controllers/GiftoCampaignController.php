@@ -71,6 +71,8 @@ class GiftoCampaignController extends Controller
         try {
             // Fetch campaign using GiftoGramService
             $campaign = $this->giftoGramService->getCampaignById($id);
+            $funds = ($this->giftoGramService->getFunding())["data"]["data"]["credit_available"];
+            $points = (($this->giftoGramService->getFunding())["data"]["data"]["credit_available"]) * 100;
 
             // Check if campaign exists
             if (empty($campaign) || !isset($campaign['data'])) {
@@ -86,7 +88,7 @@ class GiftoCampaignController extends Controller
             $data['template'] = 'admin.campaign.campaign-setting';  // Template view name
 
             // Pass campaign data and available groups to the view
-            return view('with_login_common', compact('data', 'campaign', 'availableGroups', 'id', 'giftoInfo'));
+            return view('with_login_common', compact('data', 'campaign', 'availableGroups', 'id', 'giftoInfo', 'funds', 'points'));
         } catch (\Exception $e) {
             Log::error('Error fetching campaign: ' . $e->getMessage());
             return response()->json(['error' => 'Campaign not found.'], 404);
@@ -107,6 +109,7 @@ class GiftoCampaignController extends Controller
         ]);
 
         try {
+
             // Fetch the campaign using GiftoGramService by the UUID
             $campaignData = $this->giftoGramService->getCampaignById($request->compaign_uuid);
 
@@ -126,6 +129,7 @@ class GiftoCampaignController extends Controller
                 'compaign_status' => (bool) $campaignData['data']['data']['active'],
             ];
 
+            $currentPoints = 0;
             // Handle card background image uploads
             if ($request->hasFile('card_bg')) {
                 $cardBgPaths = [];
@@ -133,6 +137,7 @@ class GiftoCampaignController extends Controller
                     // Get the original file name without extension
                     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
+                    $currentPoints += $request->image_price[$index];
                     // Build structured array for each image
                     $cardBgPaths[$originalName] = [
                         'id' => $index + 1,
@@ -145,6 +150,9 @@ class GiftoCampaignController extends Controller
                 $campaignAttributes['card_bg'] = json_encode($cardBgPaths); // Store as JSON
             }
 
+            if ($request->totalPoints <= $currentPoints) {
+                return response()->json(['status' => 'error', 'message' => "Your current points are insufficient to proceed and complete the campaign setup."], 400);
+            }
 
             // Save or update the campaign
             $campaign = GiftoCampaign::updateOrCreate(
@@ -152,12 +160,10 @@ class GiftoCampaignController extends Controller
                 $campaignAttributes
             );
 
-            return redirect()->route('campaign-configuration-view', ['id' => $request->compaign_uuid])
-                ->with('success', 'Campaign configured successfully!');
+            return response()->json(['status' => 'success', 'message' => "Campaign configured successfully!"]);
         } catch (\Exception $e) {
             Log::error('Error configuring campaign: ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'Error configuring the campaign. Please try again.');
+            return response()->json(['status' => 'error', 'message' => "Error configuring the campaign. Please try again."], 400);
         }
     }
 

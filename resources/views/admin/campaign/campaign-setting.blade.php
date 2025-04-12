@@ -1,7 +1,22 @@
+<style>
+    .giftoPoints {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<div id="loader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p>Loading, please wait...</p>
+    </div>
+</div>
 <form class="main-form" name="setup-campaign-form" enctype="multipart/form-data" id="setup-campaign-form" method="POST" action="{{ route('campaign-configuration') }}">
 <div class="container py-5">
-    <div class="heading mb-4">
+    <div class="heading mb-4 giftoPoints">
         <h2>{{ $data['title'] }}</h2>
+        <h2>Total Points: {!! $points !!}</h2>
     </div>
 
     @if(session()->has('success'))
@@ -24,6 +39,7 @@
         @csrf
 
         <input type="hidden" name="compaign_uuid" id="compaign_uuid" value="{!! $id !!}">
+        <input type="hidden" name="totalPoints" id="totalPoints" value="{!! $points !!}">
 
         <div class="form-group mb-3">
             <label for="card_title" class="form-label">Card Title <span class="text-danger">*</span></label>
@@ -105,69 +121,47 @@
 </div>
 
 
-<!-- Bootstrap Modal for Images Table -->
-<div class="modal fade" id="imagesModal" tabindex="-1" aria-labelledby="imagesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imagesModalLabel">Manage Uploaded Images</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table id="imagesTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Thumbnail</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Rows will be dynamically inserted -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+    <!-- HTML for the modal -->
+    <div class="modal fade" id="imagesModal" tabindex="-1" aria-labelledby="imagesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagesModalLabel">Manage Uploaded Images</h5>
+                    <button type="button" class="btn-close" id="closeModalButton" aria-label="Close" disabled></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-7"></div>
+                        <div class="col-5 text-right">
+                            <h5>Total Points: <span id="popupPoints">{!! $points !!}</span></h5>
+                            <div id="error-message" class="text-danger" style="display: none;">Points should be greater than 0.</div>
+                        </div>
+                    </div>
+                    <table id="imagesTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Thumbnail</th>
+                            <th>Name</th>
+                            <th>Points</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Rows will be dynamically inserted -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="doneButton" data-dismiss="modal">Done</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
 
 <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
 <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Instant client-side form validation
-        $('#setup-campaign-form').submit(function(e) {
-            let isValid = true;
-
-            if ($('#card_title').val().trim() === '') {
-                isValid = false;
-                alert('Please enter Card Title.');
-            }
-
-            if ($('#group_id').val().trim() === '') {
-                isValid = false;
-                alert('Please select a Group.');
-            }
-
-            let fileInput = $('#card_bg')[0];
-            if (fileInput.files.length > 0) {
-                for (let i = 0; i < fileInput.files.length; i++) {
-                    let fileSize = fileInput.files[i].size / 1024 / 1024; // in MB
-                    if (fileSize > 25) {
-                        isValid = false;
-                        alert('Each image size must be less than 25MB.');
-                    }
-                }
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-            }
-        });
 
         let imageFiles = [];
 
@@ -210,27 +204,6 @@
                 openModalWithImages(imageFiles);
             }
         });
-
-        // Live preview of image
-        // function updateImagePreview(files) {
-        //     $('#image-preview-container').empty(); // Clear previous previews
-        //     for (let i = 0; i < files.length; i++) {
-        //         const file = files[i];
-        //         if (file) {
-        //             let reader = new FileReader();
-        //             reader.onload = function(e) {
-        //                 const img = $('<img>').attr('src', e.target.result).addClass('img-fluid rounded shadow').css({
-        //                     'max-width': '250px',
-        //                     'max-height': '250px',
-        //                     'object-fit': 'cover',
-        //                     'margin': '5px'
-        //                 });
-        //                 $('#image-preview-container').append(img);
-        //             }
-        //             reader.readAsDataURL(file);
-        //         }
-        //     }
-        // }
 
         // Live preview of images
         function updateImagePreview(files) {
@@ -298,6 +271,100 @@
         dropZone.click(function() {
             $('#card_bg').click();
         });
+
+        /******* AJAX form Submission *******/
+        $('#setup-campaign-form').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            let isValid = true;
+            let errorMessages = []; // Array to collect error messages
+
+            // Clear previous inline error messages
+            $('.text-danger').remove();
+
+            // Validate Card Title
+            if ($('#card_title').val().trim() === '') {
+                isValid = false;
+                errorMessages.push('Please enter Card Title.');
+                $('#card_title').after('<div class="text-danger">Please enter Card Title.</div>');
+            }
+
+            // Validate Group Selection
+            if ($('#group_id').val().trim() === '') {
+                isValid = false;
+                errorMessages.push('Please select a Group.');
+                $('#group_id').after('<div class="text-danger">Please select a Group.</div>');
+            }
+
+            // Validate File Sizes
+            let fileInput = $('#card_bg')[0];
+            if (fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    let fileSize = fileInput.files[i].size / 1024 / 1024; // in MB
+                    if (fileSize > 25) {
+                        isValid = false;
+                        errorMessages.push('Each image size must be less than 25MB.');
+                    }
+                }
+            }
+
+            // If not valid, show SweetAlert with all error messages
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Errors',
+                    html: errorMessages.join('<br>'), // Join error messages with line breaks
+                    confirmButtonText: 'OK'
+                });
+                return; // Stop the submission if validation fails
+            }
+
+            // Create FormData object
+            let formData = new FormData(this);
+            $('#loader').show();
+            // AJAX call to submit the form
+            $.ajax({
+                url: $(this).attr('action'), // The URL to send the request to
+                type: 'POST',
+                data: formData,
+                contentType: false, // Prevent jQuery from overriding content type
+                processData: false, // Prevent jQuery from processing the data
+                success: function(response) {
+                    // Hide loader
+                    $('#loader').hide();
+
+                    // Check the status and show appropriate SweetAlert
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    // Hide loader
+                    $('#loader').hide();
+
+                    // Show error message using SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: xhr.responseJSON.message || 'An error occurred. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+        /******* AJAX form Submission *******/
     });
 
     function closepopup() {
@@ -338,4 +405,36 @@
         $('.peice').text(input.value / 100);
     }
     /******* Logic for Multiple of 500 *******/
+
+
+    /******* Logic for update points *******/
+    let initialPoints = {!! $points !!}; // Store the initial points
+
+    function updatePoints() {
+        let totalPoints = initialPoints; // Start with the initial points
+        $('input[name="image_price[]"]').each(function() {
+            totalPoints -= parseInt($(this).val()) || 0; // Deduct the input value
+        });
+
+        $('#popupPoints').text(totalPoints); // Update the displayed points
+
+        // Check if total points are less than or equal to zero
+        if (totalPoints <= 0) {
+            $('#error-message').show(); // Show error message
+            $('#closeModalButton').prop('disabled', true); // Disable close button
+        } else {
+            $('#error-message').hide(); // Hide error message
+            $('#closeModalButton').prop('disabled', false); // Enable close button
+        }
+    }
+
+    $(document).on('change', 'input[name="image_price[]"]', function() {
+        updatePoints(); // Update points on input change
+    });
+
+    // Initialize points on modal open
+    $('#imagesModal').on('show.bs.modal', function() {
+        updatePoints(); // Call updatePoints to set initial state
+    });
+    /******* Logic for update points *******/
 </script>
