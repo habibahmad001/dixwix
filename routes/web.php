@@ -206,6 +206,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/users/my-account', [UserController::class, 'MyAccount'])->name("my-account");
     Route::post('/users/switch-plan', [UserController::class, 'SwitchPlan'])->name("switch-plan");
     Route::post('/users/redeem-rewards', [UserController::class, 'redeemReward'])->name("redeem-rewards");
+    Route::post('/users/withdrow-points', [UserController::class, 'WithdrawPoints'])->name("withdrow-points");
     Route::post('/users/save-payment-method-only', [UserController::class, 'saveCustomerPaymentMethod'])->name('save-payment-method-only');
     Route::post('/users/save-payment-method', [UserController::class, 'SavePaymentMethod'])->name('save-payment-method');
     Route::post('/users/remove-payment-method', [UserController::class, 'RemovePaymentMethod'])->name('remove-payment-method');
@@ -250,6 +251,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/redeem-requests', [RedeemRequestController::class, 'index'])->name("redeem-requests");
         Route::get('/redeem-requests/{id}', [RedeemRequestController::class, 'edit'])->name("edit-redeem-requests");
         Route::put('/redeem-requests/{id}', [RedeemRequestController::class, 'update'])->name("update-redeem-requests");
+        Route::any('/dd', [RedeemRequestController::class, function(){ dd("submission successfully"); }]);
 
         Route::any('/gifto-campaign', [RedeemRequestController::class, 'GiftoCampaign'])->name("gifto-campaign");
         Route::any('/gifto-requests/{id}', [RedeemRequestController::class, 'Giftoedit'])->name("edit-gifto-requests");

@@ -114,11 +114,12 @@
                             <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
                         </div>
                         <div class="imagesection d-flex justify-content-center">
-                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('redeem-rewards') }}" class="w-100">
+{{--                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">--}}
+                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">
                                 @csrf
-                                <input type="hidden" name="redeem_coins" value="{{ $reward_balance }}">
+                                <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>--}}
-                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
+                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>
                             </form>
                         </div>
                     </div>
@@ -347,15 +348,13 @@
             text: "Would you like to send a Redeem Request or send a Gift Card?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Redeem Request",
+            confirmButtonText: "Withdraw Request",
             cancelButtonText: "Send Gift Card",
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // If user selects "Redeem Request", submit the form
-                document.querySelector("#redeemfrm").submit();
+                showWithdrawInputModal();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // If user selects "Send Gift Card", check the reward balance
                 if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
                     Swal.fire({
                         title: "Insufficient Points",
@@ -364,9 +363,65 @@
                         confirmButtonText: "OK"
                     });
                 } else {
-                    // Show the modal if the balance is sufficient
                     jQuery('#dixwix_gifto_modal1').modal('show');
                 }
+            }
+        });
+    }
+
+    function showWithdrawInputModal() {
+        const currentPoints = {!! $reward_balance !!};
+
+        Swal.fire({
+            title: 'Input Points for Withdraw',
+            html: `<p>Your current points: <strong id="currentPoints">${currentPoints}</strong></p>
+               <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
+               <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="swal2-input">`,
+            showCancelButton: true,
+            confirmButtonText: 'Proceed',
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                const inputValue = document.getElementById('withdrawPoints').value;
+                const pointsToWithdraw = parseInt(inputValue, 10);
+
+                if (!inputValue) {
+                    Swal.showValidationMessage('You need to enter a value!');
+                    return false;
+                }
+                if (pointsToWithdraw <= 0) {
+                    Swal.showValidationMessage('Please enter a positive number!');
+                    return false;
+                }
+                if (currentPoints - pointsToWithdraw < 100) {
+                    Swal.showValidationMessage('You must have at least 100 points remaining!');
+                    return false;
+                }
+                return pointsToWithdraw;
+            }
+        }).then((inputResult) => {
+            if (inputResult.isConfirmed) {
+                $('#redeem_coins').val(inputResult.value);
+                document.querySelector("#redeemfrm").submit();
+            }
+        });
+
+        const withdrawInput = document.getElementById('withdrawPoints');
+        const currentPointsDisplay = document.getElementById('currentPoints');
+        const dollarAmountDisplay = document.getElementById('dollarAmount');
+
+        withdrawInput.addEventListener('input', function() {
+            const pointsToWithdraw = parseInt(this.value, 10) || 0;
+            const remainingPoints = currentPoints - pointsToWithdraw;
+
+            currentPointsDisplay.innerText = remainingPoints < 0 ? 0 : remainingPoints;
+
+            const dollarAmount = (pointsToWithdraw / 100).toFixed(2);
+            dollarAmountDisplay.innerText = `$${dollarAmount}`;
+
+            if (remainingPoints < 100) {
+                currentPointsDisplay.style.color = 'maroon';
+            } else {
+                currentPointsDisplay.style.color = '';
             }
         });
     }
@@ -893,6 +948,10 @@
 
     .rewards-buttons {
         width: 300px !important;
+    }
+
+    .withdraw-buttons {
+        width: 100% !important;
     }
 
 

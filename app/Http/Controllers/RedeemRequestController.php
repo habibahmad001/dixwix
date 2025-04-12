@@ -31,7 +31,7 @@ class RedeemRequestController extends Controller
     {
         $data['title'] = 'Redeem Requests';
         $data['template'] = 'admin.reward.transaction-list';
-        $transactions = RewardTransaction::orderBy('created_at', 'desc')->get();
+        $transactions = RewardTransaction::orderBy('id', 'desc')->get();
 
         return view('with_login_common', compact('data', 'transactions'));
     }

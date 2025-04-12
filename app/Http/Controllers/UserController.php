@@ -1526,6 +1526,77 @@ protected function validateRecaptcha($recaptchaResponse)
         return back()->with('success', $message);
     }
 
+
+    public function WithdrawPoints(Request $request)
+    {
+        $manualApprovalLimit = (int) getSetting('amount_manual_approval_limit');
+        $user = auth()->user();
+        $admin = User::role('admin')->first();
+
+        $coins = $request->redeem_coins;
+        $amount = (int) pointsToDollars($coins);
+
+        if ($user->reward_balance < $request->redeem_coins) {
+            return back()->with('error', "Insufficient Reward Balance");
+        }
+
+        $paymentMethod = $user->paymentMethods()->where('default', true)->first();
+
+        if (!$paymentMethod) {
+            return back()->with('error', "You need to set a default payment method before withdraw points.");
+        }
+
+        if ($coins <= $manualApprovalLimit) {
+            $description = "Auto transfer points";
+
+            $paymentResponse = $this->stripeService->redeemPoints($user,$coins, $paymentMethod, $description, []);
+
+            Point::create([
+                'user_id' => $user->id,
+                'type' => 'debit',
+                'points' => $coins,
+                'data' => $paymentResponse,
+                'amount' => $amount,
+                'description' => $description,
+                'trans_type' => Point::TRANS_TYPE_AUTO,
+            ]);
+
+            $message = "Your withdraw points have been successfully withdraw and transferred to your Stripe account.";
+
+            $this->sendRedeemRewardMail(
+                $user,
+                '🎉 Your Withdraw Points Have Been Transferred to Your Stripe Account!',
+                $coins,
+                $amount,
+                $manualApprovalLimit);
+
+        } else {
+
+            if ($user->rewardTransactions()->where('status', RewardTransaction::PENDING)->exists()) {
+                return back()->with('error', "Your withdraw request is pending admin approval. Please contact the admin to proceed.");
+            }
+
+            $this->sendRedeemRewardMail(
+                $user,
+                '🔔 Your Points Redemption Request is Awaiting Approval',
+                $coins,
+                $amount,
+                $manualApprovalLimit);
+
+            $this->adminNotificationForPendingRequest($admin, $user, $coins);
+            $message = "Withdraw points request submitted.";
+        }
+
+        RewardTransaction::create([
+            'user_id' => $user->id,
+            'coins'   => $coins,
+            'amount'   => $amount,
+            'status'  => $coins > $manualApprovalLimit ? 0 : 1,
+        ]);
+
+        return back()->with('success', $message);
+    }
+
     private function adminNotificationForPendingRequest($admin, $user, $coins){
 
         // Send Notification to Admin for Manual Approval

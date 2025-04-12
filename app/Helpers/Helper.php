@@ -378,6 +378,17 @@ if (!function_exists('calculateAmountFromCoins')) {
     }
 }
 
+if (!function_exists('pointsToDollars')) {
+    function pointsToDollars($rewardCoins)
+    {
+        $coinValue = Setting::where('name', "point_to_dollar_limit")->value('value'); // Fetch coin value from settings
+        $coinValue = (float)$coinValue; // Convert to float
+
+        $amount = $rewardCoins / $coinValue; // Calculate amount
+        return round($amount, 2); // Rounded to 2 decimal places
+    }
+}
+
 if (!function_exists('calculatePackageAmount')) {
     function calculatePackageAmount($package)
     {
