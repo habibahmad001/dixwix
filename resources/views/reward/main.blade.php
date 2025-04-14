@@ -118,8 +118,8 @@
                             <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
-{{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>--}}
-                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>
+                                <button type="button" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
+{{--                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>--}}
                             </form>
                         </div>
                     </div>
