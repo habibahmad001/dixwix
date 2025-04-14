@@ -23,7 +23,7 @@ class TransferRequestController extends Controller
     public function MyTransfers()
     {
         $data['title'] = 'My Transfer Point Requests';
-        $data['template'] = 'admin.reward.transfer-req-list';
+        $data['template'] = 'admin.reward.user.transfer-req-list';
         $transferRequests = TransferRequest::where("from_user_id", Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('with_login_common', compact('data', 'transferRequests'));
