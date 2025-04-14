@@ -118,8 +118,8 @@
                             <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
-                                <button type="button" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
-{{--                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>--}}
+{{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
+                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Redeem Points</button>
                             </form>
                         </div>
                     </div>
@@ -348,12 +348,13 @@
             text: "Would you like to send a Redeem Request or send a Gift Card?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Withdraw Request",
+            // confirmButtonText: "Withdraw Request",
+            confirmButtonText: "Redeem Request",
             cancelButtonText: "Send Gift Card",
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                showWithdrawInputModal();
+                // showWithdrawInputModal();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
                     Swal.fire({
