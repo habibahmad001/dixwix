@@ -253,13 +253,13 @@
                             <label for="gifto_msg">Gifto Message</label>
                             <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
                         </div>
-                        <div class="form-group col-7 mt-3">
+                        <div class="form-group col-8 mt-3" style="display: none">
                             <label for="gifto_amount">Points</label>
 {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
                             <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
                             <sub class="red-msg">Points must be multiple of 500.</sub>
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group col-4" style="display: none">
                             <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
 {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
                         </div>

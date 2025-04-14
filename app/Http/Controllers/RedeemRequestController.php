@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Services\GiftoGramService;
 use Stripe\Exception\ApiErrorException;
-
+use Illuminate\Support\Facades\Auth;
 
 class RedeemRequestController extends Controller
 {
@@ -32,6 +32,15 @@ class RedeemRequestController extends Controller
         $data['title'] = 'Redeem Requests';
         $data['template'] = 'admin.reward.transaction-list';
         $transactions = RewardTransaction::orderBy('id', 'desc')->get();
+
+        return view('with_login_common', compact('data', 'transactions'));
+    }
+
+    public function WithdrawRequests()
+    {
+        $data['title'] = 'Withdraw Requests';
+        $data['template'] = 'admin.reward.transaction-list';
+        $transactions = RewardTransaction::where("user_id", Auth::user()->id)->orderBy('id', 'desc')->get();
 
         return view('with_login_common', compact('data', 'transactions'));
     }

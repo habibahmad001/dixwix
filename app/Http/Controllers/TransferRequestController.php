@@ -6,6 +6,7 @@ use App\Models\Point;
 use App\Models\TransferRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransferRequestController extends Controller
 {
@@ -14,6 +15,16 @@ class TransferRequestController extends Controller
         $data['title'] = 'Transfer Point Requests';
         $data['template'] = 'admin.reward.transfer-req-list';
         $transferRequests = TransferRequest::orderBy('created_at', 'desc')->get();
+
+        return view('with_login_common', compact('data', 'transferRequests'));
+    }
+
+
+    public function MyTransfers()
+    {
+        $data['title'] = 'My Transfer Point Requests';
+        $data['template'] = 'admin.reward.transfer-req-list';
+        $transferRequests = TransferRequest::where("from_user_id", Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
         return view('with_login_common', compact('data', 'transferRequests'));
     }

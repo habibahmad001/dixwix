@@ -228,8 +228,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/settings/view-all-settings', [AdminController::class, 'ViewAllSettings'])->name("view-all-settings");
 
     /******* Gifto Orders **********/
-    Route::resource('gifto-user-orders', GiftoOrderController::class);
-    Route::any('my-orders', [GiftoOrderController::class, "MyOrders"]);
+    Route::resource('/gifto-user-orders', GiftoOrderController::class);
+    Route::any('/my-orders', [GiftoOrderController::class, "MyOrders"])->name("my-orders");
+    Route::any('/withdraw-requests', [RedeemRequestController::class, 'WithdrawRequests'])->name("withdraw-requests");
+    Route::get('/my-transfer-point-requests', [TransferRequestController::class, 'MyTransfers'])->name("my-transfer-requests");
     /******* Gifto Orders **********/
 
     Route::middleware('isAdmin')->group(function () {

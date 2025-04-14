@@ -391,17 +391,27 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="Gifto Campaign" || $data['title'] === "My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
-                    <span>My Gifto {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <span>My Order's {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                     <i class="fa fa-chevron-down"></i>
                 </a>
-                <ul class="sub-menu collapse {{ ($data['title'] === "My Orders") ? "show" : "" }}" id="gifto_sub_menu">
+                <ul class="sub-menu collapse {{ ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests") ? "show" : "" }}" id="gifto_sub_menu">
                     <li>
-                        <a href="{{ url('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Order's</span>
+                        <a href="{{ route('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>My Gifto</span>
                         </a>
                     </li>
+{{--                    <li>--}}
+{{--                        <a href="{{ route('withdraw-requests') }}" {!! $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>My Withdraw Requests</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>My Transfer Point</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                 </ul>
             </li>
             @endif
