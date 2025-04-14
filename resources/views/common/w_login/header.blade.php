@@ -407,11 +407,11 @@
 {{--                            <span>My Withdraw Requests</span>--}}
 {{--                        </a>--}}
 {{--                    </li>--}}
-{{--                    <li>--}}
-{{--                        <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
-{{--                            <span>My Transfer Point</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    <li>
+                        <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>My Transfer Point</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             @endif

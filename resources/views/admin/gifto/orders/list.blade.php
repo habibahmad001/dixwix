@@ -71,8 +71,41 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+<script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
 <script>
 $(document).ready(function() {
+
+    /******** Pagination **********/
+    $('#items_table').DataTable({
+        paging: true
+        , searching: true
+        , ordering: true
+        , responsive: true
+        , lengthChange: true
+        , pageLength: 10
+        , info: true
+        , autoWidth: false
+        , columnDefs: [{
+            orderable: false
+            , targets: -1
+        }]
+        , language: {
+            search: "Search:"
+            , lengthMenu: "Show _MENU_ entries"
+            , info: "Showing _START_ to _END_ of _TOTAL_ entries"
+            , paginate: {
+                first: "First"
+                , last: "Last"
+                , next: "Next"
+                , previous: "Previous"
+            }
+        }
+    });
+    /******** Pagination **********/
+
+
     $('.delete-category').on('click', function(e) {
         e.preventDefault();
 
@@ -127,30 +160,30 @@ $(document).ready(function() {
         });
     });
 
-    $(document).ready(function() {
-        // Existing delete-category code...
+    /********* View Card Model *********/
+    // Existing delete-category code...
 
-        // New code for viewing card images
-        $('.view-card').on('click', function() {
-            const images = $(this).data('images'); // Get the images data
-            const modalImagesContainer = $('#modalImagesContainer');
+    // New code for viewing card images
+    $('.view-card').on('click', function() {
+        const images = $(this).data('images'); // Get the images data
+        const modalImagesContainer = $('#modalImagesContainer');
 
-            // Clear previous images
-            modalImagesContainer.empty();
+        // Clear previous images
+        modalImagesContainer.empty();
 
-            // Check if images exist
-            if (images && images.length > 0) {
-                // Loop through images and append to modal
-                images.forEach(function(image) {
-                    modalImagesContainer.append(`<img src="${image}" class="img-fluid" alt="Card Image">`);
-                });
-            } else {
-                modalImagesContainer.append('<p>No images available for this card.</p>');
-            }
+        // Check if images exist
+        if (images && images.length > 0) {
+            // Loop through images and append to modal
+            images.forEach(function(image) {
+                modalImagesContainer.append(`<img src="${image}" class="img-fluid" alt="Card Image">`);
+            });
+        } else {
+            modalImagesContainer.append('<p>No images available for this card.</p>');
+        }
 
-            // Show the modal
-            $('#viewCardModal').modal('show');
-        });
+        // Show the modal
+        $('#viewCardModal').modal('show');
     });
+    /********* View Card Model *********/
 });
 </script>
