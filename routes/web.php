@@ -232,6 +232,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/my-orders', [GiftoOrderController::class, "MyOrders"])->name("my-orders");
     Route::any('/withdraw-requests', [RedeemRequestController::class, 'WithdrawRequests'])->name("withdraw-requests");
     Route::get('/my-transfer-point-requests', [TransferRequestController::class, 'MyTransfers'])->name("my-transfer-requests");
+    Route::any('/my-purchase-orders', [GiftoOrderController::class, "MyPurchases"])->name("my-purchase-orders");
     /******* Gifto Orders **********/
 
     Route::middleware('isAdmin')->group(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Point;
 use App\Models\GiftoOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,20 @@ class GiftoOrderController extends Controller
             Log::error('Error fetching campaign: ' . $e->getMessage());
             return response()->json(['error' => 'Campaign not found.'], 404);
         }
+    }
+
+    public function MyPurchases()
+    {
+        $data['title'] = 'My Purchases';
+        $data['template'] = 'admin.orders.my-orders-list';
+        $purchases = Point::with(["user", "package"])->where('user_id', Auth::user()->id)
+            ->where('type', 'credit')
+            ->where('description', 'like', '%Purchased points%')
+            ->whereNotNull('package_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('with_login_common', compact('data', 'purchases'));
     }
 
     /**

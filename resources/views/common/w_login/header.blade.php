@@ -391,7 +391,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" || $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
                     <span>My Order's {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                     <i class="fa fa-chevron-down"></i>
@@ -410,6 +410,11 @@
                     <li>
                         <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
                             <span>My Transfer Point</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('my-purchase-orders') }}" {!! $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>My Purchases</span>
                         </a>
                     </li>
                 </ul>
