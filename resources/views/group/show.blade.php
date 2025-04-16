@@ -249,7 +249,7 @@ return ($members['member_id'] === Auth::user()->id && $members['status'] === 're
                                                 @if (!$book['is_reserved'] && $book['copies'] !== 0 && !$book['is_reserved_pending'])
                                                     @if($enabled_member)
                                                         @if(!auth()->user()->hasRole('admin'))
-                                                        <a href="javascript:void(0)" onclick="setBookStatus({{ $book['id'] }}, {{ $group['id'] }},'reserved')" id="set-status" class="btn btn-green"> Add Reserve</a>
+                                                        <a href="javascript:void(0)" onclick="setBookStatus({{ $book['id'] }}, {{ $group['id'] }},'reserved', 1)" id="set-status" class="btn btn-green"> Add Reserve</a>
                                                         @else
                                                         <span class="badge badge-warning px-4 py-2">Admin can not reserve</span>
                                                         @endif
@@ -562,6 +562,7 @@ return ($members['member_id'] === Auth::user()->id && $members['status'] === 're
                 <div class="modal-body py-4" id="modal_body" style="overflow-y: scroll; max-height: 450px;">
                     <form id="book-status-form" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="book_id" id="book_id" value="" />
                         <div class="col">
                             <label for="book_duration">Select Duration</label>
                             <select class="form-control" name="duration" id="book_duration">

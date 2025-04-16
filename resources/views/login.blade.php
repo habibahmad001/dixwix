@@ -148,7 +148,7 @@
 
                                 <hr>
                             </div>
-                            <div id="client_error_message" style="text-align: center;top: 30px;"></div>
+
                         </div>
                         <form name="login-form" id="login-form" method="post">
                             @csrf
@@ -175,7 +175,7 @@
                                 </span>
                                 <a href="{{ url('forgot-password') }}">Forgot Password?</a>
                             </div>
-
+                            <div id="client_error_message" style="text-align: center;top: 30px;"></div>
                             @if (env('APP_ENV') !== 'local')
                                 <div style="width: 302px;" id="recaptcha1" class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}" data-expired-callback="recaptchaExpired"></div>
                             @else

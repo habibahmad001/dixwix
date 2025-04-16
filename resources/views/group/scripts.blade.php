@@ -124,8 +124,12 @@
         });
     }
 
-    function setBookStatus(book_id, group_id, status) {
+    function setBookStatus(book_id, group_id, status, setID=null) {
         jQuery('#dixwix_book_modal').modal('show');
+
+        if(setID !== null) {
+            jQuery('#book_id').val(book_id);
+        }
 
         $('#book-status-form').on('submit', function (event) {
             event.preventDefault();
