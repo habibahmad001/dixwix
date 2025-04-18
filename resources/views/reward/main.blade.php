@@ -149,7 +149,7 @@
 
             <div class="col-xl-4 col-lg-12">
                 <div class="item">
-                    <div class="pad15" style="height:280px">
+                    <div class="" style="min-height:280px">
                         <div class="innerheader">
                             <div class="post_image d-flex align-items-center flex-row">
                                 <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
@@ -160,7 +160,7 @@
                             </div>
                         </div>
 
-                        <div class="imagesection purchase-points d-flex flex-column justify-content-between" style="gap:10px">
+                        <div class="imagesection purchase-points flex-column justify-content-between" style="gap:10px">
                             @foreach($rewards_prices as $reward)
                                 <form method="POST" action="{{ route('purchase-points') }}" class="w-100">
                                     @csrf
@@ -216,16 +216,17 @@
         <div class="modal-content">
             <div class="modal-body" id="modal_body">
                 <div class="container mt-5">
-                    <div class="form-group">
+                    <div class="form-group" style="display: none">
                         <label for="gifto_search_user">Search User</label>
                         <div class="input-group">
-                            <input type="text" id="gifto_search_user" class="form-control" placeholder="Enter name or email to search" />
+                            <input type="text" id="gifto_search_user" class="form-control" value="{!! Auth::user()->email !!}" placeholder="Enter name or email to search" />
                         </div>
                     </div>
-                    <div class="form-group mt-3">
+                    <div class="form-group mt-3" style="display: none">
                         <label for="user_select">Select User</label>
                         <select id="gifto_user_select" class="form-control" disabled>
                             <option value="">No users found</option>
+                            <option value="{!! Auth::user()->id !!}" selected>{!! Auth::user()->email !!}</option>
                         </select>
                     </div>
                     {{--                    <div class="form-group mt-3">--}}
@@ -249,9 +250,9 @@
 {{--                            @endif--}}
 {{--                        </div>--}}
 
-                        <div class="form-group col-12 mt-3">
+                        <div class="form-group col-12 mt-3" style="display: none">
                             <label for="gifto_msg">Gifto Message</label>
-                            <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" placeholder="Thanks from the team for an awesome year!" />
+                            <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" value="Thanks from the team for an awesome year!" placeholder="Thanks from the team for an awesome year!" />
                         </div>
                         <div class="form-group col-8 mt-3" style="display: none">
                             <label for="gifto_amount">Points</label>
@@ -333,7 +334,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-success" id="sendgift_button" disabled>Send Gift Card</button>
+                <button class="btn btn-success" id="sendgift_button">Send Gift Card</button>
                 <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>

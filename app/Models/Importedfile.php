@@ -15,6 +15,7 @@ class Importedfile extends Model
     protected $table = "importedfile";
     protected $fillable = [
         'path',
+        'file_hash',
         'created_by',
         'created_at',
         'updated_at',

@@ -18,7 +18,7 @@
     </div>
     @endif
 
-    @if($canAddReview)
+{{--    @if($canAddReview)--}}
     <form method="POST" action="{{ route('add-review') }}">
         @csrf
         <input type="hidden" name="item_id" value="{{ $book->id }}" />
@@ -47,7 +47,7 @@
 
         <button class="btn lastbtn submit_btn" type="submit">Post Review</button>
     </form>
-    @endif
+{{--    @endif--}}
 
     <div class="mb-4 d-flex justify-content-between">
         @if($reviews && $reviews->isNotEmpty() && ((auth()->user()->hasRole('admin') || auth()->id() == $book->created_by) || auth()->id() == $book['group']->created_by || (!empty($status) && $status->activated && $status->member_role == 'admin')))

@@ -123,7 +123,7 @@
                 <div class="item">
                     <div class="pad15">
                         <div class="innerheader">
-                            <h3 class="lead main-heading"><?=$group['title']?></h3>
+                            <a href="<?=route('show-group',["id"=>$group->id])?>"><h3 class="lead main-heading"><?=$group['title']?></h3></a>
                             <div class="post_image">
                                 <a href="<?=route('show-group',["id"=>$group->id])?>"><img src="assets/media/eye-outline.png" alt="View Group"></a>
                                 @if(Auth::user()->hasRole("admin") || $group["created_by"] == Auth::user()->id)
@@ -144,20 +144,20 @@
                         <img src="" alt="Group Image">
                         <?php } ?>
                         @if(!empty($group['current_user'] && $group['current_user']['member_role'] == 'admin' && $group['current_user']['activated']))
-                                <table><tr><td><a href="javascript:void(0)" 
-                               data-group_id="{{ $group['id'] }}" 
-                               data-group_type_id="{{ $group['group_type_id'] }}" 
-                               id="getMembersToAdd" 
-                               onclick="getMembersToAdd('<?= route('get-members-to-add', ['group_id' => $group['id'], 'group_type_id' => $group['group_type_id']]) ?>', '<?= $group['group_type_id'] ?>')" 
+                                <table><tr><td><a href="javascript:void(0)"
+                               data-group_id="{{ $group['id'] }}"
+                               data-group_type_id="{{ $group['group_type_id'] }}"
+                               id="getMembersToAdd"
+                               onclick="getMembersToAdd('<?= route('get-members-to-add', ['group_id' => $group['id'], 'group_type_id' => $group['group_type_id']]) ?>', '<?= $group['group_type_id'] ?>')"
                                class="dark-btn btn link_with_img">
                                 <img src="assets/media/add-circle-outline.png"> Invite
-                            </a></td></tr><tr><td><button id="shareBtn_<?= $group['id'] ?>" 
-                                    class="dark-btn btn link_with_img" 
+                            </a></td></tr><tr><td><button id="shareBtn_<?= $group['id'] ?>"
+                                    class="dark-btn btn link_with_img"
                                     onclick="copyToClipboard('<?= route('show-group', ['id' => $group['id']]) ?>', 'shareBtn_<?= $group['id'] ?>')">
                                 <img src="https://icon-library.com/images/sharing-icon-png/sharing-icon-png-14.jpg"> Share
                             </button></td></tr></table>
 
-                            
+
 
                             <script>
                                 // JavaScript function to copy text to clipboard
@@ -169,11 +169,11 @@
                                     tempInput.select();
                                     document.execCommand("copy");
                                     document.body.removeChild(tempInput);
-                                    
+
                                     // Change the button text or style to show the user it was copied
                                     var button = document.getElementById(buttonId);
                                     button.innerHTML = '<img src="https://icon-library.com/images/sharing-icon-png/sharing-icon-png-14.jpg"> Copied!';
-                                    
+
                                     // Optionally, you can add a timeout to reset the button text after a few seconds
                                     setTimeout(function() {
                                         button.innerHTML = '<img src="https://icon-library.com/images/sharing-icon-png/sharing-icon-png-14.jpg"> Share';

@@ -37,6 +37,20 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
         {{ session()->get('error') }}
     </div>
     @endif
+
+    @if(session()->has('duplicate_records'))
+        <div class="alert alert-warning">
+            <strong>Duplicate Records Found:</strong>
+            <p>The following items were not imported because they already exist:</p>
+            <ul>
+                @foreach(session()->get('duplicate_records') as $v)
+                    <li>{{ $v }}</li>
+                @endforeach
+            </ul>
+            <p>All other items are imported successfully.</p>
+        </div>
+    @endif
+
     @error('csv_url')
     <div class="alert alert-danger">{{ $message }}</div>
     @endif

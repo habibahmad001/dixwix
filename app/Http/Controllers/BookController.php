@@ -492,6 +492,14 @@ class BookController extends Controller
             return back()->withErrors(['csv_url' => 'Failed to process the file.']);
         }
 
+        // Check for duplicate import
+        $fileHash = md5_file(Storage::path($filePath));
+        if (Importedfile::where('file_hash', $fileHash)
+            ->where("created_by", Auth::user()->id)
+            ->where("group_id", $request->group_id)
+            ->exists()) {
+            return back()->with('error', 'This file has already been imported.');
+        }
 
         $uploader = Auth::user();
 
@@ -500,6 +508,8 @@ class BookController extends Controller
         try {
             Importedfile::create([
                 "path" => $filePath,
+                "file_hash" => $fileHash,
+                "group_id" => $request->group_id,
                 "created_by" => $uploader->id
             ]);
 
@@ -508,6 +518,7 @@ class BookController extends Controller
             $csvGroup  = Group::findOrFail($request->group_id);
             $errors    = [];
             $rowCount  = 0;
+            $existingRecords = []; // To track existing records
 
             $updts=[];
 
@@ -535,6 +546,17 @@ class BookController extends Controller
                 $csv_data = array_filter($csv_data, function($value) {
                     return !is_null($value) && $value !== "";
                 });
+
+                // Check for existing records
+                $existingBook = Book::where('name', $csv_data['name'])
+                    ->where('group_id', $request->group_id)
+                    ->where('created_by', Auth::user()->id)
+                    ->first();
+
+                if ($existingBook) {
+                    $existingRecords[] = $csv_data['name']; // Track duplicates
+//                    continue; // Skip this record
+                }
 
                 $rowCount++;
                 $csv_data["group_id"]   = $request->group_id;
@@ -675,12 +697,17 @@ class BookController extends Controller
                 dispatch(new SendBulkItemGroupNotification($group, $uploader));
             }
 
+            if (!empty($existingRecords)) {
+                DB::rollBack();
+                return back()->with('duplicate_records', $existingRecords);
+            }
+
             DB::commit();
             return back()->with('success', "Items successfully imported.");
 
         } catch (Exception $e) {
             DB::rollBack();
-            // Log::error("Import error: " . $e->getMessage());
+             Log::error("Import error: " . $e->getMessage());
             return back()->with('error', "An error occurred during the import process. Please try again.");
         }
     }
