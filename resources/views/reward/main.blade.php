@@ -119,7 +119,7 @@
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
-                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>
+                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Redeem Points</button>
                             </form>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                                     <input type="hidden" name="points" value="{{ $reward->coins }}">
                                     <input type="hidden" name="price" value="{{ $reward->price }}">
                                     <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
-                                    <button type="submit" class="btn rewards-buttons d-flex justify-content-between align-items-center lastbtn submit_btn w-100">
+                                    <button type="submit" class="btn justify-content-between align-items-center submit_btn w-100">
                                         {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
                                     </button>
                                 </form>
@@ -349,8 +349,7 @@
             text: "Would you like to send a Redeem Request or send a Gift Card?",
             icon: "question",
             showCancelButton: true,
-            // confirmButtonText: "Withdraw Request",
-            confirmButtonText: "Redeem Request",
+            confirmButtonText: "Withdraw Request",
             cancelButtonText: "Send Gift Card",
             reverseButtons: true
         }).then((result) => {
