@@ -586,19 +586,19 @@ class BookController extends Controller
                     'name'             => 'required|string',
                     'description'      => 'required',
                     'writers'          => 'required|string',
-                    'year'             => 'nullable|integer',
-                    'pages'            => 'nullable|numeric',
+//                    'year'             => 'nullable|integer',
+//                    'pages'            => 'nullable|numeric',
                     'journal_name'     => 'nullable|string',
-                    'ean_isbn_no'      => 'nullable|string|min:10|max:15',
-                    'upc_isbn_no'      => 'nullable|string',
-                    'copies'           => 'required|numeric|min:1',
+//                    'ean_isbn_no'      => 'nullable|string|min:10|max:15',
+//                    'upc_isbn_no'      => 'nullable|string',
+//                    'copies'           => 'required|numeric|min:1',
                     'cover_image_path' => 'required|string|url',
                     'price'            => 'required|numeric',
                 ]);
 
-                $validator->sometimes(['ean_isbn_no', 'writers', 'pages'], 'required', function ($input) use ($category) {
-                    return strtolower($category->name) === 'book';
-                });
+//                $validator->sometimes(['ean_isbn_no', 'writers', 'pages'], 'required', function ($input) use ($category) {
+//                    return strtolower($category->name) === 'book';
+//                });
 
                 if ($validator->fails()) {
                     $fieldErrors = [];
@@ -659,14 +659,14 @@ class BookController extends Controller
                     'name'           => $csv_data['name'],
                     'description'    => $csv_data['description'],
                     'writers'        => $csv_data['writers'],
-                    'year'           => $csv_data['year'],
-                    'pages'          => $csv_data['pages'],
+                    'year'           => $csv_data['year'] ?? "2010",
+                    'pages'          => $csv_data['pages'] ?? "15",
                     'status_options' => "maintenance",
                     'sale_or_rent'   => $request->sale_or_rent,
-                    'journal_name'   => $csv_data['journal_name'],
-                    'ean_isbn_no'    => $csv_data['ean_isbn_no'],
-                    'upc_isbn_no'    => $csv_data['upc_isbn_no'],
-                    'copies'         => $csv_data['copies'],
+                    'journal_name'   => $csv_data['journal_name'] ?? "Impact Communications first",
+                    'ean_isbn_no'    => $csv_data['ean_isbn_no'] ?? "1234900000",
+                    'upc_isbn_no'    => $csv_data['upc_isbn_no'] ?? "1933715251",
+                    'copies'         => $csv_data['copies'] ?? "1",
                     'group_type_id'  => $csvGroup->group_type_id,
                     'cover_page'     => $csv_data['cover_image_path'],
                     'price'          => $csv_data['price'],

@@ -114,6 +114,16 @@ Route::get('/security', [PageController::class, 'Security'])->name('security');
 
 Route::get('/support', [PageController::class, 'Support'])->name('support');
 
+Route::get('/test-env', function () {
+    dd([
+        'APP_NAME' => env('APP_NAME'),
+        '__ENV' => $_ENV['APP_NAME'] ?? 'missing',
+        'getenv' => getenv('APP_NAME'),
+    ]);
+});
+
+
+
 Route::post('/store-user', [UserController::class, 'RegisterUser'])->name("store-user");
 Route::post('/add-group-location', [UserController::class, 'addGroupLocation']);
 Route::post('/store-via-user', [UserController::class, 'StoreViaUser'])->name("store-via-user");
