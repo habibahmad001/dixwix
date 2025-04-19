@@ -118,7 +118,9 @@ Route::get('/test-env', function () {
     dd([
         'APP_NAME' => env('APP_NAME'),
         '__ENV' => $_ENV['APP_NAME'] ?? 'missing',
-        'getenv' => getenv('APP_NAME'),
+        'getenv' => env('APP_NAME'),
+        'APP_KEY' => env('APP_KEY'),
+        'DB_HOST' => env('DB_HOST'),
     ]);
 });
 

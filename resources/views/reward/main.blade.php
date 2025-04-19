@@ -167,7 +167,7 @@
                                     <input type="hidden" name="points" value="{{ $reward->coins }}">
                                     <input type="hidden" name="price" value="{{ $reward->price }}">
                                     <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
-                                    <button type="submit" class="btn justify-content-between align-items-center submit_btn w-100">
+                                    <button type="submit" class="btn justify-content-between d-flex align-items-center submit_btn w-100" style="padding: 2%">
                                         {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
                                     </button>
                                 </form>
