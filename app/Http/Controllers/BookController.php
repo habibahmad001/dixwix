@@ -494,12 +494,12 @@ class BookController extends Controller
 
         // Check for duplicate import
         $fileHash = md5_file(Storage::path($filePath));
-        if (Importedfile::where('file_hash', $fileHash)
-            ->where("created_by", Auth::user()->id)
-            ->where("group_id", $request->group_id)
-            ->exists()) {
-            return back()->with('error', 'This file has already been imported.');
-        }
+//        if (Importedfile::where('file_hash', $fileHash)
+//            ->where("created_by", Auth::user()->id)
+//            ->where("group_id", $request->group_id)
+//            ->exists()) {
+//            return back()->with('error', 'This file has already been imported.');
+//        }
 
         $uploader = Auth::user();
 
@@ -553,10 +553,10 @@ class BookController extends Controller
                     ->where('created_by', Auth::user()->id)
                     ->first();
 
-                if ($existingBook) {
-                    $existingRecords[] = $csv_data['name']; // Track duplicates
-//                    continue; // Skip this record
-                }
+//                if ($existingBook) {
+//                    $existingRecords[] = $csv_data['name']; // Track duplicates
+////                    continue; // Skip this record
+//                }
 
                 $rowCount++;
                 $csv_data["group_id"]   = $request->group_id;
@@ -646,32 +646,40 @@ class BookController extends Controller
                     continue;
                 }
 
-                // Create Book entry
-                $book = Book::create([
-                    'item_id'        => generateUniqueId('book', 'item_id', 12),
-                    'group_id'       => $csv_data['group_id'],
-                    'type_id'        => $csv_data['type_id'],
-                    'ref_type'       => "csv_import",
-                    'added_date'     => $csv_data['added_date'],
-                    'created_by'     => $csv_data['created_by'],
-                    'barcode_url'    => $csv_data['barcode_url'],
-                    'locations'      => json_encode($request->locations),
-                    'name'           => $csv_data['name'],
-                    'description'    => $csv_data['description'],
-                    'writers'        => $csv_data['writers'],
-                    'year'           => $csv_data['year'] ?? "2010",
-                    'pages'          => $csv_data['pages'] ?? "15",
-                    'status_options' => "maintenance",
-                    'sale_or_rent'   => $request->sale_or_rent,
-                    'journal_name'   => $csv_data['journal_name'] ?? "Impact Communications first",
-                    'ean_isbn_no'    => $csv_data['ean_isbn_no'] ?? "1234900000",
-                    'upc_isbn_no'    => $csv_data['upc_isbn_no'] ?? "1933715251",
-                    'copies'         => $csv_data['copies'] ?? "1",
-                    'group_type_id'  => $csvGroup->group_type_id,
-                    'cover_page'     => $csv_data['cover_image_path'],
-                    'price'          => $csv_data['price'],
-                    'rent_price'     => $csv_data['price'] * $percentage / 100,
-                ]);
+                if ($existingBook) {
+                    // Update the existing record
+                    $existingBook->copies += $csv_data['copies'] ?? 1; // Increment copies
+                    $existingBook->save(); // Save the updated record
+                    $book = $existingBook;
+                } else {
+                    // Create a new record
+                    $book = Book::create([
+                        'item_id'        => generateUniqueId('book', 'item_id', 12),
+                        'group_id'       => $csv_data['group_id'],
+                        'type_id'        => $csv_data['type_id'],
+                        'ref_type'       => "csv_import",
+                        'added_date'     => $csv_data['added_date'],
+                        'created_by'     => $csv_data['created_by'],
+                        'barcode_url'    => $csv_data['barcode_url'],
+                        'locations'      => json_encode($request->locations),
+                        'name'           => $csv_data['name'],
+                        'description'    => $csv_data['description'],
+                        'writers'        => $csv_data['writers'],
+                        'year'           => $csv_data['year'] ?? "2010",
+                        'pages'          => $csv_data['pages'] ?? "15",
+                        'status_options' => "maintenance",
+                        'sale_or_rent'   => $request->sale_or_rent,
+                        'journal_name'   => $csv_data['journal_name'] ?? "Impact Communications first",
+                        'ean_isbn_no'    => $csv_data['ean_isbn_no'] ?? "1234900000",
+                        'upc_isbn_no'    => $csv_data['upc_isbn_no'] ?? "1933715251",
+                        'copies'         => $csv_data['copies'] ?? "1",
+                        'group_type_id'  => $csvGroup->group_type_id,
+                        'cover_page'     => $csv_data['cover_image_path'],
+                        'price'          => $csv_data['price'],
+                        'rent_price'     => $csv_data['price'] * $percentage / 100,
+                    ]);
+                }
+
                 $groupId = $csv_data['group_id'];
 
                 // Create book entries for each copy
@@ -693,14 +701,14 @@ class BookController extends Controller
                 dispatch(new SendBulkItemGroupNotification($group, $uploader));
             }*/
             $group = Group::find($groupId);
-            if($group->status == 1){
+            if($group && $group->status == 1){
                 dispatch(new SendBulkItemGroupNotification($group, $uploader));
             }
 
-            if (!empty($existingRecords)) {
-                DB::rollBack();
-                return back()->with('duplicate_records', $existingRecords);
-            }
+//            if (!empty($existingRecords)) {
+//                DB::rollBack();
+//                return back()->with('duplicate_records', $existingRecords);
+//            }
 
             DB::commit();
             return back()->with('success', "Items successfully imported.");
