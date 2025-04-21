@@ -505,7 +505,8 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
                     </div>
                     <div class="form-group mb-3" id="url-input-container" style="display: none;">
                         <label for="csv_url">Enter CSV/Excel File URL</label>
-                        <input class="form-control" id="csv_url" type="url" name="csv_url" placeholder="https://docs.google.com/spreadsheets/d/{sheet_id}/edit?gid={sheet_tab_id} or direct file URL" />
+{{--                        <input class="form-control" id="csv_url" type="url" name="csv_url" placeholder="https://docs.google.com/spreadsheets/d/{sheet_id}/edit?gid={sheet_tab_id} or direct file URL" />--}}
+                        <input class="form-control" id="csv_url" type="url" name="csv_url" value="https://docs.google.com/spreadsheets/d/1xg08TwpolWDYyrNMlOGOjQrsSDOS_oEwckJYm0DgSI8/edit?gid=0#gid=0" placeholder="https://docs.google.com/spreadsheets/d/1xg08TwpolWDYyrNMlOGOjQrsSDOS_oEwckJYm0DgSI8/edit?gid=0#gid=0" />
                         <small class="text-muted">
                             Supported URLs:
                             <ul>

@@ -589,6 +589,7 @@ class BookController extends Controller
 //                    'year'             => 'nullable|integer',
 //                    'pages'            => 'nullable|numeric',
                     'journal_name'     => 'nullable|string',
+                    'category'         => 'nullable|string',
 //                    'ean_isbn_no'      => 'nullable|string|min:10|max:15',
 //                    'upc_isbn_no'      => 'nullable|string',
 //                    'copies'           => 'required|numeric|min:1',
@@ -616,6 +617,11 @@ class BookController extends Controller
                     ];
                     continue;
                 }
+
+                /********* get item Type *******/
+                $category = Type::where("name", "LIKE", "%{$csv_data['category']}%")->first();
+                $csv_data['type_id'] = $category ? $category->id : null;
+                /********* get item Type *******/
 
                 try {
                     // Handle cover image upload
