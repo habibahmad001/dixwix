@@ -375,31 +375,27 @@
             @endif
 
             @if (\Auth::user()->hasRole('user') && \Auth::user()->can("my-rewards"))
+{{--            <li class="nav-item">--}}
+{{--                <a href="{{ route('my-rewards') }}" {!! ($data['title']==="My Rewards" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>--}}
+{{--                    <img src="<?= url('assets/media/rewards.png') ?>">--}}
+{{--                    <span>Rewards {!! ($data['title'] === "My Rewards" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
             <li class="nav-item">
-                <a href="{{ route('my-rewards') }}" {!! ($data['title']==="My Rewards" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="My Rewards" || $data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" || $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
-                    <span>Rewards {!! ($data['title'] === "My Rewards" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                </a>
-            </li>
-            @endif
-
-            @if (\Auth::user()->hasRole('user') && \Auth::user()->can("my-rewards"))
-            <li class="nav-item">
-                <a href="{{ route('my-account') }}" {!! ($data['title']==="My Account" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
-                    <img src="<?= url('assets/media/my-account.png') ?>">
-                    <span>Account {!! ($data['title'] === "My Account" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" || $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
-                    <img src="<?= url('assets/media/rewards.png') ?>">
-                    <span>My Order's {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <span>Rewards {!! ($data['title'] === "My Rewards" ? '' : '') !!}</span>
                     <i class="fa fa-chevron-down"></i>
                 </a>
-                <ul class="sub-menu collapse {{ ($data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests") ? "show" : "" }}" id="gifto_sub_menu">
+                <ul class="sub-menu collapse {{ ($data['title']==="My Rewards" || $data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests") ? "show" : "" }}" id="gifto_sub_menu">
+                    <li>
+                        <a href="{{ route('my-rewards') }}" {!! ($data['title']==="My Rewards" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                            <span>My Rewards {!! ($data['title'] === "My Rewards" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ route('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Gifto</span>
+                            <span>My Gifto {!! ($data['title'] === "My Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
 {{--                    <li>--}}
@@ -409,15 +405,24 @@
 {{--                    </li>--}}
                     <li>
                         <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Transfer Point</span>
+                            <span>My Transfer Point {!! ($data['title'] === "My Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('my-purchase-orders') }}" {!! $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Purchases</span>
+                            <span>My Purchases {!! ($data['title'] === "My Purchases" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
                 </ul>
+            </li>
+            @endif
+
+            @if (\Auth::user()->hasRole('user') && \Auth::user()->can("my-rewards"))
+            <li class="nav-item">
+                <a href="{{ route('my-account') }}" {!! ($data['title']==="My Account" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                    <img src="<?= url('assets/media/my-account.png') ?>">
+                    <span>Account {!! ($data['title'] === "My Account" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                </a>
             </li>
             @endif
 

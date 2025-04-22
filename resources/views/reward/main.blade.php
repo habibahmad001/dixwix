@@ -102,7 +102,7 @@
 {{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
 {{--                <div class="modal-dialog modal-lg" role="document">--}}
 {{--                    <div class="modal-content">--}}
-                        <div class="modal-body" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                        <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
                             <div class="container mt-5">
                                 <div class="form-group" style="display: none">
                                     <label for="gifto_search_user">Search User</label>
@@ -166,7 +166,7 @@
                                                     <div class="row">
                                                         @foreach($limitedCardBgPaths as $originalName => $data)
                                                             @if(is_array($data) && isset($data['path']))
-                                                                <div class="col-3 text-center" style="position: relative;"> <!-- Center text under image -->
+                                                                <div class="col-2 text-center" style="position: relative;"> <!-- Center text under image -->
                                                                     <label style="cursor: pointer; display: block;">
                                                                         <!-- Hidden checkbox -->
                                                                         <input
@@ -185,7 +185,7 @@
                                                                         <img
                                                                             src="{{ asset('/storage/' . $data['path']) }}"
                                                                             class="img-fluid rounded shadow"
-                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;"
+                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px; min-height: 126px;"
                                                                             alt="{{ $data['name'] ?? $originalName }}"
                                                                         >
 
@@ -232,6 +232,40 @@
 {{--            </div>--}}
             {{--/*********** gifto model ***********/--}}
         </div>
+
+        <div class="row" id="dixwix_modal1" style="display: none">
+{{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
+{{--                <div class="modal-dialog modal-lg" role="document">--}}
+{{--                    <div class="modal-content">--}}
+                        <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                            <div class="container mt-5">
+                                <div class="form-group">
+                                    <label for="search_user">Search User</label>
+                                    <div class="input-group">
+                                        <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
+                                    </div>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="user_select">Select User</label>
+                                    <select id="user_select" class="form-control" disabled>
+                                        <option value="">No users found</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="user_points">Enter Points</label>
+                                    <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
+                                </div>
+                                <div class="form-group mt-3 text-right">
+                                    <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                                    <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+        </div>
+
         <div class="row">
             <div class="col-lg-6 col-xl-4 col-md-6">
                 <div class="item">
@@ -308,36 +342,6 @@
                                 </form>
                             @endforeach
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body" id="modal_body">
-                <div class="container mt-5">
-                    <div class="form-group">
-                        <label for="search_user">Search User</label>
-                        <div class="input-group">
-                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_select">Select User</label>
-                        <select id="user_select" class="form-control" disabled>
-                            <option value="">No users found</option>
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_points">Enter Points</label>
-                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
-                    </div>
-                    <div class="form-group mt-3">
-                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
-                        <button id="close-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -464,7 +468,7 @@
         userSelect.append(
             `<option value="">Select User</option>`
         );
-        jQuery('#dixwix_modal1').modal('show');
+        jQuery('#dixwix_modal1').slideDown('slow');
     }
 
     /******* Logic for Multiple of 500 *******/
