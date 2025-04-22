@@ -528,7 +528,7 @@ class BookController extends Controller
                     $d2=mb_convert_encoding($csv_data2['name'], 'UTF-8', 'UTF-8');
                     $d3=mb_convert_encoding($csv_data2['description'], 'UTF-8', 'UTF-8');
                     $d4=mb_convert_encoding($csv_data2['writers'], 'UTF-8', 'UTF-8');
-                    $d5=mb_convert_encoding($csv_data2['journal_name'], 'UTF-8', 'UTF-8');
+                    $d5=mb_convert_encoding(isset($csv_data2['journal_name']) ?? "", 'UTF-8', 'UTF-8');
 
                     $csv_data2['name']=$d2;
                     $csv_data2['description']=$d3;
@@ -588,7 +588,7 @@ class BookController extends Controller
                     'writers'          => 'required|string',
 //                    'year'             => 'nullable|integer',
 //                    'pages'            => 'nullable|numeric',
-                    'journal_name'     => 'nullable|string',
+//                    'journal_name'     => 'nullable|string',
                     'category'         => 'nullable|string',
 //                    'ean_isbn_no'      => 'nullable|string|min:10|max:15',
 //                    'upc_isbn_no'      => 'nullable|string',
@@ -654,7 +654,7 @@ class BookController extends Controller
 
                 if ($existingBook) {
                     // Update the existing record
-                    $existingBook->copies += $csv_data['copies'] ?? 1; // Increment copies
+                    $existingBook->copies += isset($csv_data['copies']) ?? 1; // Increment copies
                     $existingBook->save(); // Save the updated record
                     $book = $existingBook;
                 } else {
@@ -675,10 +675,10 @@ class BookController extends Controller
                         'pages'          => $csv_data['pages'] ?? "15",
                         'status_options' => "maintenance",
                         'sale_or_rent'   => $request->sale_or_rent,
-                        'journal_name'   => $csv_data['journal_name'] ?? "Impact Communications first",
-                        'ean_isbn_no'    => $csv_data['ean_isbn_no'] ?? "1234900000",
-                        'upc_isbn_no'    => $csv_data['upc_isbn_no'] ?? "1933715251",
-                        'copies'         => $csv_data['copies'] ?? "1",
+                        'journal_name'   => isset($csv_data['journal_name']) ?? "Impact Communications first",
+                        'ean_isbn_no'    => isset($csv_data['ean_isbn_no']) ?? "1234900000",
+                        'upc_isbn_no'    => isset($csv_data['upc_isbn_no']) ?? "1933715251",
+                        'copies'         => isset($csv_data['copies']) ?? "1",
                         'group_type_id'  => $csvGroup->group_type_id,
                         'cover_page'     => $csv_data['cover_image_path'],
                         'price'          => $csv_data['price'],
@@ -689,7 +689,7 @@ class BookController extends Controller
                 $groupId = $csv_data['group_id'];
 
                 // Create book entries for each copy
-                for ($i = 0; $i < $csv_data['copies']; $i++) {
+                for ($i = 0; $i < isset($csv_data['copies']); $i++) {
                     $book->entries()->create([
                         'name'       => $book->name . " (Copy " . ($i + 1) . ")",
                         'created_by' => $uploader->id,
