@@ -528,7 +528,7 @@ class BookController extends Controller
                     $d2=mb_convert_encoding($csv_data2['name'], 'UTF-8', 'UTF-8');
                     $d3=mb_convert_encoding($csv_data2['description'], 'UTF-8', 'UTF-8');
                     $d4=mb_convert_encoding($csv_data2['writers'], 'UTF-8', 'UTF-8');
-                    $d5=mb_convert_encoding(isset($csv_data2['journal_name']) ?? "", 'UTF-8', 'UTF-8');
+                    $d5=mb_convert_encoding(isset($csv_data2['manufacturer_publisher']) ?? "", 'UTF-8', 'UTF-8');
 
                     $csv_data2['name']=$d2;
                     $csv_data2['description']=$d3;
@@ -588,7 +588,7 @@ class BookController extends Controller
                     'writers'          => 'required|string',
 //                    'year'             => 'nullable|integer',
 //                    'pages'            => 'nullable|numeric',
-//                    'journal_name'     => 'nullable|string',
+                    'manufacturer_publisher' => 'nullable|string',
                     'category'         => 'nullable|string',
 //                    'ean_isbn_no'      => 'nullable|string|min:10|max:15',
 //                    'upc_isbn_no'      => 'nullable|string',
@@ -689,7 +689,7 @@ class BookController extends Controller
                 $groupId = $csv_data['group_id'];
 
                 // Create book entries for each copy
-                for ($i = 0; $i < isset($csv_data['copies']); $i++) {
+                for ($i = 0; $i < isset($csv_data['copies']) ?? 2; $i++) {
                     $book->entries()->create([
                         'name'       => $book->name . " (Copy " . ($i + 1) . ")",
                         'created_by' => $uploader->id,
@@ -717,7 +717,7 @@ class BookController extends Controller
 //            }
 
             DB::commit();
-            return back()->with('success', "Items successfully imported.");
+            return redirect("/my-items")->with('success', "Items successfully imported.");
 
         } catch (Exception $e) {
             DB::rollBack();
