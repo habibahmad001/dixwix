@@ -39,7 +39,7 @@ class RedeemRequestController extends Controller
     public function WithdrawRequests()
     {
         $data['title'] = 'Withdraw Requests';
-        $data['template'] = 'admin.reward.transaction-list';
+        $data['template'] = 'admin.reward.my-transaction-list';
         $transactions = RewardTransaction::where("user_id", Auth::user()->id)->orderBy('id', 'desc')->get();
 
         return view('with_login_common', compact('data', 'transactions'));

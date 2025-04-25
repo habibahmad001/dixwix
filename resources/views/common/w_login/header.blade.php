@@ -398,11 +398,11 @@
                             <span>My Gifto {!! ($data['title'] === "My Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
-{{--                    <li>--}}
-{{--                        <a href="{{ route('withdraw-requests') }}" {!! $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
-{{--                            <span>My Withdraw Requests</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    <li>
+                        <a href="{{ route('withdraw-requests') }}" {!! $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
+                            <span>Withdraw Requests {!! ($data['title'] === "Withdraw Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
                             <span>My Transfer Point {!! ($data['title'] === "My Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
