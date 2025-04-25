@@ -233,6 +233,24 @@
             {{--/*********** gifto model ***********/--}}
         </div>
 
+        <div class="row" id="dixwix_purchase" style="display: none">
+            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                <div class="container mt-5">
+                    <div class="form-group">
+                        <label for="withdrawPoints">Input Points for Withdraw</label>
+                        <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
+                        <p>Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
+                        <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
+                        <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
+                    </div>
+                    <div class="form-group text-right">
+                        <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
+                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row" id="dixwix_modal1" style="display: none">
 {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
 {{--                <div class="modal-dialog modal-lg" role="document">--}}
@@ -283,12 +301,12 @@
                             <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
                         </div>
                         <div class="imagesection d-flex justify-content-center">
-{{--                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">--}}
-                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">
+                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">
+{{--                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">--}}
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
-                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Redeem Points</button>
+                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>
                             </form>
                         </div>
                     </div>
@@ -362,6 +380,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // showWithdrawInputModal();
+                $('#dixwix_purchase').slideDown('slow');
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
                     Swal.fire({
@@ -414,8 +433,8 @@
             }
         }).then((inputResult) => {
             if (inputResult.isConfirmed) {
-                $('#redeem_coins').val(inputResult.value);
-                document.querySelector("#redeemfrm").submit();
+                // $('#redeem_coins').val(inputResult.value);
+                // document.querySelector("#redeemfrm").submit();
             }
         });
 
@@ -751,6 +770,101 @@
         //     // Enable the button only if a valid number is entered
         //     $assignButton.prop("disabled", !enteredValue || enteredValue <= 0);
         // });
+
+        /*********** New logic for inline form ***********/
+        const currentPoints = {!! $reward_balance !!};
+
+        $('#withdrawPoints').on('input', function() {
+            const pointsToWithdraw = parseInt(this.value, 10) || 0;
+            const dollarAmount = (pointsToWithdraw / 100).toFixed(2);
+            $('#dollarAmount').text(`$${dollarAmount}`);
+
+            // Calculate remaining points
+            const remainingPoints = currentPoints - pointsToWithdraw;
+            $('#currentPoints').text(remainingPoints);
+
+            // Change color based on remaining points
+            if (remainingPoints < 100) {
+                $('#currentPoints').css('color', 'maroon');
+            } else {
+                $('#currentPoints').css('color', ''); // Reset to default color
+            }
+
+            // Clear validation message
+            $('#validationMessage').hide();
+
+            // Validation logic
+            if (pointsToWithdraw < 0) {
+                $('#validationMessage').text("Please enter a positive number.").show();
+            } else if (remainingPoints < 100) {
+                $('#validationMessage').text("You must have at least 100 points remaining!").show();
+            } else {
+                $('#validationMessage').hide(); // Hide validation message if valid
+            }
+        });
+
+        $('#confirmWithdrawButton').on('click', function() {
+            const pointsToWithdraw = parseInt($('#withdrawPoints').val(), 10);
+
+            // Final validation before submission
+            if (!pointsToWithdraw || pointsToWithdraw <= 0) {
+                $('#validationMessage').text("Please enter a valid number of points.").show();
+                return;
+            }
+            if (currentPoints - pointsToWithdraw < 100) {
+                $('#validationMessage').text("You must have at least 100 points remaining!").show();
+                return;
+            }
+
+            // Show SweetAlert confirmation
+            Swal.fire({
+                title: "Confirm Withdrawal",
+                text: `Are you sure you want to withdraw ${pointsToWithdraw} points?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, withdraw!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#redeem_coins').val($('#withdrawPoints').val());
+                    $('#redeemfrm').submit();
+                }
+            });
+            {{--// Submit the form via AJAX--}}
+            {{--$.ajax({--}}
+            {{--    url: "{{ route('withdrow-points') }}",--}}
+            {{--    method: 'POST',--}}
+            {{--    data: {--}}
+            {{--        _token: "{{ csrf_token() }}",--}}
+            {{--        redeem_coins: pointsToWithdraw--}}
+            {{--    },--}}
+            {{--    success: function(response) {--}}
+            {{--        if (response.success) {--}}
+            {{--            Swal.fire({--}}
+            {{--                title: "Success",--}}
+            {{--                text: response.message,--}}
+            {{--                icon: "success"--}}
+            {{--            }).then(() => {--}}
+            {{--                window.location.reload();--}}
+            {{--            });--}}
+            {{--        } else {--}}
+            {{--            Swal.fire({--}}
+            {{--                title: "Error",--}}
+            {{--                text: response.message,--}}
+            {{--                icon: "error"--}}
+            {{--            });--}}
+            {{--        }--}}
+            {{--    },--}}
+            {{--    error: function() {--}}
+            {{--        Swal.fire({--}}
+            {{--            title: "Error",--}}
+            {{--            text: "Something went wrong. Please try again.",--}}
+            {{--            icon: "error"--}}
+            {{--        });--}}
+            {{--    }--}}
+            {{--});--}}
+        });
+        /*********** New logic for inline form ***********/
     });
 </script>
 

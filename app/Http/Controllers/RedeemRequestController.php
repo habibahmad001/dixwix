@@ -138,8 +138,9 @@ class RedeemRequestController extends Controller
                 ]);
             }
 
-            $this->handleRedeemNotification($request->status, $user, $transaction);
             $transaction->save();
+
+            $this->handleRedeemNotification($request->status, $user, $transaction);
 
             return redirect()->back()->with('success', 'Request updated successfully!');
 
