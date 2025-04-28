@@ -12,6 +12,16 @@
         color: #963c45;
         font-size: 11px;
     }
+    .btnalign {
+        justify-content: space-between;
+    }
+    .btnalign > button {
+        min-width: 48%;
+        min-height: 45px;
+    }
+    .cardimgdiv img {
+        min-height: 150px;
+    }
 </style>
 
 <div class="content">
@@ -35,7 +45,7 @@
         @endif
 
         @if(!empty($client_secret))
-            <div class="item">
+            <div class="item frmpopup">
                 <div class="card-body">
                     <div id="payment-form">
                         <div class="post_image d-flex align-items-center flex-row">
@@ -97,7 +107,7 @@
             </div>
         @endif
 
-        <div class="row" id="dixwix_gifto_modal1" style="display: none">
+        <div class="row frmpopup" id="dixwix_gifto_modal1" style="display: none">
             {{--/*********** gifto model ***********/--}}
 {{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
 {{--                <div class="modal-dialog modal-lg" role="document">--}}
@@ -163,7 +173,7 @@
                                                 @endphp
 
                                                 @if(count($limitedCardBgPaths) > 0)
-                                                    <div class="row">
+                                                    <div class="row cardimgdiv">
                                                         @foreach($limitedCardBgPaths as $originalName => $data)
                                                             @if(is_array($data) && isset($data['path']))
                                                                 <div class="col-2 text-center" style="position: relative;"> <!-- Center text under image -->
@@ -185,13 +195,13 @@
                                                                         <img
                                                                             src="{{ asset('/storage/' . $data['path']) }}"
                                                                             class="img-fluid rounded shadow"
-                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px; min-height: 126px;"
+                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;"
                                                                             alt="{{ $data['name'] ?? $originalName }}"
                                                                         >
 
                                                                         <!-- Price Text -->
                                                                         <div style="margin-top: 5px; font-weight: bold; color: #333;">
-                                                                            {{ isset($data['price']) ? '' . number_format($data['price'], 2) : 'No Price' }}
+                                                                            {{ isset($data['price']) ? '$ ' . number_format($data['price'] / 100, 2) : 'No Price' }}
                                                                         </div>
                                                                     </label>
                                                                 </div>
@@ -233,7 +243,7 @@
             {{--/*********** gifto model ***********/--}}
         </div>
 
-        <div class="row" id="dixwix_purchase" style="display: none">
+        <div class="row frmpopup" id="dixwix_purchase" style="display: none">
             <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
                 <div class="container mt-5">
                     <div class="form-group">
@@ -251,7 +261,7 @@
             </div>
         </div>
 
-        <div class="row" id="dixwix_modal1" style="display: none">
+        <div class="row frmpopup" id="dixwix_modal1" style="display: none">
 {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
 {{--                <div class="modal-dialog modal-lg" role="document">--}}
 {{--                    <div class="modal-content">--}}
@@ -306,7 +316,10 @@
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
-                                <button type="button" onclick="javascript: opengiftomodal(this)" class="btn withdraw-buttons lastbtn submit_btn">Withdraw Points</button>
+                                <div class="row btnalign">
+                                    <button type="button" onclick="javascript: jQuery('.frmpopup').slideUp('slow'); $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>
+                                    <button type="button" onclick="javascript: opengiftomodal(this)" class="col-5 btn btn-secondary btn-sm">Send Gift Card</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -368,38 +381,51 @@
 </div>
 
 <script>
-    function opengiftomodal(e) {
-        Swal.fire({
-            title: "Choose an Option",
-            text: "Would you like to send a Redeem Request or send a Gift Card?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Withdraw Request",
-            cancelButtonText: "Send Gift Card",
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // showWithdrawInputModal();
-                $('#dixwix_purchase').slideDown('slow');
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
-                    Swal.fire({
-                        title: "Insufficient Points",
-                        text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    });
-                } else {
-                    jQuery('#dixwix_gifto_modal1').slideDown('slow');
-                    // jQuery('#dixwix_gifto_modal1').slideDown('slow', function() {
-                    //     jQuery('html, body').animate({
-                    //         scrollTop: jQuery('#dixwix_gifto_modal1').offset().top
-                    //     }, 800); // 800ms scroll duration
-                    // });
+    {{--function opengiftomodal(e) {--}}
+    {{--    Swal.fire({--}}
+    {{--        title: "Choose an Option",--}}
+    {{--        text: "Would you like to send a Redeem Request or send a Gift Card?",--}}
+    {{--        icon: "question",--}}
+    {{--        showCancelButton: true,--}}
+    {{--        confirmButtonText: "Withdraw Request",--}}
+    {{--        cancelButtonText: "Send Gift Card",--}}
+    {{--        reverseButtons: true--}}
+    {{--    }).then((result) => {--}}
+    {{--        if (result.isConfirmed) {--}}
+    {{--            // showWithdrawInputModal();--}}
+    {{--            $('#dixwix_purchase').slideDown('slow');--}}
+    {{--        } else if (result.dismiss === Swal.DismissReason.cancel) {--}}
+    {{--            if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {--}}
+    {{--                Swal.fire({--}}
+    {{--                    title: "Insufficient Points",--}}
+    {{--                    text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",--}}
+    {{--                    icon: "error",--}}
+    {{--                    confirmButtonText: "OK"--}}
+    {{--                });--}}
+    {{--            } else {--}}
+    {{--                jQuery('#dixwix_gifto_modal1').slideDown('slow');--}}
+    {{--                // jQuery('#dixwix_gifto_modal1').slideDown('slow', function() {--}}
+    {{--                //     jQuery('html, body').animate({--}}
+    {{--                //         scrollTop: jQuery('#dixwix_gifto_modal1').offset().top--}}
+    {{--                //     }, 800); // 800ms scroll duration--}}
+    {{--                // });--}}
 
-                }
-            }
-        });
+    {{--            }--}}
+    {{--        }--}}
+    {{--    });--}}
+    {{--}--}}
+    function opengiftomodal(e) {
+        if (!{!! $reward_balance !!} || {!! $reward_balance !!} <= 500) {
+            Swal.fire({
+                title: "Insufficient Points",
+                text: "You do not have enough points to send a gift. Please purchase additional points to proceed.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        } else {
+            jQuery('.frmpopup').slideUp('slow');
+            jQuery('#dixwix_gifto_modal1').slideDown('slow');
+        }
     }
 
     function showWithdrawInputModal() {
@@ -487,6 +513,7 @@
         userSelect.append(
             `<option value="">Select User</option>`
         );
+        jQuery('.frmpopup').slideUp('slow');
         jQuery('#dixwix_modal1').slideDown('slow');
     }
 

@@ -387,7 +387,7 @@
                     <span>Rewards {!! ($data['title'] === "My Rewards" ? '' : '') !!}</span>
                     <i class="fa fa-chevron-down"></i>
                 </a>
-                <ul class="sub-menu collapse {{ ($data['title']==="My Rewards" || $data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests") ? "show" : "" }}" id="gifto_sub_menu">
+                <ul class="sub-menu collapse {{ ($data['title']==="My Rewards" || $data['title'] === "My Orders" || $data['title']==="My Transfer Point Requests" || $data['title']==="Withdraw Requests" || $data['title']==="My Purchases") ? "show" : "" }}" id="gifto_sub_menu">
                     <li>
                         <a href="{{ route('my-rewards') }}" {!! ($data['title']==="My Rewards" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                             <span>My Rewards {!! ($data['title'] === "My Rewards" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
@@ -571,36 +571,34 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('redeem-requests') }}" {!! ($data['title']==="Redeem Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
-                    <img src="<?= url('assets/media/plans.png') ?>">
-                    <span>Redeem Requests {!! ($data['title'] === "Redeem Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title']==="Gifto Campaign" || $data['title'] === "Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="#gifto_sub_menu" aria-controls="gifto_sub_menu" data-toggle="collapse" {!! ($data['title'] === "Redeem Requests" || $data['title']==="Transfer Point Requests" || $data['title'] === "Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <img src="<?= url('assets/media/rewards.png') ?>">
-                    <span>Gifto Campaign {!! ($data['title'] === "Gifto Campaign" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <span>Redeem Requests</span>
                     <i class="fa fa-chevron-down"></i>
                 </a>
-                <ul class="sub-menu collapse {{ ($data['title'] === "Gifto Orders") ? "show" : "" }}" id="gifto_sub_menu">
-                    <li>
-                        <a href="{{ route('gifto-campaign') }}" {!! $data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>Gifto Campaign Listing</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('gifto-orders') }}" {!! $data['title']==="Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>Gifto Order's</span>
-                        </a>
-                    </li>
-                </ul>
+{{--                <ul class="sub-menu collapse {{ ($data['title']==="Gifto Orders" || $data['title']==="Redeem Requests" || $data['title']==="Transfer Point Requests") ? "show" : "" }}" id="gifto_sub_menu">--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('redeem-requests') }}" {!! ($data['title']==="Redeem Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>--}}
+{{--                            <span>Withdraw Request's {!! ($data['title'] === "Redeem Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ url('gifto-orders') }}" {!! $data['title']==="Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>Gifto Request's {!! ($data['title'] === "Gifto Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transfer-requests') }}" {!! ($data['title']==="Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>--}}
+{{--                            <span>Transfer Request's {!! ($data['title'] === "Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                </ul>--}}
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('transfer-requests') }}" {!! ($data['title']==="Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                <a href="{{ route('gifto-campaign') }}" {!! $data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
                     <img src="<?= url('assets/media/plans.png') ?>">
-                    <span>Transfer Point Requests {!! ($data['title'] === "Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <span>Gifto Campaign Listing</span>
                 </a>
             </li>
             @endif

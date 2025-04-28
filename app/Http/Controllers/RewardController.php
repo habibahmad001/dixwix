@@ -333,7 +333,7 @@ class RewardController extends Controller
         /******** Send Request To Gifto *******/
         $giftoGramResponse = app(GiftoGramService::class)->sendGift(
             $user->email,
-            $request->points/100,
+            $request->points,
             $request->gifto_msg,
             getSetting('gifto_gram_uuid'),
             json_encode($request->selected_card),
@@ -348,7 +348,7 @@ class RewardController extends Controller
         $order->userName = Auth::user()->name;
         $order->userEmail = $user->email;
         $order->points = $request->points;
-        $order->giftoAmount = $request->points/100;
+        $order->giftoAmount = $request->points;
         $order->giftoMsg = $request->gifto_msg;
         $order->campaignUuid = getSetting('gifto_gram_uuid');
         $order->selectedCard = json_encode($request->selected_card);
