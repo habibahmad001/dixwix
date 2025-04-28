@@ -155,7 +155,7 @@
                                     <div class="form-group col-8 mt-3" style="display: none">
                                         <label for="gifto_amount">Points</label>
                                         {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                                        <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="500" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
+                                        <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="0" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
                                         <sub class="red-msg">Points must be multiple of 500.</sub>
                                     </div>
                                     <div class="form-group col-4" style="display: none">
@@ -184,7 +184,7 @@
                                                                             id="selected_card-{{ $data['id'] ?? 0 }}"
                                                                             name="selected_card[]"
                                                                             value="{{ $originalName }}"
-                                                                            data-price="{{ $data['price'] ?? 0 }}"
+                                                                            data-price="{{ $data['price'] ? ($data['price'] / 100) : 0 }}"
                                                                             data-paths="{{ asset('/storage/' . $data['path']) }}"
                                                                             class="selected_card"
                                                                             onchange="updateGiftoAmount(this)"
@@ -499,7 +499,7 @@
         }
 
         // Optional: Boundaries (if you still want min 500 and max 9440)
-        if (currentAmount < 500) currentAmount = 500;
+        if (currentAmount < 5) currentAmount = 5;
         if (currentAmount > 9440) currentAmount = 9440;
 
         input.value = currentAmount;

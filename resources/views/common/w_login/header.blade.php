@@ -482,7 +482,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="collapse" href="#general_sub_menu" role="button" aria-expanded="false" aria-controls="general_sub_menu">
-                    <img src="<?= url('assets/media/setting.png') ?>">
+                    <img src="<?= url('assets/media/list.png') ?>">
                     <span>General</span>
                     <i class="fa fa-chevron-down"></i>
                 </a>
@@ -545,7 +545,7 @@
             @if (\Auth::user()->hasRole('admin'))
             <li class="nav-item">
                 <a href="{{ route('subscription-plans') }}" {!! ($data['title']==="Subscription Plans" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
-                    <img src="<?= url('assets/media/plans.png') ?>">
+                    <img src="<?= url('assets/media/chevron-forward.png') ?>">
                     <span>Plans {!! ($data['title'] === "Subscription Plans" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                 </a>
             </li>
@@ -597,7 +597,7 @@
 
             <li class="nav-item">
                 <a href="{{ route('gifto-campaign') }}" {!! $data['title']==="Gifto Campaign" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                    <img src="<?= url('assets/media/plans.png') ?>">
+                    <img src="<?= url('assets/media/location 1.png') ?>">
                     <span>Gifto Campaign Listing</span>
                 </a>
             </li>
@@ -614,7 +614,7 @@
 
             <li class="nav-item">
                 <a href="<?= route('logout') ?>" class="nav-link">
-                    <img src="<?= url('assets/media/dashboard.png') ?>">
+                    <img src="<?= url('assets/media/log-out-outline.png') ?>">
                     <span>Logout</span>
                 </a>
             </li>
