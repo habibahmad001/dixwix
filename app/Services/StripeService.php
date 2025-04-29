@@ -92,7 +92,10 @@ class StripeService
 
     public function redeemPoints(User $user, $points, $paymentMethod, $description, $metadata)
     {
-        $amount = calculateAmountFromCoins($points); // Example: 1 point = $0.10
+//        $amount = calculateAmountFromCoins($points); // Example: 1 point = $0.10
+//        $amountCents = $amount * 100;
+
+        $amount = $points / 100;
         $amountCents = $amount * 100;
 
         try {
