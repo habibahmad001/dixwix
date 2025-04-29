@@ -249,7 +249,7 @@
                     <div class="form-group">
                         <label for="withdrawPoints">Input Points for Withdraw</label>
                         <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
-                        <p>Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
+                        <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
                         <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
                         <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
                     </div>
