@@ -45,7 +45,7 @@
         @endif
 
         @if(!empty($client_secret))
-            <div class="item frmpopup">
+            <div class="item stayOne">
                 <div class="card-body">
                     <div id="payment-form">
                         <div class="post_image d-flex align-items-center flex-row">
@@ -107,12 +107,47 @@
             </div>
         @endif
 
-        <div class="row frmpopup" id="dixwix_gifto_modal1" style="display: none">
-            {{--/*********** gifto model ***********/--}}
-{{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
-{{--                <div class="modal-dialog modal-lg" role="document">--}}
-{{--                    <div class="modal-content">--}}
-                        <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+        <!-- Tabs Starts-->
+        <div class="tabsArea stayOne" style="display: none;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true">Withdraw Request</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="gift-tab" data-bs-toggle="tab" href="#gift" role="tab" aria-controls="gift" aria-selected="false">Send Gift Card</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <!-- Withdraw Request Tab -->
+                <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                    <div class="row" id="dixwix_purchase">
+                        <div class="modal-body" id="modal_body" >
+                            <div class="container mt-5">
+                                <div class="form-group">
+                                    <label for="withdrawPoints">Input Points for Withdraw</label>
+                                    <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
+                                    <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
+                                    <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
+                                    <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
+                                </div>
+                                <div class="form-group text-right">
+                                    <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
+                                    {{--                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>--}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Send Gift Card Tab -->
+                <div class="tab-pane fade show active" id="gift" role="tabpanel" aria-labelledby="gift-tab">
+                    <div class="row" id="dixwix_gifto_modal1">
+                        {{--/*********** gifto model ***********/--}}
+                        {{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
+                        {{--                <div class="modal-dialog modal-lg" role="document">--}}
+                        {{--                    <div class="modal-content">--}}
+                        <div class="modal-body" id="modal_body">
                             <div class="container mt-5">
                                 <div class="form-group" style="display: none">
                                     <label for="gifto_search_user">Search User</label>
@@ -234,65 +269,53 @@
                             </div>
                             <div class="form-group col-12 text-right">
                                 <button class="btn btn-success" id="sendgift_button">Send Gift Card</button>
-                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_gifto_modal1').hide();" data-dismiss="modal">Close</button>
+                                {{--                            <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_gifto_modal1').hide();" data-dismiss="modal">Close</button>--}}
                             </div>
-{{--                        </div>--}}
-{{--                    </div>--}}
-                </div>
-{{--            </div>--}}
-            {{--/*********** gifto model ***********/--}}
-        </div>
-
-        <div class="row frmpopup" id="dixwix_purchase" style="display: none">
-            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
-                <div class="container mt-5">
-                    <div class="form-group">
-                        <label for="withdrawPoints">Input Points for Withdraw</label>
-                        <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
-                        <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
-                        <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
-                        <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
-                    </div>
-                    <div class="form-group text-right">
-                        <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
-                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>
+                            {{--                        </div>--}}
+                            {{--                    </div>--}}
+                        </div>
+                        {{--            </div>--}}
+                        {{--/*********** gifto model ***********/--}}
                     </div>
                 </div>
             </div>
+
+        </div>
+        <!-- Tabs Ends-->
+
+        <div class="row stayOne" id="dixwix_modal1" style="display: none">
+            {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
+            {{--                <div class="modal-dialog modal-lg" role="document">--}}
+            {{--                    <div class="modal-content">--}}
+            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                <div class="container mt-5">
+                    <div class="form-group">
+                        <label for="search_user">Search User</label>
+                        <div class="input-group">
+                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="user_select">Select User</label>
+                        <select id="user_select" class="form-control" disabled>
+                            <option value="">No users found</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="user_points">Enter Points</label>
+                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
+                    </div>
+                    <div class="form-group mt-3 text-right">
+                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
         </div>
 
-        <div class="row frmpopup" id="dixwix_modal1" style="display: none">
-{{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
-{{--                <div class="modal-dialog modal-lg" role="document">--}}
-{{--                    <div class="modal-content">--}}
-                        <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
-                            <div class="container mt-5">
-                                <div class="form-group">
-                                    <label for="search_user">Search User</label>
-                                    <div class="input-group">
-                                        <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
-                                    </div>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label for="user_select">Select User</label>
-                                    <select id="user_select" class="form-control" disabled>
-                                        <option value="">No users found</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label for="user_points">Enter Points</label>
-                                    <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
-                                </div>
-                                <div class="form-group mt-3 text-right">
-                                    <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
-                                    <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-        </div>
 
         <div class="row">
             <div class="col-lg-6 col-xl-4 col-md-6">
@@ -316,10 +339,10 @@
                                 @csrf
                                 <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
-                                <div class="row btnalign">
-                                    <button type="button" onclick="javascript: jQuery('.frmpopup').slideUp('slow'); $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>
-                                    <button type="button" onclick="javascript: opengiftomodal(this)" class="col-5 btn btn-secondary btn-sm">Send Gift Card</button>
-                                </div>
+{{--                                <div class="row btnalign">--}}
+{{--                                    <button type="button" onclick="javascript: $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>--}}
+                                    <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
+{{--                                </div>--}}
                             </form>
                         </div>
                     </div>
@@ -341,7 +364,7 @@
                             <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
                         </div>
                         <div class="imagesection d-flex justify-content-center">
-                            <button onclick="javascript: openmodal()" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
+                            <button onclick="javascript: $('.stayOne').slideUp('slow'); jQuery('#dixwix_modal1').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
                         </div>
                     </div>
                 </div>
@@ -423,7 +446,6 @@
                 confirmButtonText: "OK"
             });
         } else {
-            jQuery('.frmpopup').slideUp('slow');
             jQuery('#dixwix_gifto_modal1').slideDown('slow');
         }
     }
@@ -513,7 +535,6 @@
         userSelect.append(
             `<option value="">Select User</option>`
         );
-        jQuery('.frmpopup').slideUp('slow');
         jQuery('#dixwix_modal1').slideDown('slow');
     }
 
@@ -892,6 +913,14 @@
             {{--});--}}
         });
         /*********** New logic for inline form ***********/
+
+        $('#myTab a:first').tab('show');
+
+        // Event listener for tab change
+        $('#myTab a').on('click', function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
     });
 </script>
 

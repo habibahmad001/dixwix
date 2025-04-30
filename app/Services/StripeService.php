@@ -56,9 +56,18 @@ class StripeService
         }
     }
 
-    public function createPaymentIntentForConfirm($amount, $currency = 'usd', $customerId = null, $paymentMethodId = null, $description = null, $metadata= [])
+    public function createPaymentIntentForConfirm($amount, $currency = 'usd', $customerId = null, $paymentMethodId = null, $description = null, $metadata = [])
     {
         try {
+            // Log the parameters being sent to PaymentIntent::create
+            \Log::info('Creating Payment Intent with parameters:', [
+                'amount' => $amount * 100,
+                'currency' => $currency,
+                'customer' => $customerId,
+                'payment_method' => $paymentMethodId,
+                'description' => $description,
+                'metadata' => $metadata,
+            ]);
 
             $paymentIntent = PaymentIntent::create([
                 'amount' => $amount * 100,
@@ -76,6 +85,15 @@ class StripeService
 
             return $paymentIntent;
         } catch (ApiErrorException $e) {
+            // Log the error message and any relevant details
+            \Log::error('Payment Intent creation failed: ' . $e->getMessage(), [
+                'amount' => $amount * 100,
+                'currency' => $currency,
+                'customer' => $customerId,
+                'payment_method' => $paymentMethodId,
+                'description' => $description,
+                'metadata' => $metadata,
+            ]);
             throw new \Exception($e->getMessage());
         }
     }

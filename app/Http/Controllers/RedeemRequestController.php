@@ -29,7 +29,7 @@ class RedeemRequestController extends Controller
 
     public function index()
     {
-        $data['title'] = 'Redeem Requests';
+        $data['title'] = 'Withdraw Request';
         $data['template'] = 'admin.reward.transaction-list';
         $transactions = RewardTransaction::orderBy('id', 'desc')->get();
 
