@@ -1,3 +1,12 @@
+<!-- Custom CSS -->
+<style>
+    .custom-icon {
+        background-color: #f26722; /* Soft orange color from the image */
+        width: 60px;
+        height: 60px;
+    }
+</style>
+
 <div class="container-fluid intro-wrapper position-relative">
     <img src="img/isolationimage.png" class="imagepattren">
     <div class="container intro-section text-center">
@@ -12,7 +21,7 @@
                     rewards for contributing to the community
                 </p> --}}
               <p>
-                At DixWix.com, we believe in the power of community, collaboration and sustainability. Our platform helps users share resources, skills and expertise with trusted friends, colleagues and neighbors. Earn rewards from renting your unused items within private community groups.
+                  DixWix is a platform that helps users earn cash from renting their unused items
               </p>
                 {{-- <h2 class="headingallsec mt-5">Together, let's build a greener future in a<br>collaborative, secure and
                     friendly environment”</h2>--}}
@@ -275,6 +284,148 @@
 </div>
 
 <!--  Our members End -->
+
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2><strong>How it <span class="text-danger">Works?</span></strong></h2>
+        <p class="text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <div class="row">
+            <!-- Item Template (repeat with different content) -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">1</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Register</h5>
+                        <p class="card-text text-muted">Sign up and create your member profile with your contact and location details.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">2</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Groups</h5>
+                        <p class="card-text text-muted">Invite friends to share ideas and resources, collaborate on projects and build a community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">3</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Catalog</h5>
+                        <p class="card-text text-muted">Identify resources and skills that can be shared within your private community. Print QR codes and tag your physical items for easy organization and tracking.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">4</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Circulation</h5>
+                        <p class="card-text text-muted">Manage rental and return requests and keep resources circulating.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">5</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Rewards</h5>
+                        <p class="card-text text-muted">Earn cash rewards for rentals, your items within the community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="mx-auto rounded-circle text-white d-flex align-items-center justify-content-center custom-icon" style="font-size: 24px;">6</div>
+                        </div>
+                        <h5 class="card-title font-weight-bold">Support</h5>
+                        <p class="card-text text-muted">Review support portal for assistance with onboarding, cataloging, rentals & FAQs. Register for our live webinars and onboarding sessions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="py-5 bg-white">
+    <div class="container text-center">
+        <h2><strong>Simple, Transparent <span style="color:#f15a29;">Pricing</span></strong></h2>
+        <p class="text-muted mb-5">We don’t sell customer data or <a href="#" style="color:#f15a29; text-decoration:underline;">ad’s</a>. Our pricing is based on a shared cost model designed to fit everyone’s needs. Everyone can get started for free with an option to upgrade for a larger number of items.</p>
+
+        <div class="row">
+            <!-- Basic Plan -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-left">
+                        <h5 class="text-muted text-center">Basic</h5>
+                        <h4 class="font-weight-bold text-center">$0 <small class="text-muted">(/User/Month)</small></h4>
+                        <ul class="list-unstyled mt-4">
+                            <li><span style="color:#f15a29;">&#10003;</span> Total Items: 25</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Total Groups: 2</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Categories: Fixed</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Lend / Borrow: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> QR Codes: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Rewards: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Google SSO: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Notification: Included</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-danger btn-block mt-3" style="border-color:#f15a29; color:#f15a29;">Get Started</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm position-relative">
+                    <div class="card-body text-left">
+                        <h5 class="text-muted text-center">Pro</h5>
+                        <h4 class="font-weight-bold text-center">$5 <small class="text-muted">(/User/Month)</small></h4>
+                        <ul class="list-unstyled mt-4">
+                            <li><span style="color:#f15a29;">&#10003;</span> Total Items: 100</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Total Groups: Unlimited</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Categories: Custom</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Lend / Borrow: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> QR Codes: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Rewards: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Google SSO: Included</li>
+                            <li><span style="color:#f15a29;">&#10003;</span> Notification: Included</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-danger btn-block mt-3" style="border-color:#f15a29; color:#f15a29;">Upgrade Now</a>
+                    </div>
+                    <!-- Badge -->
+                    <span class="badge badge-light border position-absolute" style="top:15px; right:15px;">MOST VALUE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
 <!-- Second Divider Start -->
 
