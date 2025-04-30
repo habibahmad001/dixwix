@@ -1341,6 +1341,41 @@ protected function validateRecaptcha($recaptchaResponse)
         }
     }
 
+    public function updateStripeID()
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $user = auth()->user();
+
+        try {
+            // Create a new Stripe customer
+            $customer = \Stripe\Customer::create([
+                'email' => $user->email,
+                'name'  => $user->name,
+            ]);
+
+            // Update the user's Stripe customer ID
+            $user->update(['stripe_customer_id' => $customer->id]);
+
+            // Log success message
+            Log::info('Stripe customer ID updated successfully for user: ' . $user->id);
+
+            // Return success message
+            return response()->json(['message' => 'Stripe customer ID updated successfully.'], 200);
+        } catch (ApiErrorException $e) {
+            // Log error message
+            Log::error('Failed to update Stripe customer ID for user: ' . $user->id . ' - Error: ' . $e->getMessage());
+
+            // Return error message
+            return response()->json(['message' => 'Failed to update Stripe customer ID. Please try again later.'], 500);
+        } catch (\Exception $e) {
+            // Log any other exceptions
+            Log::error('An unexpected error occurred while updating Stripe customer ID for user: ' . $user->id . ' - Error: ' . $e->getMessage());
+
+            // Return error message
+            return response()->json(['message' => 'An unexpected error occurred. Please try again later.'], 500);
+        }
+    }
+
     public function switchPlan(Request $request)
     {
         $request->validate(['plan_id' => 'required|exists:membership_plans,id']);

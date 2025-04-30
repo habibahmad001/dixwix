@@ -211,6 +211,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/reviews/{id}', [ReviewController::class, 'delete'])->name('reviews.delete');
 
     Route::get('/admin-dashboard', [AdminController::class, 'Dashboard'])->name("admin-dashboard");
+    Route::get('/update-stripe-id', [UserController::class, 'updateStripeID'])->name("stripe-id-ipdate");
 
     Route::get('/edit-profile', [UserController::class, 'EditUser'])->name("edit-profile");
     Route::post('/store-profile', [UserController::class, 'StoreUser'])->name("store-profile");
