@@ -1148,7 +1148,7 @@ class BookController extends Controller
 
     public function RenewBookStatus(Request $request)
     {
-        $book = Book::with('entries')->where('id', $request['book_id'])->firstOrFail();
+        $book = Book::with('entries', 'user', 'group')->where('id', $request['book_id'])->firstOrFail();
         DB::beginTransaction();
 
         try {
@@ -1193,7 +1193,24 @@ class BookController extends Controller
             }
 
             DB::commit();
-
+            $user = User::find($book->user->id);
+            $entryNotification = [
+                'only_database' => true,
+                'title'         => 'Book Reservation Request 🎉',
+                'type'          => 'book_reservation_request',
+                'subject'       => 'Book Reservation Request',
+                'message'       => "One of the group member has requested for the book <em><strong>{$book->name}</strong></em> with Book ID <em><strong>{$book->item_id}</strong></em> to reserve for $duration",
+                'action'        => 'View Reservation',
+                'user_id'       => $book->user->id,
+                'url'           => url("show-group/" . $book->group->id),
+            ];
+            try {
+                $user->notify(new GeneralNotification($entryNotification));
+                logger()->info('Notification sent successfully', ['user_id' => $book->user->id, 'book_id' => $book->id]);
+            } catch (Exception $e) {
+                logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => $book->user->id, 'book_id' => $book->id]);
+                return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+            }
             return json_encode(["success" => true, "message" => "Book status updated successfully"]);
 
         } catch (Exception $e) {
