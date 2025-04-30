@@ -577,11 +577,11 @@
                     <i class="fa fa-chevron-down"></i>
                 </a>
                 <ul class="sub-menu collapse {{ ($data['title']==="Gifto Orders" || $data['title']==="Withdraw Request" || $data['title']==="Transfer Point Requests") ? "show" : "" }}" id="gifto_sub_menu">
-{{--                    <li>--}}
-{{--                        <a href="{{ route('redeem-requests') }}" {!! ($data['title']==="Redeem Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>--}}
-{{--                            <span>Withdraw Request's {!! ($data['title'] === "Withdraw Request" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    <li>
+                        <a href="{{ route('redeem-requests') }}" {!! ($data['title']==="Redeem Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                            <span>Withdraw Request's {!! ($data['title'] === "Withdraw Request" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ url('gifto-orders') }}" {!! $data['title']==="Gifto Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
                             <span>Gifto Request's {!! ($data['title'] === "Gifto Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
