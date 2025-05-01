@@ -341,7 +341,7 @@
 {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
 {{--                                <div class="row btnalign">--}}
 {{--                                    <button type="button" onclick="javascript: $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>--}}
-                                    <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button>
+                                    <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn submit_btn w-100">Redeem Points</button>
 {{--                                </div>--}}
                             </form>
                         </div>

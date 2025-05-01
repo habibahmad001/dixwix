@@ -148,7 +148,7 @@
         </div>
         <div class="form-group">
             <h3 class="lead main-heading">Status <span class="text-danger">*</span></h3>
-            <input type="radio" name="group[status]" value="1" {{ !isset($group['status']) ? 'checked' : '' }} {{ isset($group['status']) && $group['status']==1?'checked':'' }} class="large-radio" required> Public
+            <input type="radio" name="group[status]" value="1" {{ !isset($group['status']) ? 'checked' : '' }} {{ isset($group['status']) && $group['status']==1?'checked':'' }} class="large-radio" required> Shared
             <input type="radio" name="group[status]" value="0" {{ isset($group['status']) && $group['status']==0?'checked':'' }} class="large-radio" required> Private
             <div class="form-group mt-3">
                 <h3 class="lead main-heading">Group Picture</h3>
@@ -241,7 +241,7 @@
         userGroupLocations.forEach(location => {
             // Check if "Community" is selected, otherwise set it as selected by default
             let isSelected = locationsArray.includes(location) || (!isCommunitySelected && location === "Community");
-            
+
             if (location === "Community" && !isCommunitySelected) {
                 isCommunitySelected = true; // Mark that "Community" has been selected
             }

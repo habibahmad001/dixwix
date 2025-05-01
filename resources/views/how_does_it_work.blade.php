@@ -289,12 +289,12 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12" style="background-image: url('img/hiws.png');background-position: center;background-size: contain;width: 100% !important;height: 400px !important;background-repeat: no-repeat;border: 1px solid #000;border-radius: 5px;margin-bottom: 5px;">
-        </div>
-    </div>
-</div>
+{{--<div class="container">--}}
+{{--    <div class="row">--}}
+{{--        <div class="col-md-12" style="background-image: url('img/hiws.png');background-position: center;background-size: contain;width: 100% !important;height: 400px !important;background-repeat: no-repeat;border: 1px solid #000;border-radius: 5px;margin-bottom: 5px;">--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 <!-- Services End -->
 

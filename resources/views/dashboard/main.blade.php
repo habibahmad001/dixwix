@@ -12,12 +12,12 @@
                 Developing the Leaders Around You <i class="fas fa-angle-right"></i>
             </a>*/ ?>
             <div class="bottom-links d-flex flex-column flex-md-row" style="gap:5px">
-                <a href="{{ route("dashboard", ["selected_alphabet" => $data['selected_alphabet'], "view_type" => "title"]) }}" id="toolbar_nav_title" class="{{ !isset($data["view_type"]) || $data["view_type"] == "title" ? "dark-btn" : "" }} btn link_with_img">
-                    <img src="assets/media/summary.png"> Title
-                </a>
-                <a href="{{ route("dashboard", ["selected_alphabet" => $data['selected_alphabet'], "view_type" => "summary"]) }}" id="toolbar_nav_summary" class="{{ isset($data["view_type"]) && $data["view_type"] == "summary" ? "dark-btn" : "" }} btn link_with_img">
-                    <img src="assets/media/title.png"> Summary
-                </a>
+{{--                <a href="{{ route("dashboard", ["selected_alphabet" => $data['selected_alphabet'], "view_type" => "title"]) }}" id="toolbar_nav_title" class="{{ !isset($data["view_type"]) || $data["view_type"] == "title" ? "dark-btn" : "" }} btn link_with_img">--}}
+{{--                    <img src="assets/media/summary.png"> Title--}}
+{{--                </a>--}}
+{{--                <a href="{{ route("dashboard", ["selected_alphabet" => $data['selected_alphabet'], "view_type" => "summary"]) }}" id="toolbar_nav_summary" class="{{ isset($data["view_type"]) && $data["view_type"] == "summary" ? "dark-btn" : "" }} btn link_with_img">--}}
+{{--                    <img src="assets/media/title.png"> Summary--}}
+{{--                </a>--}}
                 <a href="javascript:void(0)" id="toolbar_nav_filter" class="dark-btn btn link_with_img" onclick="openNav()">
                     <img src="assets/media/filter.png"> Filter
                 </a>
