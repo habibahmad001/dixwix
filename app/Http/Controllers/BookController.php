@@ -1169,7 +1169,7 @@ class BookController extends Controller
             }
 
             // Update the entry where id matches book_id
-            $entry = Entries::where('id', $request['book_id'])->first();
+            $entry = Entries::where('book_id', $request['book_id'])->first();
 
             if ($entry) {
                 // Increment the is_renew value
@@ -1180,7 +1180,7 @@ class BookController extends Controller
 
                 // Calculate the due_date based on the duration
                 $dueDate = Carbon::now()->addWeeks($duration);
-
+//                DB::enableQueryLog();
                 // Update the entry
                 $entry->update([
                     "renew_date" => Carbon::now(),
@@ -1188,6 +1188,11 @@ class BookController extends Controller
                     "is_reserved" => 2,
                     "is_renew" => $newIsRenewValue
                 ]);
+//                $lastQuery = DB::getQueryLog();
+//                $lastExecutedQuery = end($lastQuery);
+//
+//// Print the last executed query
+//                dd($lastExecutedQuery['query'], $lastExecutedQuery['bindings']);
             } else {
                 return json_encode(["success" => false, "message" => "Entry not found."]);
             }

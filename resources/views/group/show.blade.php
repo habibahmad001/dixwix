@@ -249,28 +249,28 @@ return ($members['member_id'] === Auth::user()->id && $members['status'] === 're
                                                 @if (!$book['is_reserved'] && $book['copies'] !== 0 && !$book['is_reserved_pending'])
                                                     @if($enabled_member)
                                                         @if(!auth()->user()->hasRole('admin'))
-                                                        <a href="javascript:void(0)" onclick="setBookStatus({{ $book['id'] }}, {{ $group['id'] }},'reserved', 1)" id="set-status" class="btn btn-green"> Add Reserve</a>
+                                                            <a href="javascript:void(0)" onclick="setBookStatus({{ $book['id'] }}, {{ $group['id'] }},'reserved', 1)" id="set-status" class="btn btn-green"> Add Reserve</a>
                                                         @else
-                                                        <span class="badge badge-warning px-4 py-2">Admin can not reserve</span>
+                                                            <span class="badge badge-warning px-4 py-2">Admin can not reserve</span>
                                                         @endif
                                                     @else
-                                                    <span class="badge badge-warning px-4 py-2">You are disabled</span>
+                                                        <span class="badge badge-warning px-4 py-2">You are disabled</span>
                                                     @endif
                                                 @endif
-                                            @if($book['is_reserved'])
-                                                @if($book['state'] == 'return-request')
-                                                <span class="badge badge-warning px-4 py-2"> Return pending </span>
-                                                @else
-                                                <a href="javascript:void(0)" id="return-book-request-btn" onclick="returnBook({{ $book['entry_id'] }}, {{ $book['id'] }}, this)" class="btn btn-red"> Return</a>
+                                                @if($book['is_reserved'])
+                                                    @if($book['state'] == 'return-request')
+                                                        <span class="badge badge-warning px-4 py-2"> Return pending </span>
+                                                    @else
+                                                        <a href="javascript:void(0)" id="return-book-request-btn" onclick="returnBook({{ $book['entry_id'] }}, {{ $book['id'] }}, this)" class="btn btn-red"> Return</a>
+                                                    @endif
                                                 @endif
                                             @endif
-                                            @endif
                                             @if($enabled_member || $group['created_by'] == auth()->id() || auth()->user()->hasRole('admin'))
-                                            {{-- <a class="btn btn-info btn-sm mt-2" href="{{ route('comments', $book['id']) }}">Comments</a> --}}
-                                            <a class="btn btn-warning  btn-sm mt-2" href="{{ route('reviews', $book['id']) }}">Reviews</a>
+                                                {{-- <a class="btn btn-info btn-sm mt-2" href="{{ route('comments', $book['id']) }}">Comments</a> --}}
+                                                <a class="btn btn-warning  btn-sm mt-2" href="{{ route('reviews', $book['id']) }}">Reviews</a>
                                             @endif
                                             @if ($book['created_by'] == auth()->id() || $group['created_by'] == auth()->id() || auth()->user()->hasRole('admin') || (!empty($user_status) && $user_status['member_role'] =='admin' && $user_status['activated']))
-                                            <a href="javascript:void(0)" class="badge badge-secondary px-4 mt-2 py-2 show-copies" onclick="showCopies({{ $book['id'] }})">Action</a>
+                                                <a href="javascript:void(0)" class="badge badge-secondary px-4 mt-2 py-2 show-copies" onclick="showCopies({{ $book['id'] }})">Action</a>
                                             @endif
                                         </td>
                                     </tr>
