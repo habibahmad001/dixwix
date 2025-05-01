@@ -5,6 +5,9 @@
         width: 60px;
         height: 60px;
     }
+    .themeColor {
+        color: #f26722 !important; /* Soft orange color from the image */
+    }
 </style>
 
 <div class="container-fluid intro-wrapper position-relative">
@@ -287,7 +290,7 @@
 
 <section class="py-5 bg-light">
     <div class="container text-center">
-        <h2><strong>How it <span class="text-danger">Works?</span></strong></h2>
+        <h2><strong>How it <span class="text-danger themeColor">Works?</span></strong></h2>
         <p class="text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
         <div class="row">
             <!-- Item Template (repeat with different content) -->
@@ -372,59 +375,102 @@
 </section>
 
 
-<section class="py-5 bg-white">
-    <div class="container text-center">
-        <h2><strong>Simple, Transparent <span style="color:#f15a29;">Pricing</span></strong></h2>
-        <p class="text-muted mb-5">We don’t sell customer data or <a href="#" style="color:#f15a29; text-decoration:underline;">ad’s</a>. Our pricing is based on a shared cost model designed to fit everyone’s needs. Everyone can get started for free with an option to upgrade for a larger number of items.</p>
-
-        <div class="row">
+<section class="dixpricing py-5">
+    <div class="container">
+        <div class="head text-center mb-4">
+            <h2>Simple, Transparent <span style="color:#f15a29;">Pricing</span></h2>
+            <div class="col-lg-8 col-md-12 mx-auto">
+                <p>We don’t sell customer data or <a href="#" style="color:#f15a29;">ad’s</a>. Our pricing is based on a shared cost model designed to fit everyone’s needs. Everyone can get started for free with an option to upgrade for a larger number of items.</p>
+            </div>
+        </div>
+        <div class="list row d-flex justify-content-center">
             <!-- Basic Plan -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-left">
-                        <h5 class="text-muted text-center">Basic</h5>
-                        <h4 class="font-weight-bold text-center">$0 <small class="text-muted">(/User/Month)</small></h4>
-                        <ul class="list-unstyled mt-4">
-                            <li><span style="color:#f15a29;">&#10003;</span> Total Items: 25</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Total Groups: 2</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Categories: Fixed</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Lend / Borrow: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> QR Codes: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Rewards: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Google SSO: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Notification: Included</li>
-                        </ul>
-                        <a href="#" class="btn btn-outline-danger btn-block mt-3" style="border-color:#f15a29; color:#f15a29;">Get Started</a>
-                    </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="content border p-4 rounded shadow-sm text-left">
+                    <p class="h5 font-weight-bold">Basic</p>
+                    <p class="price h4 text-success">Free</p>
+                    <ul class="pl-3">
+                        <li>25 Items</li>
+                        <li>2 Groups</li>
+                        <li>Fixed Categories</li>
+                        <li>Lend / Borrow Included</li>
+                        <li>QR Codes Included</li>
+                        <li>Rewards Included</li>
+                        <li>Google SSO Included</li>
+                        <li>Notification Included</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>
                 </div>
             </div>
-
             <!-- Pro Plan -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm position-relative">
-                    <div class="card-body text-left">
-                        <h5 class="text-muted text-center">Pro</h5>
-                        <h4 class="font-weight-bold text-center">$5 <small class="text-muted">(/User/Month)</small></h4>
-                        <ul class="list-unstyled mt-4">
-                            <li><span style="color:#f15a29;">&#10003;</span> Total Items: 100</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Total Groups: Unlimited</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Categories: Custom</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Lend / Borrow: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> QR Codes: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Rewards: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Google SSO: Included</li>
-                            <li><span style="color:#f15a29;">&#10003;</span> Notification: Included</li>
-                        </ul>
-                        <a href="#" class="btn btn-outline-danger btn-block mt-3" style="border-color:#f15a29; color:#f15a29;">Upgrade Now</a>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="content border p-4 rounded shadow-sm text-left position-relative">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="h5 font-weight-bold">Pro</p>
+                        <p class="tag">POPULAR</p>
                     </div>
-                    <!-- Badge -->
-                    <span class="badge badge-light border position-absolute" style="top:15px; right:15px;">MOST VALUE</span>
+                    <p class="price h4 text-primary">$5 / User / Month</p>
+                    <ul class="pl-3">
+                        <li>100 Items</li>
+                        <li>Unlimited Groups</li>
+                        <li>Custom Categories</li>
+                        <li>Lend / Borrow Included</li>
+                        <li>QR Codes Included</li>
+                        <li>Rewards Included</li>
+                        <li>Google SSO Included</li>
+                        <li>Notification Included</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+
+<section class="support-page py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="font-weight-bold">Support Page - <span style="color:#f15a29;">Getting Started</span></h2>
+            <p class="text-muted">Articles to get you up and running, quick and easy.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold" style="color:#f15a29;">Website Getting Started</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-3">
+                                <strong>Registration</strong>
+                                <ul class="pl-3 mt-2">
+                                    <li>Step 1: Register your account with an email address and password.</li>
+                                    <li>Step 2: Validate your account by confirming the link sent to your email.</li>
+                                    <li>Step 3: Login to the account using your registration details.</li>
+                                </ul>
+                            </li>
+                            <li class="mb-2"><strong>Membership:</strong> Get started with Free Membership</li>
+                            <li class="mb-2"><strong>Create a Group</strong></li>
+                            <li class="mb-2"><strong>Join a Group</strong></li>
+                            <li class="mb-2"><strong>Add Items</strong></li>
+                            <li class="mb-2"><strong>Rent an Item</strong></li>
+                            <li class="mb-2"><strong>Approve a Rental Request</strong></li>
+                            <li class="mb-2"><strong>Return an Item</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold" style="color:#f15a29;">Support</h5>
+                        <p class="mb-0">Need help? Visit our support portal for onboarding, cataloging, rental management, and FAQs.</p>
+                        <p class="mb-0">You can also <a href="#" style="color:#f15a29;">register for a live webinar</a> or join an onboarding session to learn more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <!-- Second Divider Start -->

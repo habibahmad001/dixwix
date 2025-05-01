@@ -114,6 +114,8 @@ Route::get('/security', [PageController::class, 'Security'])->name('security');
 
 Route::get('/support', [PageController::class, 'Support'])->name('support');
 
+Route::get('/getting-started', [PageController::class, 'gettingStarted'])->name('getting-started');
+
 Route::get('/test-env', function () {
     dd([
         'APP_NAME' => env('APP_NAME'),

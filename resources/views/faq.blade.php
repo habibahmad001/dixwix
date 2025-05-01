@@ -36,10 +36,22 @@
                 <div class="card">
                     <div class="card-header">
                         <a class="collapsed card-link" data-bs-toggle="collapse" href="#collapseThree">
-                            How can I create my own collection?
+                            How to lend items?
                         </a>
                     </div>
                     <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body">&nbsp;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-bs-toggle="collapse" href="#collapseFour">
+                            How can I create my own collection?
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="collapse" data-bs-parent="#accordion">
                         <div class="card-body">
                         The collection can be added by the contacting administrator.
                         </div>
@@ -48,11 +60,22 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <a class="collapsed card-link" data-bs-toggle="collapse" href="#collapseThree">
+                        <a class="collapsed card-link" data-bs-toggle="collapse" href="#collapseFive">
+                            How can I rent a book from anyone?
+                        </a>
+                    </div>
+                    <div id="collapseFive" class="collapse" data-bs-parent="#accordion">
+                        <div class="card-body">&nbsp;</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-bs-toggle="collapse" href="#collapseSix">
                             Can we buy from amazon from here?
                         </a>
                     </div>
-                    <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+                    <div id="collapseSix" class="collapse" data-bs-parent="#accordion">
                         <div class="card-body">Please contact admin for the following query.</div>
                     </div>
                 </div>

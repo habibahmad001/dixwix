@@ -279,4 +279,18 @@ class PageController extends Controller
 
         return view('without_login_common', compact('data'));
     }
+
+    public function gettingStarted()
+    {
+        $data['title'] = 'Getting started';
+        $data['template'] = 'gettingStarted';
+        $data['is_banner'] = true;
+        $data['is_banner_link'] = false;
+        $data['banner_link'] = route('signup');
+        $data['banner_heading'] = 'How can we help?';
+        $data['banner_text'] = "";
+        $data['background-class'] = "header";
+
+        return view('without_login_common', compact('data'));
+    }
 }

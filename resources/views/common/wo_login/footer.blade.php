@@ -11,6 +11,7 @@
                     <a href=""><i class="fa fa-circle" aria-hidden="true"></i> Signup</a>
                     <a href=""><i class="fa fa-circle" aria-hidden="true"></i> Contact</a>
                     <a href="{{ route('join.us') }} "><i class="fa fa-circle" aria-hidden="true"></i> Join Us</a>
+                    <a href="{{ route('getting-started') }} "><i class="fa fa-circle" aria-hidden="true"></i> Getting started</a>
 
                 </div>
             </div>
