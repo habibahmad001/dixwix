@@ -1453,7 +1453,7 @@ class BookController extends Controller
                 return response()->json(["success" => false, "message" => "Reserved user not found."], 404);
             }
 
-            $group = Group::find($entry->group_id);
+            $group = Group::find($request->group_id);
             if (! $group) {
                 return response()->json(["success" => false, "message" => "Group not found."], 404);
             }

@@ -261,7 +261,7 @@ return ($members['member_id'] === Auth::user()->id && $members['status'] === 're
                                                     @if($book['state'] == 'return-request')
                                                         <span class="badge badge-warning px-4 py-2"> Return pending </span>
                                                     @else
-                                                        <a href="javascript:void(0)" id="return-book-request-btn" onclick="returnBook({{ $book['entry_id'] }}, {{ $book['id'] }}, this)" class="btn btn-red"> Return</a>
+                                                        <a href="javascript:void(0)" id="return-book-request-btn" onclick="returnBook({{ $book['entry_id'] }}, {{ $book['id'] }}, this, {!! $group['id'] !!})" class="btn btn-red"> Return</a>
                                                     @endif
                                                 @endif
                                             @endif

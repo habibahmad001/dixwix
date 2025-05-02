@@ -184,7 +184,7 @@
         });
     }
 
-    function returnBook(entry_id, book_id, buttonElement) {
+    function returnBook(entry_id, book_id, buttonElement, group_id=0) {
         Swal.fire({
             title: 'Confirm Return',
             html: `
@@ -235,6 +235,7 @@
                 formData.append('original_condition', originalCondition);
                 formData.append('entry_id', entry_id);
                 formData.append('book_id', book_id);
+                formData.append('group_id', group_id);
                 formData.append('image_at_returning', returnImage);
 
                 // Disable the button and update its text
