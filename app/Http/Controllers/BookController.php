@@ -1186,12 +1186,12 @@ class BookController extends Controller
                     "renew_date" => Carbon::now(),
                     "due_date" => $dueDate, // Update the due_date
                     "is_reserved" => 2,
+                    "reserved_by" => auth()->user()->id,
                     "is_renew" => $newIsRenewValue
                 ]);
 //                $lastQuery = DB::getQueryLog();
 //                $lastExecutedQuery = end($lastQuery);
 //
-//// Print the last executed query
 //                dd($lastExecutedQuery['query'], $lastExecutedQuery['bindings']);
             } else {
                 return json_encode(["success" => false, "message" => "Entry not found."]);

@@ -591,7 +591,7 @@ class GroupController extends Controller
             ->where('is_reserved', 2)
             ->get()
             ->toArray();*/
-      
+
       $entries = Entries::with(['book'])
         ->whereHas('book', function ($q) use ($id) {
             $q->whereHas('group', function ($q) use ($id) {
@@ -714,7 +714,7 @@ class GroupController extends Controller
             // Handle the case when 'mainid' is not available
             $group['itemMetrics']['rejected_items'] = collect();  // Empty collection
         }
-        
+
 
         // Check if the 'rejected_items' array is empty, and if so, assign it as an empty array
         if ($group['itemMetrics']['rejected_items']->isEmpty()) {
@@ -784,13 +784,13 @@ class GroupController extends Controller
             $retdata['active_tab'] = 'requests';
         }
 
-        
+
 
         $data                = [];
         $data['title']       = 'Show Group';
         $data['template']    = 'group.show';
         $data['script_file'] = 'group_show';
-
+        
         return view('with_login_common', compact('data', 'retdata'));
     }
 
@@ -1202,7 +1202,7 @@ public function InviteUser(Request $request)
                         'error_message' => $e->getMessage(),
                     ]);
                 }
-             
+
 
                 // Log notification entry
                 // Log::info("Notification sent to user", ['user_id' => $user->id, 'notification' => $inviteNotification]);
@@ -1283,7 +1283,7 @@ public function InviteUser(Request $request)
                         'message' => 'Join my group to view its items',
                         'url' => route('show-group', ['id' => $group->id]),
                         'action' => 'View Group',
-                    ]), 
+                    ]),
                     'read_at' => null, // Set to NULL initially
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -1372,7 +1372,7 @@ public function InviteUser(Request $request)
 
                 // Prepare and send the notification as before
                 $inviteNotification = [
-                    'id' => (string) Str::uuid(), 
+                    'id' => (string) Str::uuid(),
                     'type' => 'App\\Notifications\\GeneralNotification',
                     'notifiable_type' => 'App\\Models\\User',
                     'notifiable_id' => $user->id,
