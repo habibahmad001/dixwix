@@ -1169,7 +1169,7 @@ class BookController extends Controller
             }
 
             // Update the entry where id matches book_id
-            $entry = Entries::where('book_id', $request['book_id'])->first();
+            $entry = Entries::where('book_id', $request['book_id'])->where('is_reserved', 0)->first();
 
             if ($entry) {
                 // Increment the is_renew value
