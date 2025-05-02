@@ -1491,7 +1491,7 @@ class BookController extends Controller
                 "</strong></em> with Book ID <em><strong>" . htmlspecialchars($entry->book_id) .
                 "</strong></em>",
                 'user_id'       => $current_user_id,
-                'url'           => url("show-group/{$entry->group_id}?tab=return-requests"),
+                'url'           => url("show-group/{$request->group_id}?tab=return-requests"),
                 'action'        => 'View Return Request',
             ];
 
