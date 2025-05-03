@@ -12,7 +12,7 @@
                 <th scope="col">Due Date</th>
                 <th scope="col">Requested Date</th>
                 <th scope="col">Type</th>
-                @if (!auth()->user()->hasRole('admin'))
+                @if ($group["created_by"] == auth()->id())
                     <th scope="col">Actions</th>
                 @endif
             </tr>
@@ -73,7 +73,7 @@
                     ($entry['state'] == 'return-request' ? 'Return' : 'Not Available')
                 }}
             </td>
-            @if (!auth()->user()->hasRole('admin'))
+            @if ($group["created_by"] == auth()->id())
             <td>
                 @if($entry['state'] == 'rejected')
                     <span class="badge bg-danger text-white">Rejected</span>
