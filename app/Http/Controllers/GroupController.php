@@ -637,13 +637,14 @@ class GroupController extends Controller
                 $query->where('reserved_by', auth()->id());
             })
             ->get();*/
+        DB::enableQueryLog();
             $return_requests = Entries::with(['book'])
           ->whereHas('book', function ($q) use ($id, $user_status, $group) {
               $q->whereHas('group', function ($q) use ($id) {
                   $q->where('id', $id); // Ensure the group is the one the user is part of
               });
 
-              if (!auth()->user()->hasRole('admin')) {
+              if (auth()->user()->hasRole('admin')) {
                   if ($group['created_by'] != auth()->id()) {
                       if (empty($user_status) || $user_status['member_role'] != 'admin') {
                           $q->where('created_by', auth()->user()->id); // Only show books created by the user
@@ -670,7 +671,8 @@ class GroupController extends Controller
                   ->where('book_id', '!=', ''); // Ensure book_id is not empty
           })
           ->get();
-
+//          ->toSql();
+//        dd(DB::getQueryLog());
 
         $return_requests->each(function ($entry) {
             if ($entry->reserved_by) {
@@ -790,7 +792,7 @@ class GroupController extends Controller
         $data['title']       = 'Show Group';
         $data['template']    = 'group.show';
         $data['script_file'] = 'group_show';
-        
+
         return view('with_login_common', compact('data', 'retdata'));
     }
 

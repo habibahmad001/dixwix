@@ -12,7 +12,9 @@
                 <th scope="col">Due Date</th>
                 <th scope="col">Requested Date</th>
                 <th scope="col">Type</th>
-                <th scope="col">Actions</th>
+                @if (!auth()->user()->hasRole('admin'))
+                    <th scope="col">Actions</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -71,7 +73,7 @@
                     ($entry['state'] == 'return-request' ? 'Return' : 'Not Available')
                 }}
             </td>
-
+            @if (!auth()->user()->hasRole('admin'))
             <td>
                 @if($entry['state'] == 'rejected')
                     <span class="badge bg-danger text-white">Rejected</span>
@@ -89,6 +91,7 @@
                     <span>Pending</span>
                 @endif
             </td>
+            @endif
         </tr>
     @endif
     @endforeach
