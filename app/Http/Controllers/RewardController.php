@@ -75,7 +75,11 @@ class RewardController extends Controller
 
         $gifto_funds = $funding["data"]["data"]["credit_available"];
 
-        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns'));
+        $orders = GiftoOrder::where('user_id', Auth::user()->id)->latest()->get();
+
+        $transferRequests = TransferRequest::where("from_user_id", Auth::user()->id)->orderBy('created_at', 'desc')->get();
+
+        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns', 'orders', 'transferRequests'));
     }
 
     public function purchasePoints(Request $request)
