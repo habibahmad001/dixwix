@@ -336,8 +336,9 @@ return ($members['member_id'] === Auth::user()->id && $members['status'] === 're
         </div>
         <div class="tab-content {{ $group['status'] ? '' : 'd-none' }} {{ $active_tab == 'return-requests' ?  'active' : ''}}" id="tab4">
             <div class="container p-0">
-                <div class="heading mt-4">
+                <div class="heading mt-4 d-flex" style="justify-content: space-between">
                     <h2>Return/Rental Requests</h2>
+                    <button name="archeived" id="archeived" type="button" class="btn btn-info" onclick="javascript:loadHistoryReport({!! $id !!})">Archived</button>
                 </div>
                 <div class="item search-result">
                     <div class="container">

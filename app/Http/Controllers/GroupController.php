@@ -794,20 +794,23 @@ class GroupController extends Controller
         $data['template']    = 'group.show';
         $data['script_file'] = 'group_show';
 
-        return view('with_login_common', compact('data', 'retdata'));
+        return view('with_login_common', compact('data', 'retdata', 'id'));
     }
 
     public function historyLogsReport($id) {
+
+        $data = [];
         /******* History Logs ********/
-        DB::enableQueryLog();
-        $history_log = LoanHistory::with(["book"])
+//        DB::enableQueryLog();
+        $history_log = LoanHistory::with(["book", "user"])
             ->where("group_id", $id)
             ->get();
-        dd($history_log);
+//        dd($history_log);
         /******* History Logs ********/
-        return view('with_login_common', compact('data', 'retdata'))->render;
-//        $html = view('admin/acl/adminUser/inc_show')->with($data)->render();
-//        $response = ['responseCode'=>1,'html'=>$html];
+        $data['history_log'] = $history_log;
+//        return view('group/ajax/return-request')->with($data);
+        $html = view('group/ajax/return-request')->with($data)->render();
+        return $response = ['responseCode'=>1, 'html'=>$html];
     }
 
     public function addComment(Request $request)

@@ -1,4 +1,5 @@
-<div class="table-group-details table-responsive mt-5">
+{{--<a href="javascript:void(0);" onclick="javascript:loadHistoryReport({!! $id !!})">Just Click It</a>--}}
+<div class="table-group-details table-responsive loading-data-ajax">
     <table id="items_table_requests" class="table table-striped table-rounded">
         <thead>
             <tr>
@@ -149,6 +150,27 @@
             }
             , success: function(result) {
                 window.location.reload();
+            }
+        });
+    }
+
+    function loadHistoryReport(id) {
+        // Show loader before API call
+        jQuery(".loading-data-ajax").html('<div class="loader">Loading...</div>');
+
+        jQuery.ajax({
+            type: 'GET',
+            url: '/history-logs-report/' + id,
+            success: function(result) {
+                jQuery(".loading-data-ajax").html(result.html);
+            },
+            error: function() {
+                // Optionally handle error and remove loader
+                jQuery(".loading-data-ajax").html('<div class="error">Failed to load report. Please try again.</div>');
+            },
+            complete: function() {
+                // Optionally you can clear the loader here but success and error already handle content replacement
+                // So this can be kept empty or just for any cleanup if needed
             }
         });
     }
