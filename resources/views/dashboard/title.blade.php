@@ -129,9 +129,15 @@
             display: block;
             font-size: 18px;
         }
-
-
+        .dashboard-flow {
+            width: 100%;
+            margin-bottom: 8%;
+        }
     </style>
+
+<div class="row" >
+   <img class="dashboard-flow" id="dashboard-flow" src="{!! asset('img/dashboard-flow.png') !!}" />
+</div>
 <?php $isAdmin=false;$mCls=3;$csttxt='cst';
         if (Auth::user()->hasRole('admin')) {
             $isAdmin=true;
@@ -139,6 +145,45 @@
             $mCls=3;
         } ?>
         <div class="row">
+
+            <!-- Users Card -->
+            <div class="col-md-{{$mCls}} mb-4">
+                <div class="card-counter success card-counter-data" id="users-card" data-id='itemsall'>
+                    <i class="fa fa-list"></i>
+                    <span class="count-numbers ">{{$data['totalItemsCount']}}</span>
+                    <span class="count-name ">Total Items</span>
+                </div>
+            </div>
+
+            <div class="col-md-{{$mCls}} mb-4">
+                <div class="card-counter info">
+                    <i class="fa fa-users"></i>
+                    <span class="count-numbers ">{{$data['total_group_count']}}</span>
+                    <span class="count-name ">Total Groups</span>
+                </div>
+            </div>
+
+            <div class="col-md-{{$mCls}} mb-4">
+                <div class="card-counter success">
+                    <i class="fa fa-user-plus"></i>
+                    <span class="count-numbers ">{{$data['member_invited_count']}}</span>
+                    <span class="count-name ">Member Invited</span>
+                </div>
+            </div>
+
+            <div class="col-md-{{$mCls}} mb-4">
+                <div class="card-counter danger">
+                    <i class="fa fa-dollar"></i>
+                    <span class="count-numbers">${{$data['reward_balance']}}</span>
+                    <span class="count-name ">Total Earnings</span>
+                </div>
+            </div>
+
+        </div>
+
+<div class="hiddenBlocks" id="hblocks">
+        <div class="row">
+
             <!-- Flowz Card -->
             <div class="col-md-{{$mCls}} mb-4">
                 <div class="card-counter card-counter-data danger" id="flowz-card" data-id='overdue'>
@@ -173,37 +218,6 @@
                 </div>
             </div>
 
-
-            <!-- Users Card -->
-            <div class="col-md-{{$mCls}} mb-4">
-                <div class="card-counter success card-counter-data" id="users-card" data-id='itemsall'>
-                    <i class="fa fa-list"></i>
-                    <span class="count-numbers ">{{$data['totalItemsCount']}}</span>
-                    <span class="count-name ">Total Items</span>
-                </div>
-            </div>
-
-        </div>
-
-        <span style="float: left;">Groups</span>
-        <br>
-        <div class="row">
-            <div class="col-md-{{$mCls}} mb-4">
-                <div class="card-counter info">
-                    <i class="fa fa-users"></i>
-                    <span class="count-numbers ">{{$data['total_group_count']}}</span>
-                    <span class="count-name ">Total Groups</span>
-                </div>
-            </div>
-
-            <div class="col-md-{{$mCls}} mb-4">
-                <div class="card-counter success">
-                    <i class="fa fa-user-plus"></i>
-                    <span class="count-numbers ">{{$data['member_invited_count']}}</span>
-                    <span class="count-name ">Member Invited</span>
-                </div>
-            </div>
-
             <div class="col-md-{{$mCls}} mb-4">
                 <div class="card-counter" style="background-color: #8775A7; color: #fff;">
                     <i class="fa fa-building"></i>
@@ -211,27 +225,7 @@
                     <span class="count-name ">Rentals by Group</span>
                 </div>
             </div>
-        </div>
 
-        <span style="float: left;">Rewards</span>
-        <br>
-        <div class="row">
-            <div class="col-md-{{$mCls}} mb-4">
-                <div class="card-counter danger">
-                    <i class="fa fa-dollar"></i>
-                    <span class="count-numbers">${{$data['reward_balance']}}</span>
-                    <span class="count-name ">Total Earnings</span>
-                </div>
-            </div>
-
-
-            <div class="col-md-{{$mCls}} mb-4">
-                <div class="card-counter info">
-                    <i class="fa fa-bank"></i>
-                    <span class="count-numbers ">${{$data['reward_savings']}}</span>
-                    <span class="count-name ">Total Savings</span>
-                </div>
-            </div>
         </div>
 
 <style>
@@ -277,6 +271,10 @@
         color: #ef5350;
     }
 
+    .hiddenBlocks {
+        display: none;
+    }
+
     .card-counter.success {
         background: rgba(102, 187, 106, 0.1);
         color: #66bb6a;
@@ -319,6 +317,13 @@
     <!-- <h2>Items By Category</h2> -->
 
     <div class="row">
+        <div class="col-md-{{$mCls}} mb-4">
+            <div class="card-counter info">
+                <i class="fa fa-bank"></i>
+                <span class="count-numbers ">${{$data['reward_savings']}}</span>
+                <span class="count-name ">Total Savings</span>
+            </div>
+        </div>
         @php
             $totalItems = count($data['itemMetrics']['total_items_by_category']);
             $columnClass = $totalItems == 1 ? 'col-12' : ($totalItems == 2 ? 'col-md-6 col-sm-12' : ($totalItems == 3 ? 'col-md-4 col-sm-6' : 'col-md-3 col-sm-6'));
@@ -383,6 +388,10 @@
             <span class="count-name"><strong style="margin-right: 5px !important;">Total Savings:</strong> {{ number_format($totSvg, 2) }}</span>
         </div>
     </div>
+</div>
+</div>
+<div class="row" style="float: right">
+    <button name="tiles" id="hblocks-btn" class="btn btn-info">Show More</button>
 </div>
 
 <!-- <h2>Item Metrics</h2>
@@ -639,6 +648,14 @@
 
 <script type="text/javascript">$(document).ready(function() {
     // Attach double-click event to all cards
+    jQuery("#hblocks-btn").click(function(){
+        if(jQuery(this).text() === "Show More") {
+            jQuery(this).text("Hide It");
+        } else {
+            jQuery(this).text("Show More");
+        }
+       jQuery("#hblocks").toggle("slow");
+    });
     $('.card-counter-data').on('dblclick', function() {
         var cardId = $(this).data('id');
         var vr1=false;

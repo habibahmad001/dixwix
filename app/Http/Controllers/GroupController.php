@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller as Controller;
+use App\Models\LoanHistory;
 use Illuminate\Support\Facades\DB;
 use App\Mail\MailService;
 use App\Models\Comment;
@@ -637,20 +638,20 @@ class GroupController extends Controller
                 $query->where('reserved_by', auth()->id());
             })
             ->get();*/
-        DB::enableQueryLog();
+//        DB::enableQueryLog();
             $return_requests = Entries::with(['book'])
           ->whereHas('book', function ($q) use ($id, $user_status, $group) {
               $q->whereHas('group', function ($q) use ($id) {
                   $q->where('id', $id); // Ensure the group is the one the user is part of
               });
 
-              if (auth()->user()->hasRole('admin')) {
-                  if ($group['created_by'] != auth()->id()) {
-                      if (empty($user_status) || $user_status['member_role'] != 'admin') {
-                          $q->where('created_by', auth()->user()->id); // Only show books created by the user
-                      }
-                  }
-              }
+//              if (auth()->user()->hasRole('admin')) {
+//                  if ($group['created_by'] != auth()->id()) {
+//                      if (empty($user_status) || $user_status['member_role'] != 'admin') {
+//                          $q->where('created_by', auth()->user()->id); // Only show books created by the user
+//                      }
+//                  }
+//              }
           })
           ->where(function ($query) {
               $query->whereIn('is_reserved', [1, 2]);
@@ -794,6 +795,19 @@ class GroupController extends Controller
         $data['script_file'] = 'group_show';
 
         return view('with_login_common', compact('data', 'retdata'));
+    }
+
+    public function historyLogsReport($id) {
+        /******* History Logs ********/
+        DB::enableQueryLog();
+        $history_log = LoanHistory::with(["book"])
+            ->where("group_id", $id)
+            ->get();
+        dd($history_log);
+        /******* History Logs ********/
+        return view('with_login_common', compact('data', 'retdata'))->render;
+//        $html = view('admin/acl/adminUser/inc_show')->with($data)->render();
+//        $response = ['responseCode'=>1,'html'=>$html];
     }
 
     public function addComment(Request $request)

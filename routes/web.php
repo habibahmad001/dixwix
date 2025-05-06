@@ -19,6 +19,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\GiftoOrderController;
+use App\Http\Controllers\UserEntryController;
 
 use App\Http\Controllers\HowDoesItController;
 use App\Http\Controllers\MembershipController;
@@ -206,6 +207,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::get('/comments/{itemId}', [CommentController::class, 'getComments'])->name('comments');
     // Route::delete('/comments/delete-all', [CommentController::class, 'deleteAll'])->name('comments.deleteAll');
     // Route::delete('/comments/{id}', [CommentController::class, 'delete'])->name('comments.delete');
+    Route::get('/history-logs-report/{group_id}', [GroupController::class, 'historyLogsReport'])->name('history-logs');
 
     Route::post('/add-review', [ReviewController::class, 'addReview'])->name('add-review');
     Route::get('/reviews/{itemId}', [ReviewController::class, 'getReviews'])->name('reviews');
@@ -248,6 +250,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/withdraw-requests', [RedeemRequestController::class, 'WithdrawRequests'])->name("withdraw-requests");
     Route::get('/my-transfer-point-requests', [TransferRequestController::class, 'MyTransfers'])->name("my-transfer-requests");
     Route::any('/my-purchase-orders', [GiftoOrderController::class, "MyPurchases"])->name("my-purchase-orders");
+
+    Route::resource('user-entries', UserEntryController::class);
     /******* Gifto Orders **********/
 
     Route::middleware('isAdmin')->group(function () {

@@ -44,6 +44,10 @@ class Group extends Model
       return $this->hasMany('App\Models\Groupmember','group_id', 'id');
     }
 
+    function loadhistory() {
+      return $this->hasMany('App\Models\LoanHistory','group_id', 'id');
+    }
+
   	 function groupMember() {
         return $this->hasOne('App\Models\Groupmember','group_id');
       }

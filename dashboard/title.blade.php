@@ -216,8 +216,8 @@
 @php
     $group_member = Groupmember::with(['group', 'member'])
     ->where('member_id', Auth::user()->id)
-    ->where('member_role', 'admin')  
-    ->get(); 
+    ->where('member_role', 'admin')
+    ->get();
 @endphp
 
 @if(Auth::user()->hasRole('admin') || $group_member->isNotEmpty())
