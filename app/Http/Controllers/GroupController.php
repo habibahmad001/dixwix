@@ -808,7 +808,7 @@ class GroupController extends Controller
 //        dd($history_log);
         /******* History Logs ********/
         $data['history_log'] = $history_log;
-//        return view('group/ajax/return-request')->with($data);
+
         $html = view('group/ajax/return-request')->with($data)->render();
         return $response = ['responseCode'=>1, 'html'=>$html];
     }

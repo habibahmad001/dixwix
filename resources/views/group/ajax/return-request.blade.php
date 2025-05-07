@@ -4,19 +4,29 @@
             <tr>
                 <th scope="col">Thumbnail</th>
                 <th scope="col">Item Name</th>
-{{--                <th scope="col">Image At Return</th>--}}
-{{--                <th scope="col">In Original Condition</th>--}}
+                <th scope="col">Image At Return</th>
+                <th scope="col">In Original Condition</th>
                 <th scope="col">Rental ID</th>
                 <th scope="col">Requested By</th>
 {{--                <th scope="col">Trust Scores</th>--}}
                 <th scope="col">Due Date</th>
                 <th scope="col">Requested Date</th>
-{{--                <th scope="col">Type</th>--}}
+                <th scope="col">Type</th>
             </tr>
         </thead>
         <tbody>
 
 @foreach($history_log as $entry)
+
+    @php
+        $entry_book = \App\Models\Entries::where("book_id", $entry->book_id)
+                        ->where("reserved_by", $entry->user_id)
+                        ->where("group_id", $entry->group_id)
+                        //->where("reserved_at", $entry->reserved_at)
+                        //->where("due_date", $entry->due_date)
+                        ->first();
+
+    @endphp
 
     @if($entry->book)
         <tr>
@@ -24,18 +34,18 @@
                 <img style="width: 100px; height:100px" src="{{ $entry->book->cover_page }}" alt="Cover Page">
             </td>
             <td>{{ $entry->book->name }}</td>
-{{--            <td>--}}
-{{--                @if( $entry->status === 'return-request')--}}
-{{--                    <a href="{{ $entry['image_at_returning'] }}" target="_blank">--}}
-{{--                        <img style="width: 100px; height:100px" src="{{ $entry['image_at_returning'] }}" alt="Image">--}}
-{{--                    </a>--}}
-{{--                @else--}}
-{{--                    <span>Pending</span>--}}
-{{--                @endif--}}
-{{--            </td>--}}
-{{--            <td>--}}
-{{--                <span class="badge badge-{{ $entry['original_condition'] == 'yes' ? 'success' : 'warning' }}">{{ $entry['original_condition'] }}</span>--}}
-{{--            </td>--}}
+            <td>
+                @if( $entry->status === 'return-request')
+                    <a href="{{ $entry_book?->image_at_returning }}" target="_blank">
+                        <img style="width: 100px; height:100px" src="{{ $entry_book?->image_at_returning }}" alt="Image">
+                    </a>
+                @else
+                    <span>Pending</span>
+                @endif
+            </td>
+            <td>
+                <span class="badge badge-{{ isset($entry_book?->original_condition) && $entry_book?->original_condition == 'yes' ? 'success' : 'warning' }}">{{ isset($entry_book?->original_condition) && $entry_book?->original_condition }}</span>
+            </td>
             <td>{{ $entry->book->item_id }}</td>
             <td>{{ $entry->user->name }}</td>
 {{--            <td>{{ $entry['average_rating'] ?? 'N/A' }}</td>--}}
@@ -57,12 +67,12 @@
             </td>
             <td>{{ \Carbon\Carbon::parse($entry->reserved_at)->format('F j, Y') }}</td>
 
-{{--            <td>--}}
-{{--                {{--}}
-{{--                    ($entry['is_reserved'] == 2) ? 'Rental' :--}}
-{{--                    ($entry['state'] == 'return-request' ? 'Return' : 'Not Available')--}}
-{{--                }}--}}
-{{--            </td>--}}
+            <td>
+                {{
+                    (isset($entry_book?->is_reserved) && $entry_book?->is_reserved == 2) ? 'Rental' :
+                    (isset($entry_book?->state) && $entry_book?->state == 'return-request' ? 'Return' : 'Not Available')
+                }}
+            </td>
         </tr>
     @endif
     @endforeach
