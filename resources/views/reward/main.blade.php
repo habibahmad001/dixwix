@@ -87,6 +87,43 @@
         width: 100% !important;
     }
 
+    ul#mainTab li {
+        background-color: #f0f0f0;
+    }
+    ul#mainTab li a {
+        color: #094042;
+    }
+    ul#mainTab li a.active {
+        background-color: #094042;
+        color: #f0f0f0;
+    }
+    .item>div {
+        background: #fff;
+    }
+
+    .contentAreaSection {
+        display: inline-block;
+        width: 100%;
+        margin: 5% 0;
+    }
+
+    .contentAreaSectionLeft {
+        float: left;
+        width: 49%;
+    }
+
+    .contentAreaSectionRight {
+        width: 49%;
+        float: right;
+    }
+
+    .contentAreaSectionLeft form button {
+        float: left;
+    }
+
+    .contentAreaSectionRight h2 {
+        float: right;
+    }
 
     @media (max-width: 768px) {
         .rewards-buttons {
@@ -363,13 +400,16 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="membertab-tab" data-bs-toggle="tab" href="#membertab" role="tab" aria-controls="membertab" aria-selected="false">Search Dix Member</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="purchasepoints-tab" data-bs-toggle="tab" href="#purchasepointstab" role="tab" aria-controls="purchasepointstab" aria-selected="false">Purchase points</a>
+                </li>
             </ul>
 
             <div class="tab-content" id="mainTabContent">
                 <!-- Withdraw Request Tab -->
                 <div class="tab-pane fade show active" id="radeemtab" role="tabpanel" aria-labelledby="withdraw-tab">
                     <div class="row">
-                        <div class="col-lg-6 col-xl-6 col-md-6">
+                        <div class="col-lg-12 col-xl-12 col-md-12">
                             <div class="item">
                                 <div class="pad15" style="height:280px">
                                     <div class="innerheader">
@@ -381,54 +421,23 @@
                                             <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
                                         </div>
                                     </div>
-                                    <div class="center-content d-flex justify-content-center align-items-center" style="height: 130px;">
-                                        <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
-                                    </div>
-                                    <div class="imagesection d-flex justify-content-center">
-                                        <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">
-                                            {{--                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">--}}
-                                            @csrf
-                                            <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
-                                            {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
-                                            {{--                                <div class="row btnalign">--}}
-                                            {{--                                    <button type="button" onclick="javascript: $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>--}}
-                                            <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn submit_btn w-100">Redeem Points</button>
-                                            {{--                                </div>--}}
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="item">
-                                <div class="" style="min-height:280px">
-                                    <div class="innerheader">
-                                        <div class="post_image d-flex align-items-center flex-row">
-                                            <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
-                                            <h3 class="lead mb-0 main-heading text-nowrap ms-2">Purchase points</h3>
-                                        </div>
-                                        <div class="post_image">
-                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
-                                        </div>
-                                    </div>
-
-                                    <div class="imagesection purchase-points flex-column justify-content-between" style="gap:10px">
-                                        @foreach($rewards_prices as $reward)
-                                            <form method="POST" action="{{ route('purchase-points') }}" class="w-100">
+                                    <div class="contentAreaSection">
+                                        <div class="contentAreaSectionLeft">
+                                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">
                                                 @csrf
-                                                <input type="hidden" name="points" value="{{ $reward->coins }}">
-                                                <input type="hidden" name="price" value="{{ $reward->price }}">
-                                                <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
-                                                <button type="submit" class="btn justify-content-between d-flex align-items-center submit_btn w-100" style="padding: 2%">
-                                                    {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
-                                                </button>
+                                                <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
+                                                <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn submit_btn">Redeem Points</button>
                                             </form>
-                                        @endforeach
+                                        </div>
+                                        <div class="contentAreaSectionRight">
+                                            <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <div class="row">
@@ -467,7 +476,7 @@
                 <!-- Send Gift Card Tab -->
                 <div class="tab-pane fade" id="membertab" role="tabpanel" aria-labelledby="gift-tab">
                     <div class="row">
-                        <div class="col-lg-6 col-xl-6 col-md-6">
+                        <div class="col-lg-12 col-xl-12 col-md-12">
                             <div class="item">
                                 <div class="pad15" style="height:280px">
                                     <div class="innerheader">
@@ -479,41 +488,17 @@
                                             <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
                                         </div>
                                     </div>
-                                    <div class="center-content d-flex align-items-center pt-4" style="height:130px">
-                                        <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
-                                    </div>
-                                    <div class="imagesection d-flex justify-content-center">
-                                        <button onclick="javascript: $('.stayOne').slideUp('slow'); jQuery('#dixwix_modal1').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6 col-lg-12">
-                            <div class="item">
-                                <div class="" style="min-height:280px">
-                                    <div class="innerheader">
-                                        <div class="post_image d-flex align-items-center flex-row">
-                                            <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
-                                            <h3 class="lead mb-0 main-heading text-nowrap ms-2">Purchase points</h3>
+                                    <div class="contentAreaSection">
+                                        <div class="contentAreaSectionLeft">
+                                            <div class="pt-4" style="height:130px; float: left">
+                                                <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
+                                            </div>
                                         </div>
-                                        <div class="post_image">
-                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
+                                        <div class="contentAreaSectionRight">
+                                            <div class="imagesection" style="float: right">
+                                                <button onclick="javascript: $('.stayOne').slideUp('slow'); jQuery('#dixwix_modal1').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="imagesection purchase-points flex-column justify-content-between" style="gap:10px">
-                                        @foreach($rewards_prices as $reward)
-                                            <form method="POST" action="{{ route('purchase-points') }}" class="w-100">
-                                                @csrf
-                                                <input type="hidden" name="points" value="{{ $reward->coins }}">
-                                                <input type="hidden" name="price" value="{{ $reward->price }}">
-                                                <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
-                                                <button type="submit" class="btn justify-content-between d-flex align-items-center submit_btn w-100" style="padding: 2%">
-                                                    {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
-                                                </button>
-                                            </form>
-                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -549,6 +534,69 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Purchase Points Tab -->
+                <div class="tab-pane fade" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="item">
+                                <div class="" style="min-height:280px">
+                                    <div class="innerheader">
+                                        <div class="post_image d-flex align-items-center flex-row">
+                                            <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
+                                            <h3 class="lead mb-0 main-heading text-nowrap ms-2">Purchase points</h3>
+                                        </div>
+                                        <div class="post_image">
+                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
+                                        </div>
+                                    </div>
+
+                                    <div class="imagesection purchase-points flex-column justify-content-between" style="gap:10px">
+                                        @foreach($rewards_prices as $reward)
+                                            <form method="POST" action="{{ route('purchase-points') }}" class="w-100">
+                                                @csrf
+                                                <input type="hidden" name="points" value="{{ $reward->coins }}">
+                                                <input type="hidden" name="price" value="{{ $reward->price }}">
+                                                <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
+                                                <button type="submit" class="btn justify-content-between d-flex align-items-center submit_btn w-100" style="padding: 2%">
+                                                    {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
+                                                </button>
+                                            </form>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="items_table" class="table items_table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Package</th>
+                                    <th scope="col">Points</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col" class="text-center">Dated At</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($purchases as $purchase)
+                                    <tr>
+                                        <td>{{ $purchase?->user?->name ?? "" }}</td>
+                                        <td>{{ $purchase?->package?->name ?? "" }}</td>
+                                        <td>{{ $purchase?->points ?? "" }}</td>
+                                        <td>{{ $purchase?->amount ?? "" }}</td>
+                                        <td class="text-center">{{ date("F j, Y", strtotime($purchase->created_at)) ?? "" }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>

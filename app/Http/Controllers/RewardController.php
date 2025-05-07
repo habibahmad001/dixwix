@@ -79,7 +79,14 @@ class RewardController extends Controller
 
         $transferRequests = TransferRequest::where("from_user_id", Auth::user()->id)->orderBy('created_at', 'desc')->get();
 
-        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns', 'orders', 'transferRequests'));
+        $purchases = Point::with(["user", "package"])->where('user_id', Auth::user()->id)
+            ->where('type', 'credit')
+            ->where('description', 'like', '%Purchased points%')
+            ->whereNotNull('package_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns', 'orders', 'transferRequests', 'purchases'));
     }
 
     public function purchasePoints(Request $request)
