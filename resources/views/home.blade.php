@@ -375,57 +375,57 @@
 </section>
 
 
-<section class="dixpricing py-5">
-    <div class="container">
-        <div class="head text-center mb-4">
-            <h2>Simple, Transparent <span style="color:#f15a29;">Pricing</span></h2>
-            <div class="col-lg-8 col-md-12 mx-auto">
-                <p>We don’t sell customer data or <a href="#" style="color:#f15a29;">ad’s</a>. Our pricing is based on a shared cost model designed to fit everyone’s needs. Everyone can get started for free with an option to upgrade for a larger number of items.</p>
-            </div>
-        </div>
-        <div class="list row d-flex justify-content-center">
-            <!-- Basic Plan -->
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="content border p-4 rounded shadow-sm text-left">
-                    <p class="h5 font-weight-bold">Basic</p>
-                    <p class="price h4 text-success">Free</p>
-                    <ul class="pl-3">
-                        <li>25 Items</li>
-                        <li>2 Groups</li>
-                        <li>Fixed Categories</li>
-                        <li>Lend / Borrow Included</li>
-                        <li>QR Codes Included</li>
-                        <li>Rewards Included</li>
-                        <li>Google SSO Included</li>
-                        <li>Notification Included</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>
-                </div>
-            </div>
-            <!-- Pro Plan -->
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="content border p-4 rounded shadow-sm text-left position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="h5 font-weight-bold">Pro</p>
-                        <p class="tag">POPULAR</p>
-                    </div>
-                    <p class="price h4 text-primary">$5 / User / Month</p>
-                    <ul class="pl-3">
-                        <li>100 Items</li>
-                        <li>Unlimited Groups</li>
-                        <li>Custom Categories</li>
-                        <li>Lend / Borrow Included</li>
-                        <li>QR Codes Included</li>
-                        <li>Rewards Included</li>
-                        <li>Google SSO Included</li>
-                        <li>Notification Included</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+{{--<section class="dixpricing py-5">--}}
+{{--    <div class="container">--}}
+{{--        <div class="head text-center mb-4">--}}
+{{--            <h2>Simple, Transparent <span style="color:#f15a29;">Pricing</span></h2>--}}
+{{--            <div class="col-lg-8 col-md-12 mx-auto">--}}
+{{--                <p>We don’t sell customer data or <a href="#" style="color:#f15a29;">ad’s</a>. Our pricing is based on a shared cost model designed to fit everyone’s needs. Everyone can get started for free with an option to upgrade for a larger number of items.</p>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="list row d-flex justify-content-center">--}}
+{{--            <!-- Basic Plan -->--}}
+{{--            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">--}}
+{{--                <div class="content border p-4 rounded shadow-sm text-left">--}}
+{{--                    <p class="h5 font-weight-bold">Basic</p>--}}
+{{--                    <p class="price h4 text-success">Free</p>--}}
+{{--                    <ul class="pl-3">--}}
+{{--                        <li>25 Items</li>--}}
+{{--                        <li>2 Groups</li>--}}
+{{--                        <li>Fixed Categories</li>--}}
+{{--                        <li>Lend / Borrow Included</li>--}}
+{{--                        <li>QR Codes Included</li>--}}
+{{--                        <li>Rewards Included</li>--}}
+{{--                        <li>Google SSO Included</li>--}}
+{{--                        <li>Notification Included</li>--}}
+{{--                    </ul>--}}
+{{--                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <!-- Pro Plan -->--}}
+{{--            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">--}}
+{{--                <div class="content border p-4 rounded shadow-sm text-left position-relative">--}}
+{{--                    <div class="d-flex justify-content-between align-items-center">--}}
+{{--                        <p class="h5 font-weight-bold">Pro</p>--}}
+{{--                        <p class="tag">POPULAR</p>--}}
+{{--                    </div>--}}
+{{--                    <p class="price h4 text-primary">$5 / User / Month</p>--}}
+{{--                    <ul class="pl-3">--}}
+{{--                        <li>100 Items</li>--}}
+{{--                        <li>Unlimited Groups</li>--}}
+{{--                        <li>Custom Categories</li>--}}
+{{--                        <li>Lend / Borrow Included</li>--}}
+{{--                        <li>QR Codes Included</li>--}}
+{{--                        <li>Rewards Included</li>--}}
+{{--                        <li>Google SSO Included</li>--}}
+{{--                        <li>Notification Included</li>--}}
+{{--                    </ul>--}}
+{{--                    <a href="#" class="btn btn-outline-danger btn-block mt-3">Add to Cart</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</section>--}}
 
 <!-- Second Divider Start -->
 
