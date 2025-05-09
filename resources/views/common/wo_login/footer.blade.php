@@ -46,7 +46,7 @@
                     <a href=""><i class="fa fa-circle" aria-hidden="true"></i> X - Formally Twitter</a>
 {{--                    <a href=""><i class="fa fa-circle" aria-hidden="true"></i> LinkedIn</a>--}}
                     <a href=""><i class="fa fa-circle" aria-hidden="true"></i> Facebook</a>
-
+                    <a href="/#mission"><i class="fa fa-circle" aria-hidden="true"></i> Our Mission</a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xl-4">

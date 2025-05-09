@@ -107,7 +107,7 @@
 <!-- Divider Start -->
 
 
-<div class="container divder">
+<div class="container divder" id="mission">
     <div class="row">
         <div class="col-md-12">
             <div class="-divider-text-box">
@@ -262,11 +262,11 @@
                     </div>
                 </div>
 
-                {{-- <div class="item">
+                <div class="item">
                     <div class="pad15">
                         <div class="imagesec1">
-                            <img class="im-wd" src="img/one.png" alt="Book Image">
-                            <h3 class="lead main-heading">Aisha Khan</h3>
+                            <img class="im-wd" src="img/two.png" alt="Book Image">
+                            <h3 class="lead main-heading">Asim Khan</h3>
                             <p>Book Blogger</p>
                         </div>
                         <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"I'm a voracious reader,
@@ -278,7 +278,7 @@
                             my phone, tablet, or laptop. It's a fantastic resource for any book lover."
                         </div>
                     </div>
-                </div> --}}
+                </div>
             </div>
             <button class="leftLst"><</button>
             <button class="rightLst">></button>
