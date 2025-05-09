@@ -192,12 +192,12 @@
 
         <div class="MultiCarousel" data-items="1,3,5,6,1" data-slide="1" id="MultiCarousel" data-interval="1000">
             <div class="MultiCarousel-inner">
-                @if(!empty($data['groups']))
-                @foreach ($data['groups'] as $group)
+                @if(!empty($data['books']))
+                @foreach ($data['books'] as $book)
                 <div class="item">
                     <div class="pad15">
                         <div class="innerheader">
-                            <h3 class="lead main-heading">{{ $group->title??'---' }}</h3>
+                            <h3 class="lead main-heading">{{ $book->name??'---' }}</h3>
                             <div class="post_image">
                                 <img src="img/eye-outline.png" alt="Book Image">
                             </div>
@@ -205,12 +205,12 @@
                         <div class="divider">
                             <hr>
                         </div>
-                        <div class="carousel-date">Created: {{ date('Y-m-d',strtotime($group->created_at)) }}</div>
-                        <div class="member">Members: {{ $group->groupmembers->count()??0 }}</div>
+                        <div class="carousel-date">Created: {{ date('Y-m-d',strtotime($book->created_at)) }}</div>
+                        <div class="member">Written By: {{ $book->user->name ?? "---" }}</div>
                         <div class="imagesection">
-                            <img class="im-wd" src="{{ asset('storage/'.$group["group_picture"]) }}" alt="Book Image">
+                            <img class="im-wd" src="{{ $book->cover_page }}" alt="Book Image">
                             <a id="edit_item" href="#" class="btn link_with_img">
-                                <img src="img/inner.png"> Join now
+                                <img src="img/inner.png"> View Detail
                             </a>
                         </div>
                     </div>

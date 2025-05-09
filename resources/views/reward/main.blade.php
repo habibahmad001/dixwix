@@ -97,9 +97,7 @@
         background-color: #094042;
         color: #f0f0f0;
     }
-    .item>div {
-        background: #fff;
-    }
+
 
     .contentAreaSection {
         display: inline-block;
@@ -391,6 +389,39 @@
         </div>
         <!-- Tabs Ends-->
 
+        <div class="row stayOne" id="dixwix_modal1" style="display: none">
+            {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
+            {{--                <div class="modal-dialog modal-lg" role="document">--}}
+            {{--                    <div class="modal-content">--}}
+            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                <div class="container mt-5">
+                    <div class="form-group">
+                        <label for="search_user">Search User</label>
+                        <div class="input-group">
+                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="user_select">Select User</label>
+                        <select id="user_select" class="form-control" disabled>
+                            <option value="">No users found</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="user_points">Enter Points</label>
+                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
+                    </div>
+                    <div class="form-group mt-3 text-right">
+                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
+        </div>
+
         <!-- Main Page Tabs Starts-->
         <div class="MainPagetabsArea">
             <ul class="nav nav-tabs tablinks" id="mainTab" role="tablist">
@@ -409,7 +440,7 @@
                 <!-- Withdraw Request Tab -->
                 <div class="tab-pane fade show active" id="radeemtab" role="tabpanel" aria-labelledby="withdraw-tab">
                     <div class="row">
-                        <div class="col-lg-12 col-xl-12 col-md-12">
+                        <div class="col-lg-6 col-xl-4 col-md-6">
                             <div class="item">
                                 <div class="pad15" style="height:280px">
                                     <div class="innerheader">
@@ -421,19 +452,21 @@
                                             <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
                                         </div>
                                     </div>
-                                    <div class="contentAreaSection">
-                                        <div class="contentAreaSectionLeft">
-                                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">
-                                                @csrf
-                                                <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
-                                                <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn submit_btn">Redeem Points</button>
-                                            </form>
-                                        </div>
-                                        <div class="contentAreaSectionRight">
-                                            <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
-                                        </div>
+                                    <div class="center-content d-flex justify-content-center align-items-center" style="height: 130px;">
+                                        <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
                                     </div>
-
+                                    <div class="imagesection d-flex justify-content-center">
+                                        <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ route('withdrow-points') }}" class="w-100">
+                                            {{--                            <form name="redeemfrm" id="redeemfrm" method="POST" action="{{ url('dd') }}" class="w-100">--}}
+                                            @csrf
+                                            <input type="hidden" id="redeem_coins" name="redeem_coins" value="{{ $reward_balance }}">
+                                            {{--                                <button type="submit" class="btn rewards-buttons lastbtn submit_btn w-100">Redeem Points</button> Withdraw --}}
+                                            {{--                                <div class="row btnalign">--}}
+                                            {{--                                    <button type="button" onclick="javascript: $('#dixwix_purchase').slideDown('slow');" class="col-5 btn btn-info btn-sm">Withdraw Request</button>--}}
+                                            <button type="button" onclick="javascript: $('.stayOne').slideUp('slow'); $('.tabsArea').slideDown('slow');" class="btn submit_btn w-100">Redeem Points</button>
+                                            {{--                                </div>--}}
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -476,7 +509,7 @@
                 <!-- Send Gift Card Tab -->
                 <div class="tab-pane fade" id="membertab" role="tabpanel" aria-labelledby="gift-tab">
                     <div class="row">
-                        <div class="col-lg-12 col-xl-12 col-md-12">
+                        <div class="col-lg-6 col-xl-4 col-md-6">
                             <div class="item">
                                 <div class="pad15" style="height:280px">
                                     <div class="innerheader">
@@ -488,17 +521,11 @@
                                             <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
                                         </div>
                                     </div>
-                                    <div class="contentAreaSection">
-                                        <div class="contentAreaSectionLeft">
-                                            <div class="pt-4" style="height:130px; float: left">
-                                                <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
-                                            </div>
-                                        </div>
-                                        <div class="contentAreaSectionRight">
-                                            <div class="imagesection" style="float: right">
-                                                <button onclick="javascript: $('.stayOne').slideUp('slow'); jQuery('#dixwix_modal1').slideDown('slow');" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
-                                            </div>
-                                        </div>
+                                    <div class="center-content d-flex align-items-center pt-4" style="height:130px">
+                                        <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
+                                    </div>
+                                    <div class="imagesection d-flex justify-content-center">
+                                        <button onclick="javascript: $('.stayOne').slideUp('slow'); openmodal();" class="btn rewards-buttons lastbtn submit_btn w-100">Search Dix Member</button>
                                     </div>
                                 </div>
                             </div>
@@ -538,9 +565,9 @@
                 <!-- Purchase Points Tab -->
                 <div class="tab-pane fade" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12">
+                        <div class="col-xl-5 col-lg-12">
                             <div class="item">
-                                <div class="" style="min-height:280px">
+                                <div class="pad15" style="height:280px">
                                     <div class="innerheader">
                                         <div class="post_image d-flex align-items-center flex-row">
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
@@ -551,14 +578,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="imagesection purchase-points flex-column justify-content-between" style="gap:10px">
+                                    <div class="imagesection purchase-points d-flex flex-column justify-content-between" style="gap:10px">
                                         @foreach($rewards_prices as $reward)
                                             <form method="POST" action="{{ route('purchase-points') }}" class="w-100">
                                                 @csrf
                                                 <input type="hidden" name="points" value="{{ $reward->coins }}">
                                                 <input type="hidden" name="price" value="{{ $reward->price }}">
                                                 <input type="hidden" name="package_id" id="package_id" value="{{ $reward->id }}">
-                                                <button type="submit" class="btn justify-content-between d-flex align-items-center submit_btn w-100" style="padding: 2%">
+                                                <button type="submit" class="btn rewards-buttons d-flex justify-content-between align-items-center lastbtn submit_btn w-100">
                                                     {{ $reward->name }} <span class="price">${{ $reward->price }}</span>
                                                 </button>
                                             </form>
@@ -602,38 +629,6 @@
         </div>
         <!-- Main Page Tabs Ends-->
 
-        <div class="row stayOne" id="dixwix_modal1" style="display: none">
-            {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
-            {{--                <div class="modal-dialog modal-lg" role="document">--}}
-            {{--                    <div class="modal-content">--}}
-            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
-                <div class="container mt-5">
-                    <div class="form-group">
-                        <label for="search_user">Search User</label>
-                        <div class="input-group">
-                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_select">Select User</label>
-                        <select id="user_select" class="form-control" disabled>
-                            <option value="">No users found</option>
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_points">Enter Points</label>
-                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
-                    </div>
-                    <div class="form-group mt-3 text-right">
-                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
-                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
-        </div>
     </div>
 </div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller as Controller;
 use App\Mail\MailService;
 use App\Models\BlogPost;
+use App\Models\Book;
 use App\Models\Contact as Contact;
 use App\Models\Group;
 use App\Models\Grouptype as Grouptype;
@@ -18,6 +19,7 @@ class PageController extends Controller
     public function Homepage(Request $request)
     {
         $data['groups'] = Group::where('status', 1)->orderBy('created_at', 'desc')->get();
+        $data['books'] = Book::with(["user"])->orderBy('created_at', 'desc')->take(5)->get();
         $data['title'] = 'Home';
         $data['template'] = 'home';
         $data['is_banner'] = true;

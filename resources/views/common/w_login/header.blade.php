@@ -393,26 +393,26 @@
                             <span>My Rewards {!! ($data['title'] === "My Rewards" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Gifto {!! ($data['title'] === "My Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                        </a>
-                    </li>
+{{--                    <li>--}}
+{{--                        <a href="{{ route('my-orders') }}" {!! $data['title']==="My Orders" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>My Gifto {!! ($data['title'] === "My Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                     <li>
                         <a href="{{ route('withdraw-requests') }}" {!! $data['title']==="Withdraw Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
                             <span>Withdraw Requests {!! ($data['title'] === "Withdraw Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Transfer Point {!! ($data['title'] === "My Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('my-purchase-orders') }}" {!! $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>
-                            <span>My Purchases {!! ($data['title'] === "My Purchases" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
-                        </a>
-                    </li>
+{{--                    <li>--}}
+{{--                        <a href="{{ route('my-transfer-requests') }}" {!! $data['title']==="My Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>My Transfer Point {!! ($data['title'] === "My Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('my-purchase-orders') }}" {!! $data['title']==="My Purchases" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' !!}>--}}
+{{--                            <span>My Purchases {!! ($data['title'] === "My Purchases" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                 </ul>
             </li>
             @endif
@@ -587,11 +587,11 @@
                             <span>Gifto Request's {!! ($data['title'] === "Gifto Orders" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                         </a>
                     </li>
-{{--                    <li>--}}
-{{--                        <a href="{{ route('transfer-requests') }}" {!! ($data['title']==="Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>--}}
-{{--                            <span>Transfer Request's {!! ($data['title'] === "Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    <li>
+                        <a href="{{ route('transfer-requests') }}" {!! ($data['title']==="Transfer Point Requests" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                            <span>Transfer Request's {!! ($data['title'] === "Transfer Point Requests" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 

@@ -130,12 +130,12 @@
             font-size: 18px;
         }
         .dashboard-flow {
-            width: 100%;
+            width: 70%;
             margin-bottom: 8%;
         }
     </style>
 
-<div class="row" >
+<div class="row d-flex justify-content-center align-content-center">
    <img class="dashboard-flow" id="dashboard-flow" src="{!! asset('img/dashboard-flow.png') !!}" />
 </div>
 <?php $isAdmin=false;$mCls=3;$csttxt='cst';
