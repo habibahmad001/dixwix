@@ -61,7 +61,7 @@
         </div>
 
         <div class="col-md-6">
-            <img src="img/led.png" class="imageset">
+            <img src="img/home/Community-Groups.png" class="imageset">
         </div>
     </div>
 </div>
@@ -69,7 +69,7 @@
     <div class="row">
 
         <div class="col-md-6">
-            <img src="img/led2.png" class="imageset">
+            <img src="img/home/Rewards-Compensation.png" class="imageset">
         </div>
 
         <div class="col-md-6 bgimge">
@@ -97,7 +97,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <img src="img/led.png" class="imageset">
+            <img src="img/home/AI-Powered-Assistance.png" class="imageset">
         </div>
     </div>
 </div>
