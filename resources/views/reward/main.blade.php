@@ -520,9 +520,9 @@
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
                                             <h3 class="lead mb-0 main-heading text-nowrap ms-2">Send Gift Points</h3>
                                         </div>
-                                        <div class="post_image">
-                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
-                                        </div>
+{{--                                        <div class="post_image">--}}
+{{--                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">--}}
+{{--                                        </div>--}}
                                     </div>
                                     <div class="center-content d-flex align-items-center pt-4" style="height:130px">
                                         <img src="{{ asset('assets/media/gift-points.png') }}" style="height:116px" alt="Img Missing" class="icon">
@@ -567,7 +567,7 @@
 
                 <!-- Purchase Points Tab -->
                 <div class="tab-pane fade" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
-                    <div class="row">
+                    <div class="row mb-10">
                         <div class="col-xl-5 col-lg-12">
                             <div class="item">
                                 <div class="pad15" style="height:280px">
@@ -576,9 +576,9 @@
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
                                             <h3 class="lead mb-0 main-heading text-nowrap ms-2">Purchase points</h3>
                                         </div>
-                                        <div class="post_image">
-                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
-                                        </div>
+{{--                                        <div class="post_image">--}}
+{{--                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">--}}
+{{--                                        </div>--}}
                                     </div>
 
                                     <div class="imagesection purchase-points d-flex flex-column justify-content-between" style="gap:10px">

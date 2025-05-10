@@ -271,6 +271,13 @@ class RewardController extends Controller
             ]);
         }
 
+        if ($request->points < $transferCoinLimit) {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have enough points to gift.",
+            ]);
+        }
+
         if ($request->points > $transferCoinLimit) {
 
             $checkExistsReq = $authUser->transferPointRequestFromUser()
