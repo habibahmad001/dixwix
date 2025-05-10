@@ -214,213 +214,6 @@
             </div>
         @endif
 
-        <div class="tabsArea stayOne" style="display: none;">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true">Withdraw Request</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="gift-tab" data-bs-toggle="tab" href="#gift" role="tab" aria-controls="gift" aria-selected="false">Send Gift Card</a>
-                </li>
-            </ul>
-
-            <div class="tab-content" id="myTabContent">
-                <!-- Withdraw Request Tab -->
-                <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
-                    <div class="row" id="dixwix_purchase">
-                        <div class="modal-body" id="modal_body" >
-                            <div class="container mt-5">
-                                <div class="form-group">
-                                    <label for="withdrawPoints">Input Points for Withdraw</label>
-                                    <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
-                                    <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
-                                    <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
-                                    <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
-                                </div>
-                                <div class="form-group text-right">
-                                    <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
-                                    {{--                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>--}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Send Gift Card Tab -->
-                <div class="tab-pane fade show active" id="gift" role="tabpanel" aria-labelledby="gift-tab">
-                    <div class="row" id="dixwix_gifto_modal1">
-                        {{--/*********** gifto model ***********/--}}
-                        {{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
-                        {{--                <div class="modal-dialog modal-lg" role="document">--}}
-                        {{--                    <div class="modal-content">--}}
-                        <div class="modal-body" id="modal_body">
-                            <div class="container mt-5">
-                                <div class="form-group" style="display: none">
-                                    <label for="gifto_search_user">Search User</label>
-                                    <div class="input-group">
-                                        <input type="text" id="gifto_search_user" class="form-control" value="{!! Auth::user()->email !!}" placeholder="Enter name or email to search" />
-                                    </div>
-                                </div>
-                                <div class="form-group mt-3" style="display: none">
-                                    <label for="user_select">Select User</label>
-                                    <select id="gifto_user_select" class="form-control" disabled>
-                                        <option value="">No users found</option>
-                                        <option value="{!! Auth::user()->id !!}" selected>{!! Auth::user()->email !!}</option>
-                                    </select>
-                                </div>
-                                {{--                    <div class="form-group mt-3">--}}
-                                {{--                        <label for="user_points">Enter Points</label>--}}
-                                {{--                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />--}}
-                                {{--                    </div>--}}
-                                {{--                    <div class="form-group mt-3">--}}
-                                {{--                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />--}}
-                                {{--                        <label for="gifto_checkbox">Also Send Gifto</label>--}}
-                                {{--                    </div>--}}
-
-                                <div class="row gifto_data_div">
-                                    {{--                        <div class="form-group col-12 mt-3">--}}
-                                    {{--                            @if(count($campaigns["data"]["data"])> 0)--}}
-                                    {{--                                @foreach($campaigns["data"]["data"] as $campaign)--}}
-                                    {{--                                    <p>--}}
-                                    {{--                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />--}}
-                                    {{--                                        {!! $campaign["name"] !!}--}}
-                                    {{--                                    </p>--}}
-                                    {{--                                @endforeach--}}
-                                    {{--                            @endif--}}
-                                    {{--                        </div>--}}
-
-                                    <div class="form-group col-12 mt-3" style="display: none">
-                                        <label for="gifto_msg">Gifto Message</label>
-                                        <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" value="Thanks from the team for an awesome year!" placeholder="Thanks from the team for an awesome year!" />
-                                    </div>
-                                    <div class="form-group col-8 mt-3" style="display: none">
-                                        <label for="gifto_amount">Points</label>
-                                        {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
-                                        <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="0" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
-                                        <sub class="red-msg">Points must be multiple of 500.</sub>
-                                    </div>
-                                    <div class="form-group col-4" style="display: none">
-                                        <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
-                                        {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <label for="gifto_amount">Gift Card</label>
-                                        <div>
-                                            @if(getCampaignUUID(getSetting('gifto_gram_uuid')))
-                                                @php
-                                                    $cardBgPaths = json_decode(getCampaignUUID(getSetting('gifto_gram_uuid'))?->card_bg, true);
-                                                    // Check if $cardBgPaths is an array and not empty, otherwise initialize as an empty array
-                                                    $limitedCardBgPaths = (is_array($cardBgPaths) && !empty($cardBgPaths)) ? array_slice($cardBgPaths, 0, 5) : []; // Limit to first 5 images
-                                                @endphp
-
-                                                @if(count($limitedCardBgPaths) > 0)
-                                                    <div class="row cardimgdiv">
-                                                        @foreach($limitedCardBgPaths as $originalName => $data)
-                                                            @if(is_array($data) && isset($data['path']))
-                                                                <div class="col-2 text-center" style="position: relative;"> <!-- Center text under image -->
-                                                                    <label style="cursor: pointer; display: block;">
-                                                                        <!-- Hidden checkbox -->
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            id="selected_card-{{ $data['id'] ?? 0 }}"
-                                                                            name="selected_card[]"
-                                                                            value="{{ $originalName }}"
-                                                                            data-price="{{ $data['price'] ? ($data['price'] / 100) : 0 }}"
-                                                                            data-paths="{{ asset('/storage/' . $data['path']) }}"
-                                                                            class="selected_card"
-                                                                            onchange="updateGiftoAmount(this)"
-                                                                            style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px;"
-                                                                        >
-
-                                                                        <!-- Image -->
-{{--                                                                        <img--}}
-{{--                                                                            src="{{ asset('/storage/' . $data['path']) }}"--}}
-{{--                                                                            class="img-fluid rounded shadow"--}}
-{{--                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;"--}}
-{{--                                                                            alt="{{ $data['name'] ?? $originalName }}"--}}
-{{--                                                                        >--}}
-
-                                                                        <!-- Price Text -->
-                                                                        <div style="margin-top: 5px; font-weight: bold; color: #333;">
-                                                                            {{ isset($data['price']) ? '$ ' . number_format($data['price'] / 100, 2) : 'No Price' }}
-                                                                        </div>
-                                                                    </label>
-                                                                </div>
-
-                                                            @else
-                                                                <div class="col-2">
-                                                                    <div class="alert alert-warning" style="font-size: 12px;">
-                                                                        Invalid image data
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                @else
-                                                    <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
-                                                        <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
-                                                        <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
-                                                    </div>
-                                                @endif
-
-                                            @else
-                                                <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
-                                                    <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
-                                                    <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group col-12 text-right">
-                                <button class="btn btn-success" id="sendgift_button">Send Gift Card</button>
-                                {{--                            <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_gifto_modal1').hide();" data-dismiss="modal">Close</button>--}}
-                            </div>
-                            {{--                        </div>--}}
-                            {{--                    </div>--}}
-                        </div>
-                        {{--            </div>--}}
-                        {{--/*********** gifto model ***********/--}}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- Tabs Ends-->
-
-        <div class="row stayOne" id="dixwix_modal1" style="display: none">
-            {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
-            {{--                <div class="modal-dialog modal-lg" role="document">--}}
-            {{--                    <div class="modal-content">--}}
-            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
-                <div class="container mt-5">
-                    <div class="form-group">
-                        <label for="search_user">Search User</label>
-                        <div class="input-group">
-                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_select">Select User</label>
-                        <select id="user_select" class="form-control" disabled>
-                            <option value="">No users found</option>
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="user_points">Enter Points</label>
-                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
-                    </div>
-                    <div class="form-group mt-3 text-right">
-                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
-                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
-        </div>
 
         <!-- Main Page Tabs Starts-->
         <div class="MainPagetabsArea">
@@ -439,10 +232,186 @@
             <div class="tab-content" id="mainTabContent">
                 <!-- Withdraw Request Tab -->
                 <div class="tab-pane fade show active" id="radeemtab" role="tabpanel" aria-labelledby="withdraw-tab">
+                    <div class="row mt-5">
+                        <div class="tabsArea col-12 stayOne" style="display: none;">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true">Withdraw Request</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="gift-tab" data-bs-toggle="tab" href="#gift" role="tab" aria-controls="gift" aria-selected="false">Send Gift Card</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Withdraw Request Tab -->
+                                <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                                    <div class="row" id="dixwix_purchase">
+                                        <div class="modal-body" id="modal_body" >
+                                            <div class="container mt-5">
+                                                <div class="form-group">
+                                                    <label for="withdrawPoints">Input Points for Withdraw</label>
+                                                    <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
+                                                    <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
+                                                    <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
+                                                    <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
+                                                </div>
+                                                <div class="form-group text-right">
+                                                    <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
+                                                    {{--                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>--}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Send Gift Card Tab -->
+                                <div class="tab-pane fade show active" id="gift" role="tabpanel" aria-labelledby="gift-tab">
+                                    <div class="row" id="dixwix_gifto_modal1">
+                                        {{--/*********** gifto model ***********/--}}
+                                        {{--            <div class="modal" id="dixwix_gifto_modal1" tabindex="-1" role="dialog">--}}
+                                        {{--                <div class="modal-dialog modal-lg" role="document">--}}
+                                        {{--                    <div class="modal-content">--}}
+                                        <div class="modal-body" id="modal_body">
+                                            <div class="container mt-5">
+                                                <div class="form-group" style="display: none">
+                                                    <label for="gifto_search_user">Search User</label>
+                                                    <div class="input-group">
+                                                        <input type="text" id="gifto_search_user" class="form-control" value="{!! Auth::user()->email !!}" placeholder="Enter name or email to search" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3" style="display: none">
+                                                    <label for="user_select">Select User</label>
+                                                    <select id="gifto_user_select" class="form-control" disabled>
+                                                        <option value="">No users found</option>
+                                                        <option value="{!! Auth::user()->id !!}" selected>{!! Auth::user()->email !!}</option>
+                                                    </select>
+                                                </div>
+                                                {{--                    <div class="form-group mt-3">--}}
+                                                {{--                        <label for="user_points">Enter Points</label>--}}
+                                                {{--                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />--}}
+                                                {{--                    </div>--}}
+                                                {{--                    <div class="form-group mt-3">--}}
+                                                {{--                        <input type="checkbox" name="gifto-checkbox" id="gifto_checkbox" onclick="javascript:$('.gifto_data_div').toggle('slow')" />--}}
+                                                {{--                        <label for="gifto_checkbox">Also Send Gifto</label>--}}
+                                                {{--                    </div>--}}
+
+                                                <div class="row gifto_data_div">
+                                                    {{--                        <div class="form-group col-12 mt-3">--}}
+                                                    {{--                            @if(count($campaigns["data"]["data"])> 0)--}}
+                                                    {{--                                @foreach($campaigns["data"]["data"] as $campaign)--}}
+                                                    {{--                                    <p>--}}
+                                                    {{--                                        <input type="radio" name="comp" id="comp-{!! $campaign["id"] !!}" value="{!! $campaign["id"] !!}" checked />--}}
+                                                    {{--                                        {!! $campaign["name"] !!}--}}
+                                                    {{--                                    </p>--}}
+                                                    {{--                                @endforeach--}}
+                                                    {{--                            @endif--}}
+                                                    {{--                        </div>--}}
+
+                                                    <div class="form-group col-12 mt-3" style="display: none">
+                                                        <label for="gifto_msg">Gifto Message</label>
+                                                        <input type="text" id="gifto_msg" name="gifto_msg" class="form-control" value="Thanks from the team for an awesome year!" placeholder="Thanks from the team for an awesome year!" />
+                                                    </div>
+                                                    <div class="form-group col-8 mt-3" style="display: none">
+                                                        <label for="gifto_amount">Points</label>
+                                                        {{--                            <input type="number" id="gifto_amount" min="5" max="{!! $reward_balance/100 !!}" onchange="javascript:$('.peice').text({!! round($reward_balance/100, 2) !!} - ($(this).val()))" step="5" name="gifto_amount" value="5" class="form-control" placeholder="Max limit {!! $reward_balance/100 !!}" />--}}
+                                                        <input type="number" id="gifto_amount" min="500" max="{!! $reward_balance !!}" step="500" onchange="javascript:validateInput(this);" name="gifto_amount" value="0" class="form-control" placeholder="Max limit {!! $reward_balance !!}" disabled />
+                                                        <sub class="red-msg">Points must be multiple of 500.</sub>
+                                                    </div>
+                                                    <div class="form-group col-4" style="display: none">
+                                                        <div class="a-bal"> $ <span class="peice">5</span> <sub>Amount accept by gifto</sub></div>
+                                                        {{--                            <div class="a-bal"><sub>Must have more then 500 points to send card</sub></div>--}}
+                                                    </div>
+                                                    <div class="form-group col-12">
+                                                        <label for="gifto_amount">Gift Card</label>
+                                                        <div>
+                                                            @if(getCampaignUUID(getSetting('gifto_gram_uuid')))
+                                                                @php
+                                                                    $cardBgPaths = json_decode(getCampaignUUID(getSetting('gifto_gram_uuid'))?->card_bg, true);
+                                                                    // Check if $cardBgPaths is an array and not empty, otherwise initialize as an empty array
+                                                                    $limitedCardBgPaths = (is_array($cardBgPaths) && !empty($cardBgPaths)) ? array_slice($cardBgPaths, 0, 5) : []; // Limit to first 5 images
+                                                                @endphp
+
+                                                                @if(count($limitedCardBgPaths) > 0)
+                                                                    <div class="row cardimgdiv">
+                                                                        @foreach($limitedCardBgPaths as $originalName => $data)
+                                                                            @if(is_array($data) && isset($data['path']))
+                                                                                <div class="col-2 text-center" style="position: relative;"> <!-- Center text under image -->
+                                                                                    <label style="cursor: pointer; display: block;">
+                                                                                        <!-- Hidden checkbox -->
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            id="selected_card-{{ $data['id'] ?? 0 }}"
+                                                                                            name="selected_card[]"
+                                                                                            value="{{ $originalName }}"
+                                                                                            data-price="{{ $data['price'] ? ($data['price'] / 100) : 0 }}"
+                                                                                            data-paths="{{ asset('/storage/' . $data['path']) }}"
+                                                                                            class="selected_card"
+                                                                                            onchange="updateGiftoAmount(this)"
+                                                                                            style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px;"
+                                                                                        >
+
+                                                                                        <!-- Image -->
+                                                                                    {{--                                                                        <img--}}
+                                                                                    {{--                                                                            src="{{ asset('/storage/' . $data['path']) }}"--}}
+                                                                                    {{--                                                                            class="img-fluid rounded shadow"--}}
+                                                                                    {{--                                                                            style="max-width: 100%; height: auto; object-fit: cover; margin: 5px;"--}}
+                                                                                    {{--                                                                            alt="{{ $data['name'] ?? $originalName }}"--}}
+                                                                                    {{--                                                                        >--}}
+
+                                                                                    <!-- Price Text -->
+                                                                                        <div style="margin-top: 5px; font-weight: bold; color: #333;">
+                                                                                            {{ isset($data['price']) ? '$ ' . number_format($data['price'] / 100, 2) : 'No Price' }}
+                                                                                        </div>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                            @else
+                                                                                <div class="col-2">
+                                                                                    <div class="alert alert-warning" style="font-size: 12px;">
+                                                                                        Invalid image data
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </div>
+                                                                @else
+                                                                    <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                                                                        <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                                                                        <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
+                                                                    </div>
+                                                                @endif
+
+                                                            @else
+                                                                <div class="no-card-preview" style="text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                                                                    <img src="https://placehold.co/150/cccccc/FFFFFF/?text=No+Card+Setup" alt="No Card Setup" style="max-width: 100%; height: 200px; border-radius: 10px;">
+                                                                    <p style="margin-top: 10px; font-weight: bold; color: #666;">No card setup for this campaign yet.</p>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-12 text-right">
+                                                <button class="btn btn-success" id="sendgift_button">Send Gift Card</button>
+                                                {{--                            <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_gifto_modal1').hide();" data-dismiss="modal">Close</button>--}}
+                                            </div>
+                                            {{--                        </div>--}}
+                                            {{--                    </div>--}}
+                                        </div>
+                                        {{--            </div>--}}
+                                        {{--/*********** gifto model ***********/--}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Tabs Ends-->
+                    </div>
                     <div class="row">
                         <div class="col-lg-6 col-xl-4 col-md-6">
                             <div class="item">
-                                <div class="pad15" style="height:280px">
+                                <div class="">
                                     <div class="innerheader">
                                         <div class="post_image d-flex align-items-center flex-row">
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
@@ -508,6 +477,40 @@
 
                 <!-- Send Gift Card Tab -->
                 <div class="tab-pane fade" id="membertab" role="tabpanel" aria-labelledby="gift-tab">
+                    <div class="row mt-5">
+                        <div class="row col-12 stayOne" id="dixwix_modal1" style="display: none">
+                            {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
+                            {{--                <div class="modal-dialog modal-lg" role="document">--}}
+                            {{--                    <div class="modal-content">--}}
+                            <div class="modal-body shadow" id="modal_body" style="border: 1px dashed #1c1c1c; border-radius: 9px; margin: 5% 0;">
+                                <div class="container mt-5">
+                                    <div class="form-group">
+                                        <label for="search_user">Search User</label>
+                                        <div class="input-group">
+                                            <input type="text" id="search_user" class="form-control" placeholder="Enter name or email to search" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="user_select">Select User</label>
+                                        <select id="user_select" class="form-control" disabled>
+                                            <option value="">No users found</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="user_points">Enter Points</label>
+                                        <input type="number" id="user_points" class="form-control" min="0" placeholder="Enter points to assign" disabled />
+                                    </div>
+                                    <div class="form-group mt-3 text-right">
+                                        <button class="btn btn-success" id="assign_button" disabled>Assign Points</button>
+                                        <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_modal1').hide();" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{--                    </div>--}}
+                            {{--                </div>--}}
+                            {{--            </div>--}}
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-6 col-xl-4 col-md-6">
                             <div class="item">
