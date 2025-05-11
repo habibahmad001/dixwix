@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailService;
 use App\Models\CoinPackage;
 use App\Models\Point;
 use App\Models\Setting;
+use App\Notifications\GeneralNotification;
 use Illuminate\Support\Facades\Http;
 use App\Models\TransferRequest;
 use App\Models\User;
@@ -12,6 +14,7 @@ use App\Models\GiftoOrder;
 use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use App\Services\GiftoGramService;
@@ -116,6 +119,33 @@ class RewardController extends Controller
                 'package_id' => $package_id,
             ]);
 
+            /******* Notification ********/
+            if(isset($request->payment_method_id)) {
+                $user = Auth::user();
+                $entryNotification = [
+                    'only_database' => true,
+                    'title'         => 'Your purchase Successfully 🎉',
+                    'type'          => 'your_purchase_successfully',
+                    'subject'       => 'Your purchase Successfully',
+                    'message'       => "You're purchasing Successfully",
+                    'action'        => 'Purchasing Successfully',
+                    'user_id'       => Auth::user()->id,
+                    'url'           => url("my-rewards#purchasepoints-tab"),
+                ];
+                try {
+                    $user->notify(new GeneralNotification($entryNotification));
+                    logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+                } catch (Exception $e) {
+                    logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+                    return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+                }
+
+                $formData       = ["message" => "Dear Customer", "email" => "Your purchase Successfully"];
+                $recipientEmail = Auth::user()->email;
+                Mail::to($recipientEmail)->send(new MailService($formData));
+            }
+            /******* Notification ********/
+
             return redirect()->route('my-rewards', [
                 'points' => $points,
                 'price' => $price,
@@ -140,6 +170,33 @@ class RewardController extends Controller
             }
 
             $paymentIntent = $this->stripeService->retrievePaymentIntent($paymentIntentId);
+
+            /******* Notification ********/
+            if(isset($request->payment_method_id)) {
+                $user = Auth::user();
+                $entryNotification = [
+                    'only_database' => true,
+                    'title'         => 'Your purchase Successfully 🎉',
+                    'type'          => 'your_purchase_successfully',
+                    'subject'       => 'Your purchase Successfully',
+                    'message'       => "You're purchasing Successfully",
+                    'action'        => 'Purchasing Successfully',
+                    'user_id'       => Auth::user()->id,
+                    'url'           => url("my-rewards#purchasepoints-tab"),
+                ];
+                try {
+                    $user->notify(new GeneralNotification($entryNotification));
+                    logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+                } catch (Exception $e) {
+                    logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+                    return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+                }
+
+                $formData       = ["message" => "Dear Customer", "email" => "Your purchase Successfully"];
+                $recipientEmail = Auth::user()->email;
+                Mail::to($recipientEmail)->send(new MailService($formData));
+            }
+            /******* Notification ********/
 
             // Confirm the payment using the saved payment method
             $paymentIntent->confirm([
@@ -303,6 +360,31 @@ class RewardController extends Controller
             ]);
         }
 
+        /******* Notification ********/
+        $user = Auth::user();
+        $entryNotification = [
+            'only_database' => true,
+            'title'         => 'Points gifted successfully 🎉',
+            'type'          => 'your_purchase_successfully',
+            'subject'       => 'Points gifted successfully',
+            'message'       => "You're points gifted successfully",
+            'action'        => 'Points gifted successfully',
+            'user_id'       => Auth::user()->id,
+            'url'           => url("my-rewards#radeemtab-tab"),
+        ];
+        try {
+            $user->notify(new GeneralNotification($entryNotification));
+            logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+        } catch (Exception $e) {
+            logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+            return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+        }
+
+        $formData       = ["message" => "Dear Customer", "email" => "Points gifted successfully"];
+        $recipientEmail = Auth::user()->email;
+        Mail::to($recipientEmail)->send(new MailService($formData));
+        /******* Notification ********/
+
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
 
@@ -376,6 +458,31 @@ class RewardController extends Controller
         /******** Store Order In DB ******/
         // Directly transfer points if within limit
         $this->processPointTransfer($authUser, $user, $request->points);
+
+        /******* Notification ********/
+        $user = Auth::user();
+        $entryNotification = [
+            'only_database' => true,
+            'title'         => 'Points gifted successfully 🎉',
+            'type'          => 'your_purchase_successfully',
+            'subject'       => 'Points gifted successfully',
+            'message'       => "You're points gifted successfully",
+            'action'        => 'Points gifted successfully',
+            'user_id'       => Auth::user()->id,
+            'url'           => url("my-rewards#radeemtab-tab"),
+        ];
+        try {
+            $user->notify(new GeneralNotification($entryNotification));
+            logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+        } catch (Exception $e) {
+            logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+            return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+        }
+
+        $formData       = ["message" => "Dear Customer", "email" => "Points gifted successfully"];
+        $recipientEmail = Auth::user()->email;
+        Mail::to($recipientEmail)->send(new MailService($formData));
+        /******* Notification ********/
 
         return response()->json(['success' => true, 'message' => 'Points gifted successfully!', 'gifto' => $giftoGramResponse]);
     }

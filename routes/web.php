@@ -20,6 +20,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\GiftoOrderController;
 use App\Http\Controllers\UserEntryController;
+use App\Http\Controllers\HomeReviewsController;
 
 use App\Http\Controllers\HowDoesItController;
 use App\Http\Controllers\MembershipController;
@@ -216,6 +217,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin-dashboard', [AdminController::class, 'Dashboard'])->name("admin-dashboard");
     Route::get('/update-stripe-id', [UserController::class, 'updateStripeID'])->name("stripe-id-ipdate");
+    Route::get('/attach-deattach', [UserController::class, 'attachdeattach'])->name("attach-deattach");
 
     Route::get('/edit-profile', [UserController::class, 'EditUser'])->name("edit-profile");
     Route::post('/store-profile', [UserController::class, 'StoreUser'])->name("store-profile");
@@ -291,6 +293,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::resource('gifto-orders', GiftoOrderController::class);
         /***** Manage Gifto *******/
+
+
+        /***** Manage Home Reviews *******/
+        Route::apiResource('home-reviews', HomeReviewsController::class);
+        /***** Manage Home Reviews *******/
 
         Route::get('/transfer-point-requests', [TransferRequestController::class, 'index'])->name("transfer-requests");
         Route::get('/transfer-point-requests/{id}', [TransferRequestController::class, 'edit'])->name("edit-transfer-requests");

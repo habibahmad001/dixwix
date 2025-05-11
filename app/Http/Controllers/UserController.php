@@ -1376,6 +1376,32 @@ protected function validateRecaptcha($recaptchaResponse)
         }
     }
 
+    public function attachdeattach(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $user = auth()->user();
+
+        try {
+            // Detach the payment method by unsetting the customer
+            \Stripe\PaymentMethod::update(
+                $request->meth,
+                ['customer' => null]
+            );
+
+            // Retrieve the PaymentMethod instance and attach it
+            $paymentMethod = \Stripe\PaymentMethod::retrieve($request->meth);
+            $paymentMethod->attach(['customer' => $user->stripe_customer_id]);
+
+            return response()->json(['message' => 'Stripe payment method re-attached successfully.'], 200);
+        } catch (ApiErrorException $e) {
+            Log::error('Stripe error for user: ' . $user->id . ' - ' . $e->getMessage());
+            return response()->json(['message' => 'Stripe API error.'], 500);
+        } catch (\Exception $e) {
+            Log::error('Unexpected error for user: ' . $user->id . ' - ' . $e->getMessage());
+            return response()->json(['message' => 'Unexpected error occurred.'], 500);
+        }
+    }
+
     public function switchPlan(Request $request)
     {
         $request->validate(['plan_id' => 'required|exists:membership_plans,id']);
@@ -1628,6 +1654,31 @@ protected function validateRecaptcha($recaptchaResponse)
             'amount'   => $amount,
             'status'  => $coins > $manualApprovalLimit ? 0 : 1,
         ]);
+
+        /******* Notification ********/
+        $user = Auth::user();
+        $entryNotification = [
+            'only_database' => true,
+            'title'         => 'Withdraw points request Successfully 🎉',
+            'type'          => 'withdraw_points_request_successfully',
+            'subject'       => 'Withdraw points request Successfully',
+            'message'       => $message,
+            'action'        => 'Withdraw points request Successfully',
+            'user_id'       => Auth::user()->id,
+            'url'           => url("my-rewards#purchasepoints-tab"),
+        ];
+        try {
+            $user->notify(new GeneralNotification($entryNotification));
+            logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+        } catch (Exception $e) {
+            logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+            return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+        }
+
+        $formData       = ["message" => "Dear Customer", "email" => $message];
+        $recipientEmail = Auth::user()->email;
+        Mail::to($recipientEmail)->send(new MailService($formData));
+        /******* Notification ********/
 
         return back()->with('success', $message);
     }

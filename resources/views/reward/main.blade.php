@@ -570,7 +570,7 @@
                     <div class="row mb-10">
                         <div class="col-xl-5 col-lg-12">
                             <div class="item">
-                                <div class="pad15" style="height:280px">
+                                <div class="">
                                     <div class="innerheader">
                                         <div class="post_image d-flex align-items-center flex-row">
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">

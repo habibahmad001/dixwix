@@ -61,132 +61,157 @@ class GroupController extends Controller
     }
 
     public function StoreGroup(Request $request)
-{
-    $retdata             = [];
-    $data                = $request->input('group');
-    $mode                = $request->input('mode');
-    $group_id            = $request->input('group_id');
-    $retdata['mode']     = $mode;
-    $retdata['group_id'] = $group_id;
+    {
+        $retdata             = [];
+        $data                = $request->input('group');
+        $mode                = $request->input('mode');
+        $group_id            = $request->input('group_id');
+        $retdata['mode']     = $mode;
+        $retdata['group_id'] = $group_id;
 
-    // Default location and cover image for "add" mode
-    if ($mode === "add") {
-        // Set default location if none is provided
-        if (empty($data['locations'])) {
-            $data['locations'] = ['community']; // default location
+        // Default location and cover image for "add" mode
+        if ($mode === "add") {
+            // Set default location if none is provided
+            if (empty($data['locations'])) {
+                $data['locations'] = ['community']; // default location
+            }
+
+            // Set a default cover image if none is provided
+            if (empty($data['group_picture'])) {
+                // Provide a default image URL (change the path as necessary)
+                $data['group_picture'] = 'media/logo.png'; // Example path, change this to the actual default image
+            }
         }
 
-        // Set a default cover image if none is provided
-        if (empty($data['group_picture'])) {
-            // Provide a default image URL (change the path as necessary)
-            $data['group_picture'] = 'media/logo.png'; // Example path, change this to the actual default image
+       /* $request->validate(
+            [
+                "group.title"       => "required|string",
+                "group.locations"   => "array",
+                "group.description" => "",
+                "group.status"      => "required",
+                "group_picture"     => $mode === "add" ? "image|mimes:jpeg,png,jpg,gif" : "nullable|image|mimes:jpeg,png,jpg,gif",
+            ],
+            [
+                "group.title.required"       => "The title field is required.",
+                // "group.description.required" => "The description field is required.",
+                "group.title.string"         => "The title must be a valid string.",
+                // "group.locations.required"   => "Please provide at least one location.",
+                // "group.locations.array"      => "The locations must be an array.",
+                "group.status.required"      => "The status field is required.",
+                // "group_picture.required"     => "A group picture is required for adding a new group.",
+                // "group_picture.image"        => "The group picture must be an image.",
+                // "group_picture.mimes"        => "The group picture must be a file of type: jpeg, png, jpg, gif.",
+                // "group_picture.max"          => "The group picture must not exceed 2MB in size.",
+            ]
+        );*/
+        $request->validate(
+            [
+                "group.title"       => "required|string",
+                "group.locations"   => "array", // You could make this required if necessary
+                "group.description" => "nullable|string", // Optional but you can set a string validation if required
+                "group.status"      => "required",
+                "group_picture"     => $mode === "add" ? "image|mimes:jpeg,png,jpg,gif|max:2048" : "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Image size limit
+            ],
+            [
+                "group.title.required"       => "The title field is required.",
+                "group.title.string"         => "The title must be a valid string.",
+                "group.status.required"      => "The status field is required.",
+                "group_picture.required"     => "A group picture is required for adding a new group.",
+                "group_picture.image"        => "The group picture must be an image.",
+                "group_picture.mimes"        => "The group picture must be a file of type: jpeg, png, jpg, gif.",
+                "group_picture.max"          => "The group picture must not exceed 2MB in size.",
+            ]
+        );
+
+
+        if ($request->hasFile('group_picture')) {
+            $path                  = $request->file('group_picture')->store('group_pictures');
+            $data["group_picture"] = $path;
         }
-    }
 
-   /* $request->validate(
-        [
-            "group.title"       => "required|string",
-            "group.locations"   => "array",
-            "group.description" => "",
-            "group.status"      => "required",
-            "group_picture"     => $mode === "add" ? "image|mimes:jpeg,png,jpg,gif" : "nullable|image|mimes:jpeg,png,jpg,gif",
-        ],
-        [
-            "group.title.required"       => "The title field is required.",
-            // "group.description.required" => "The description field is required.",
-            "group.title.string"         => "The title must be a valid string.",
-            // "group.locations.required"   => "Please provide at least one location.",
-            // "group.locations.array"      => "The locations must be an array.",
-            "group.status.required"      => "The status field is required.",
-            // "group_picture.required"     => "A group picture is required for adding a new group.",
-            // "group_picture.image"        => "The group picture must be an image.",
-            // "group_picture.mimes"        => "The group picture must be a file of type: jpeg, png, jpg, gif.",
-            // "group_picture.max"          => "The group picture must not exceed 2MB in size.",
-        ]
-    );*/
-    $request->validate(
-        [
-            "group.title"       => "required|string",
-            "group.locations"   => "array", // You could make this required if necessary
-            "group.description" => "nullable|string", // Optional but you can set a string validation if required
-            "group.status"      => "required",
-            "group_picture"     => $mode === "add" ? "image|mimes:jpeg,png,jpg,gif|max:2048" : "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Image size limit
-        ],
-        [
-            "group.title.required"       => "The title field is required.",
-            "group.title.string"         => "The title must be a valid string.",
-            "group.status.required"      => "The status field is required.",
-            "group_picture.required"     => "A group picture is required for adding a new group.",
-            "group_picture.image"        => "The group picture must be an image.",
-            "group_picture.mimes"        => "The group picture must be a file of type: jpeg, png, jpg, gif.",
-            "group_picture.max"          => "The group picture must not exceed 2MB in size.",
-        ]
-    );
+        $group = null;
+        $model = new Group();
 
+        if ($mode == "add") {
 
-    if ($request->hasFile('group_picture')) {
-        $path                  = $request->file('group_picture')->store('group_pictures');
-        $data["group_picture"] = $path;
-    }
+            $file_path = 'barcodes/' . date("Ymd_His") . '.png';
+            $save_path = "storage/{$file_path}";
 
-    $group = null;
-    $model = new Group();
+            \QRCode::text($data['title'] ?? '')->setOutfile($save_path)->png();
+            $qrcode_url = \Storage::disk('local')->url($file_path);
 
-    if ($mode == "add") {
+            $data["qrcode_url"] = $qrcode_url;
+            $data["created_at"] = date("Y-m-d H:i:s");
+            $data["created_by"] = Auth::user()->id;
 
-        $file_path = 'barcodes/' . date("Ymd_His") . '.png';
-        $save_path = "storage/{$file_path}";
+            $group = $model->add($data);
 
-        \QRCode::text($data['title'] ?? '')->setOutfile($save_path)->png();
-        $qrcode_url = \Storage::disk('local')->url($file_path);
-
-        $data["qrcode_url"] = $qrcode_url;
-        $data["created_at"] = date("Y-m-d H:i:s");
-        $data["created_by"] = Auth::user()->id;
-
-        $group = $model->add($data);
-
-        $group->groupmembers()->create([
-            "member_id"  => Auth::user()->id,
-            "status"     => "added",
-            "created_by" => Auth::user()->id,
-            "activated"  => 1,
-            "created_at" => date("Y-m-d H:i:s"),
-        ]);
-    } else if ($mode == "edit") {
-        $groupN = Group::find($group_id);
-        if (empty($data['group_picture']) && ! empty($groupN->group_picture)) {
-            $data['group_picture'] = $groupN->group_picture;
+            $group->groupmembers()->create([
+                "member_id"  => Auth::user()->id,
+                "status"     => "added",
+                "created_by" => Auth::user()->id,
+                "activated"  => 1,
+                "created_at" => date("Y-m-d H:i:s"),
+            ]);
+        } else if ($mode == "edit") {
+            $groupN = Group::find($group_id);
+            if (empty($data['group_picture']) && ! empty($groupN->group_picture)) {
+                $data['group_picture'] = $groupN->group_picture;
+            }
+            $group = $model->change($data, $group_id);
         }
-        $group = $model->change($data, $group_id);
-    }
 
-    if (! is_object($group)) {
-        if ($mode == "edit") {
-            $errors = \App\Message\Error::get('group.change');
-        } else {
-            $errors = \App\Message\Error::get('group.add');
-        }
-        if (count($errors) == 0) {
+        if (! is_object($group)) {
             if ($mode == "edit") {
                 $errors = \App\Message\Error::get('group.change');
             } else {
                 $errors = \App\Message\Error::get('group.add');
             }
+            if (count($errors) == 0) {
+                if ($mode == "edit") {
+                    $errors = \App\Message\Error::get('group.change');
+                } else {
+                    $errors = \App\Message\Error::get('group.add');
+                }
+            }
         }
+        if (isset($errors) && count($errors) > 0) {
+            $message                           = returnErrorMsg($errors);
+            $retdata['errs']                   = $errors;
+            $retdata['group']                  = $data;
+            $retdata['group']['group_picture'] = "";
+            $retdata['err_message']            = $message;
+            // $this->flashError($retdata['err_message']);
+            return $this->ReturnToAddPage($retdata);
+        }
+
+        /******* Notification ********/
+        $user = Auth::user();
+        $entryNotification = [
+            'title'   => 'Group created',
+            'type'    => 'group_created',
+            'subject' => 'New Group Created',
+            'message' => 'A group created for you',
+            'user_id' => $user->id,
+            'url'     => route('show-group', ['id' => $user->id]),
+            'action'  => 'View Group',
+        ];
+        try {
+            $user->notify(new GeneralNotification($entryNotification));
+            logger()->info('Notification sent successfully', ['user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+        } catch (Exception $e) {
+            logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => Auth::user()->id, 'book_id' => Auth::user()->id]);
+            return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+        }
+
+        $formData       = ["message" => "Dear Customer", "email" => "New Group Created"];
+        $recipientEmail = Auth::user()->email;
+        Mail::to($recipientEmail)->send(new MailService($formData));
+        /******* Notification ********/
+
+        $retdata["success"] = "Group " . ucfirst($mode) . "ed successfully";
+        return back()->with('success', $retdata['success']);
     }
-    if (isset($errors) && count($errors) > 0) {
-        $message                           = returnErrorMsg($errors);
-        $retdata['errs']                   = $errors;
-        $retdata['group']                  = $data;
-        $retdata['group']['group_picture'] = "";
-        $retdata['err_message']            = $message;
-        // $this->flashError($retdata['err_message']);
-        return $this->ReturnToAddPage($retdata);
-    }
-    $retdata["success"] = "Group " . ucfirst($mode) . "ed successfully";
-    return back()->with('success', $retdata['success']);
-}
 
 
     public function ReturnToAddPage($retdata = [])
