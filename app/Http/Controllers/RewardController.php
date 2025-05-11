@@ -120,7 +120,7 @@ class RewardController extends Controller
             ]);
 
             /******* Notification ********/
-            if(isset($request->payment_method_id)) {
+            if(isset($request->package_id)) {
                 $user = Auth::user();
                 $entryNotification = [
                     'only_database' => true,
