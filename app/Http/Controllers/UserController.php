@@ -1665,7 +1665,7 @@ protected function validateRecaptcha($recaptchaResponse)
             'message'       => $message,
             'action'        => 'Withdraw points request Successfully',
             'user_id'       => Auth::user()->id,
-            'url'           => url("my-rewards#purchasepoints-tab"),
+            'url'           => url("my-rewards?tabs=third#purchasepoints-tab"),
         ];
         try {
             $user->notify(new GeneralNotification($entryNotification));

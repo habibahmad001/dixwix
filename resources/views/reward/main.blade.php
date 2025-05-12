@@ -151,81 +151,17 @@
         </div>
         @endif
 
-        @if(!empty($client_secret))
-            <div class="item stayOne">
-                <div class="card-body">
-                    <div id="payment-form">
-                        <div class="post_image d-flex align-items-center flex-row">
-                            <h3 class="lead mb-0 main-heading text-nowrap ms-2">You're purchasing {{ $points }} points for ${{ $price }}</h3>
-                        </div>
-                        <br>
-                        @if(count($payment_methods)>0)
-                            <label>Saved payment methods</label>
-                            <div class="payment-methods-list">
-                                @foreach($payment_methods as $method)
-                                    <label class="card payment-method-card mb-3 w-100">
-                                        <div class="card-body d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{ asset('assets/media/' . strtolower($method->type) . '.png') }}"
-                                                     alt="{{ ucfirst($method->type) }} Logo" class="card-icon mr-3">
-                                                <div>
-                                                    <h5 class="mb-1 text-nowrap">**** **** **** {{ $method->last4 }}
-                                                        @if($method->default)
-                                                            <span class="badge badge-success mr-2">Primary</span>
-                                                        @endif
-                                                    </h5>
-                                                    <p class="mb-0 text-muted">Expiration {{ $method->expiry_month }}/{{ $method->expiry_year }}</p>
-                                                </div>
-                                            </div>
-                                            <input type="radio" name="selected_payment_method" value="{{ $method->id }}"
-                                                   @if($method->default) checked @endif class="ms-2 payment-radio">
-                                        </div>
-                                    </label>
-                                @endforeach
-                            </div>
-
-                            <div class="form-check mt-3 mb-3">
-                                <input class="form-check-input" type="checkbox" id="toggle-new-card">
-                                <label class="form-check-label" for="toggle-new-card">
-                                    Pay with new card
-                                </label>
-                            </div>
-                        @endif
-
-                        <div id="new-card-section" class="@if(count($payment_methods)>0)) d-none @endif">
-                            <div class="mb-3">
-                                <div id="card-element" class="form-control"></div>
-                            </div>
-                            <div id="card-errors" class="text-danger"></div>
-                            <div class="form-check mt-3">
-                                <input class="form-check-input" type="checkbox" id="save-card">
-                                <label class="form-check-label" for="save-card">
-                                    Save card for future payments
-                                </label>
-                            </div>
-                        </div>
-
-                        <button id="pay-button" class="btn rewards-buttons lastbtn submit_btn w-100 mt-3">
-                            <span id="button-text">Pay Now</span>
-                            <span id="loading-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-
         <!-- Main Page Tabs Starts-->
         <div class="MainPagetabsArea">
             <ul class="nav nav-tabs tablinks" id="mainTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="radeemtab-tab" data-bs-toggle="tab" href="#radeemtab" role="radeemtab" aria-controls="radeemtab" aria-selected="true">Redeem Points</a>
+                    <a class="nav-link {!! request()->tabs == "one" ? "active" : (!isset(request()->tabs) ? "active" : "") !!}" id="radeemtab-tab" data-bs-toggle="tab" href="#radeemtab" role="radeemtab" aria-controls="radeemtab" aria-selected="true">Redeem Points</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="membertab-tab" data-bs-toggle="tab" href="#membertab" role="tab" aria-controls="membertab" aria-selected="false">Search Dix Member</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="purchasepoints-tab" data-bs-toggle="tab" href="#purchasepointstab" role="tab" aria-controls="purchasepointstab" aria-selected="false">Purchase points</a>
+                    <a class="nav-link {!! request()->tabs == "third" ? "active" : "" !!}" id="purchasepoints-tab" data-bs-toggle="tab" href="#purchasepointstab" role="tab" aria-controls="purchasepointstab" aria-selected="false">Purchase points</a>
                 </li>
             </ul>
 
@@ -417,9 +353,9 @@
                                             <img src="{{ asset('assets/media/star.png') }}" alt="View Group" class="icon">
                                             <h3 class="lead mb-0 main-heading text-nowrap ms-2">Total Earned Points</h3>
                                         </div>
-                                        <div class="post_image">
-                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">
-                                        </div>
+{{--                                        <div class="post_image">--}}
+{{--                                            <img src="{{ asset('assets/media/amazon.png') }}" alt="View Group" class="icon">--}}
+{{--                                        </div>--}}
                                     </div>
                                     <div class="center-content d-flex justify-content-center align-items-center" style="height: 130px;">
                                         <h2 class="mb-0 points-display">{{ $reward_balance }}</h2>
@@ -567,6 +503,71 @@
 
                 <!-- Purchase Points Tab -->
                 <div class="tab-pane fade" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
+                    <div class="row mt-5">
+                        @if(!empty($client_secret))
+                            <div class="item col-12 stayOne">
+                                <div class="card-body">
+                                    <div id="payment-form">
+                                        <div class="post_image d-flex align-items-center flex-row">
+                                            <h3 class="lead mb-0 main-heading text-nowrap ms-2">You're purchasing {{ $points }} points for ${{ $price }}</h3>
+                                        </div>
+                                        <br>
+                                        @if(count($payment_methods)>0)
+                                            <label>Saved payment methods</label>
+                                            <div class="payment-methods-list">
+                                                @foreach($payment_methods as $method)
+                                                    <label class="card payment-method-card mb-3 w-100">
+                                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="{{ asset('assets/media/' . strtolower($method->type) . '.png') }}"
+                                                                     alt="{{ ucfirst($method->type) }} Logo" class="card-icon mr-3">
+                                                                <div>
+                                                                    <h5 class="mb-1 text-nowrap">**** **** **** {{ $method->last4 }}
+                                                                        @if($method->default)
+                                                                            <span class="badge badge-success mr-2">Primary</span>
+                                                                        @endif
+                                                                    </h5>
+                                                                    <p class="mb-0 text-muted">Expiration {{ $method->expiry_month }}/{{ $method->expiry_year }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <input type="radio" name="selected_payment_method" value="{{ $method->id }}"
+                                                                   @if($method->default) checked @endif class="ms-2 payment-radio">
+                                                        </div>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+
+                                            <div class="form-check mt-3 mb-3">
+                                                <input class="form-check-input" type="checkbox" id="toggle-new-card">
+                                                <label class="form-check-label" for="toggle-new-card">
+                                                    Pay with new card
+                                                </label>
+                                            </div>
+                                        @endif
+
+                                        <div id="new-card-section" class="@if(count($payment_methods)>0)) d-none @endif">
+                                            <div class="mb-3">
+                                                <div id="card-element" class="form-control"></div>
+                                            </div>
+                                            <div id="card-errors" class="text-danger"></div>
+                                            <div class="form-check mt-3">
+                                                <input class="form-check-input" type="checkbox" id="save-card">
+                                                <label class="form-check-label" for="save-card">
+                                                    Save card for future payments
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <button id="pay-button" class="btn rewards-buttons lastbtn submit_btn w-100 mt-3">
+                                            <span id="button-text">Pay Now</span>
+                                            <span id="loading-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
                     <div class="row mb-10">
                         <div class="col-xl-5 col-lg-12">
                             <div class="item">
@@ -1366,5 +1367,7 @@
     }
 </script>
 @endif
+
+
 
 

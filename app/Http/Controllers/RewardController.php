@@ -130,7 +130,7 @@ class RewardController extends Controller
                     'message'       => "You're purchasing Successfully",
                     'action'        => 'Purchasing Successfully',
                     'user_id'       => Auth::user()->id,
-                    'url'           => url("my-rewards#purchasepoints-tab"),
+                    'url'           => url("my-rewards?tabs=third#purchasepoints-tab"),
                 ];
                 try {
                     $user->notify(new GeneralNotification($entryNotification));
@@ -182,7 +182,7 @@ class RewardController extends Controller
                     'message'       => "You're purchasing Successfully",
                     'action'        => 'Purchasing Successfully',
                     'user_id'       => Auth::user()->id,
-                    'url'           => url("my-rewards#purchasepoints-tab"),
+                    'url'           => url("my-rewards?tabs=third#purchasepoints-tab"),
                 ];
                 try {
                     $user->notify(new GeneralNotification($entryNotification));
@@ -370,7 +370,7 @@ class RewardController extends Controller
             'message'       => "You're points gifted successfully",
             'action'        => 'Points gifted successfully',
             'user_id'       => Auth::user()->id,
-            'url'           => url("my-rewards#radeemtab-tab"),
+            'url'           => url("my-rewards?tabs=one#radeemtab-tab"),
         ];
         try {
             $user->notify(new GeneralNotification($entryNotification));
@@ -469,7 +469,7 @@ class RewardController extends Controller
             'message'       => "You're points gifted successfully",
             'action'        => 'Points gifted successfully',
             'user_id'       => Auth::user()->id,
-            'url'           => url("my-rewards#radeemtab-tab"),
+            'url'           => url("my-rewards?tabs=one#radeemtab-tab"),
         ];
         try {
             $user->notify(new GeneralNotification($entryNotification));
