@@ -254,6 +254,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/my-purchase-orders', [GiftoOrderController::class, "MyPurchases"])->name("my-purchase-orders");
 
     Route::resource('user-entries', UserEntryController::class);
+    Route::get('/redeem-requests-user/{id}', [RedeemRequestController::class, 'userEdit'])->name("edit-redeem-requests-user");
+    Route::put('/update-redeem-requests-user/{id}', [RedeemRequestController::class, 'userUpdate'])->name("update-redeem-requests-user");
+    Route::any('/delete-redeem-requests-user/{id}', [RedeemRequestController::class, 'destroy'])->name('delete-redeem-requests-user');
+
+    Route::get('/reward-requests-user/{id}', [RewardController::class, 'userEdit'])->name("edit-reward-requests-user");
+    Route::put('/update-reward-requests-user/{id}', [RewardController::class, 'userUpdate'])->name("update-reward-requests-user");
+    Route::any('/delete-reward-requests-user/{id}', [RewardController::class, 'destroy'])->name('delete-reward-requests-user');
     /******* Gifto Orders **********/
 
     Route::middleware('isAdmin')->group(function () {

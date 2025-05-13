@@ -92,6 +92,38 @@ class RewardController extends Controller
         return view('with_login_common', compact('data', 'reward_balance', 'rewards_prices', 'points', 'price', 'client_secret', 'payment_methods','payment_intent_id', 'gifto_funds', 'campaigns', 'orders', 'transferRequests', 'purchases'));
     }
 
+    public function userEdit($id)
+    {
+        $transaction = TransferRequest::findOrFail($id);
+        $data['title'] = 'Edit Redeem Request';
+        $data['template'] = 'admin.reward.edit-points-request-user';
+
+        return view('with_login_common', compact('data', 'transaction'));
+    }
+
+    public function userUpdate(Request $request, $id)
+    {
+        $transaction = TransferRequest::find($id);
+
+        $request->validate([
+            'coins' => 'required',
+        ]);
+
+        try {
+
+            $transaction->points = $request->coins;
+
+            $transaction->save();
+
+            return redirect()->back()->with('success', 'Request updated successfully!');
+
+        } catch (ApiErrorException $e) {
+            return back()->with('error', 'Stripe error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to switch plan: ' . $e->getMessage());
+        }
+    }
+
     public function purchasePoints(Request $request)
     {
         $validated = $request->validate([
@@ -130,7 +162,7 @@ class RewardController extends Controller
                     'message'       => "You're purchasing Successfully",
                     'action'        => 'Purchasing Successfully',
                     'user_id'       => Auth::user()->id,
-                    'url'           => url("my-rewards?tabs=third#purchasepoints-tab"),
+                    'url'           => url("my-rewards?tabs=third#pageStarts"),
                 ];
                 try {
                     $user->notify(new GeneralNotification($entryNotification));
@@ -182,7 +214,7 @@ class RewardController extends Controller
                     'message'       => "You're purchasing Successfully",
                     'action'        => 'Purchasing Successfully',
                     'user_id'       => Auth::user()->id,
-                    'url'           => url("my-rewards?tabs=third#purchasepoints-tab"),
+                    'url'           => url("my-rewards?tabs=third#pageStarts"),
                 ];
                 try {
                     $user->notify(new GeneralNotification($entryNotification));
@@ -364,13 +396,13 @@ class RewardController extends Controller
         $user = Auth::user();
         $entryNotification = [
             'only_database' => true,
-            'title'         => 'Points gifted successfully 🎉',
-            'type'          => 'your_purchase_successfully',
-            'subject'       => 'Points gifted successfully',
-            'message'       => "You're points gifted successfully",
-            'action'        => 'Points gifted successfully',
+            'title'         => 'Points transfer successfully 🎉',
+            'type'          => 'your_points_transfer_successfully',
+            'subject'       => 'Points transfer successfully',
+            'message'       => "You're points transfer successfully",
+            'action'        => 'Points transfer successfully',
             'user_id'       => Auth::user()->id,
-            'url'           => url("my-rewards?tabs=one#radeemtab-tab"),
+            'url'           => url("my-rewards?tabs=two#pageStarts"),
         ];
         try {
             $user->notify(new GeneralNotification($entryNotification));
@@ -380,7 +412,7 @@ class RewardController extends Controller
             return json_encode(["success" => false, "message" => "Notification could not be sent."]);
         }
 
-        $formData       = ["message" => "Dear Customer", "email" => "Points gifted successfully"];
+        $formData       = ["message" => "Dear Customer", "email" => "Points transfer successfully"];
         $recipientEmail = Auth::user()->email;
         Mail::to($recipientEmail)->send(new MailService($formData));
         /******* Notification ********/
@@ -469,7 +501,7 @@ class RewardController extends Controller
             'message'       => "You're points gifted successfully",
             'action'        => 'Points gifted successfully',
             'user_id'       => Auth::user()->id,
-            'url'           => url("my-rewards?tabs=one#radeemtab-tab"),
+            'url'           => url("my-rewards?tabs=one#pageStarts"),
         ];
         try {
             $user->notify(new GeneralNotification($entryNotification));
@@ -511,5 +543,18 @@ class RewardController extends Controller
         $toUser->save();
     }
 
+
+    public function destroy(string $id)
+    {
+        try {
+            $transaction = TransferRequest::findOrFail($id);
+            $transaction->delete();
+
+            return redirect()->back()->with('success', 'Redeem request deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting Redeem request: '.$e->getMessage());
+            return response()->json(['error' => 'Failed to delete Redeem request.'], 500);
+        }
+    }
 
 }

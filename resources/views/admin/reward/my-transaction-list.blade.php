@@ -18,6 +18,7 @@
                 <th scope="col">Approved By</th>
                 <th scope="col">Action At</th>
                 <th scope="col">Status</th>
+                <th scope="col" class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,17 @@
                 <td>{{ $transaction->approveUser->name??"Auto" }}</td>
                 <td>{{ $transaction->approved_at ?? $transaction->created_at }}</td>
                 <td>{{ $transaction->status_text??"-" }}</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('edit-redeem-requests-user', ['id' => $transaction->id])  }}">
+                            <i class="fa fa-edit" style="color: darkblue; font-size: 15px"></i>
+                        </a>
+                        &nbsp;
+                        <a href="{{ route('delete-redeem-requests-user', ['id' => $transaction->id])  }}">
+                            <i class="fa fa-trash" style="color: maroon; font-size: 15px"></i>
+                        </a>
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>

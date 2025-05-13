@@ -66,6 +66,15 @@ class RedeemRequestController extends Controller
         return view('with_login_common', compact('data', 'transaction'));
     }
 
+    public function userEdit($id)
+    {
+        $transaction = RewardTransaction::findOrFail($id);
+        $data['title'] = 'Edit Redeem Request';
+        $data['template'] = 'admin.reward.edit-redeem-request-user';
+
+        return view('with_login_common', compact('data', 'transaction'));
+    }
+
     public function Giftoedit($id)
     {
         $transaction = RewardTransaction::findOrFail($id);
@@ -151,6 +160,31 @@ class RedeemRequestController extends Controller
         }
     }
 
+    public function userUpdate(Request $request, $id)
+    {
+        $transaction = RewardTransaction::find($id);
+
+        $request->validate([
+            'coins' => 'required',
+            'price' => 'required',
+        ]);
+
+        try {
+
+            $transaction->coins = $request->coins;
+            $transaction->amount = $request->price;
+
+            $transaction->save();
+
+            return redirect()->back()->with('success', 'Request updated successfully!');
+
+        } catch (ApiErrorException $e) {
+            return back()->with('error', 'Stripe error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to switch plan: ' . $e->getMessage());
+        }
+    }
+
     protected function handleRedeemNotification($status, $user, $transaction)
     {
         $recipientEmail = $user->email;
@@ -222,5 +256,18 @@ class RedeemRequestController extends Controller
 
         // Send email
         Mail::to($user->email)->send(new RedeemRewardMail($data));
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $transaction = RewardTransaction::findOrFail($id);
+            $transaction->delete();
+
+            return redirect()->back()->with('success', 'withdrow deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting withdrow: '.$e->getMessage());
+            return response()->json(['error' => 'Failed to delete withdrow.'], 500);
+        }
     }
 }

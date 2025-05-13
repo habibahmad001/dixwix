@@ -131,7 +131,7 @@
 </style>
 
 
-<div class="content">
+<div class="content" id="pageStarts">
     <div class="container">
         <div class="heading mb-4">
             <h2>My Rewards</h2>
@@ -158,7 +158,7 @@
                     <a class="nav-link {!! request()->tabs == "one" ? "active" : (!isset(request()->tabs) ? "active" : "") !!}" id="radeemtab-tab" data-bs-toggle="tab" href="#radeemtab" role="radeemtab" aria-controls="radeemtab" aria-selected="true">Redeem Points</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="membertab-tab" data-bs-toggle="tab" href="#membertab" role="tab" aria-controls="membertab" aria-selected="false">Search Dix Member</a>
+                    <a class="nav-link {!! request()->tabs == "two" ? "active" : "" !!}" id="membertab-tab" data-bs-toggle="tab" href="#membertab" role="tab" aria-controls="membertab" aria-selected="false">Search Dix Member</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {!! request()->tabs == "third" ? "active" : "" !!}" id="purchasepoints-tab" data-bs-toggle="tab" href="#purchasepointstab" role="tab" aria-controls="purchasepointstab" aria-selected="false">Purchase points</a>
@@ -482,6 +482,7 @@
                                     <th scope="col">Approved By</th>
                                     <th scope="col">Approved At</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col" class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -493,6 +494,17 @@
                                         <td>{{ $transferRequest->approveUser->name??"-" }}</td>
                                         <td>{{ $transferRequest->approved_at??"-" }}</td>
                                         <td>{{ $transferRequest->status_text??"-" }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{{ route('edit-reward-requests-user', ['id' => $transferRequest->id])  }}">
+                                                    <i class="fa fa-edit" style="color: darkblue; font-size: 15px"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="{{ route('delete-reward-requests-user', ['id' => $transferRequest->id])  }}">
+                                                    <i class="fa fa-trash" style="color: maroon; font-size: 15px"></i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -1191,7 +1203,7 @@
         // Form tabs JS
 
         // main Page JS
-        $('#mainTab a:first').tab('show');
+        // $('#mainTab a:first').tab('show');
 
         // Event listener for tab change
         $('#mainTab a').on('click', function (e) {
