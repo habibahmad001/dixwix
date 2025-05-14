@@ -303,7 +303,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         /***** Manage Home Reviews *******/
-        Route::apiResource('home-reviews', HomeReviewsController::class);
+        Route::resource('home-reviews', HomeReviewsController::class);
         /***** Manage Home Reviews *******/
 
         Route::get('/transfer-point-requests', [TransferRequestController::class, 'index'])->name("transfer-requests");

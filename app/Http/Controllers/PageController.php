@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\Contact as Contact;
 use App\Models\Group;
 use App\Models\Grouptype as Grouptype;
+use App\Models\HomeReviews;
 use App\Models\User as User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,7 @@ class PageController extends Controller
         $data['is_banner'] = true;
         //$data['banner_heading'] = 'DixWix helps users share<br>resources and expertise with<br>friends and neighbors';
         $data['banner_heading'] = 'The Private Peer-to-Peer Rental Platform';
+        $data['reviews'] = HomeReviews::latest()->get();
         $data['is_banner_link'] = true;
         $data['banner_link'] = route('signup');
         $data['banner_text'] = "Let's get started";

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('role', 256)->nullable();
             $table->string('avatar', 256)->nullable();
             $table->longText('textDescription')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps(); // includes created_at and updated_at
         });
     }

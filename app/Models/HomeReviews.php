@@ -3,17 +3,42 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class HomeReviews extends Model
 {
-    // Explicitly define the table if it doesn't follow Laravel's pluralization convention
+    use HasFactory;
+
     protected $table = 'home_reviews';
 
-    // Optionally define fillable fields for mass assignment
     protected $fillable = [
         'name',
         'role',
         'avatar',
         'textDescription',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public $timestamps = true;
+
+    protected static function booted()
+    {
+//        static::creating(function ($model) {
+//            if (Auth::check()) {
+//                $model->created_by = Auth::id();
+//                $model->updated_by = Auth::id();
+//            }
+//        });
+//
+//        static::updating(function ($model) {
+//            if (Auth::check()) {
+//                $model->updated_by = Auth::id();
+//            }
+//        });
+    }
 }

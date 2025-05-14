@@ -18,6 +18,10 @@
 <div class="inner_content_table_actions d-flex flex-column flex-md-row mt-4">
     <h4 class="inner_content_title">{!! $data['title'] !!}</h4>
     <div class="inner_content_table_action_tools">
+        <a href="{{ route('home-reviews.create') }}">
+            <i class="fa fa-plus-circle" aria-hidden="true" style="font-size: 18px; color: #db5f3e"></i>
+        </a>
+
     </div>
 </div>
 
@@ -25,50 +29,41 @@
     <table id="items_table" class="table">
         <thead>
             <tr>
-                <th scope="col">User Name</th>
-                <th scope="col">Points Used</th>
-                <th scope="col">Gifto Amount</th>
-                <th scope="col">View Card</th>
-                <th scope="col">Order Status</th>
-                <th scope="col">Order Date</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($orders as $order)
+            @foreach($reviews as $review)
             <tr>
-                <td>{{ $order->userName }}</td>
-                <td>{{ $order->points }}</td>
-                <td>{{ $order->giftoAmount }}</td>
+                <td><img src="{{ asset('storage/' . $review->avatar) }}" style="width: 100px; height: 100px; border-radius: 5%" alt="View Group" class="icon"></td>
+                <td>{{ $review->name }}</td>
+                <td>{{ $review->role }}</td>
+                <td>{{ $review->textDescription }}</td>
+                <td>{{ date("F j, Y",strtotime($review->created_at)) }}</td>
                 <td>
-                    <a href="javascript:void(0);" class="view-card" data-images="{{ $order->cardPath }}">View Card</a>
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('home-reviews.show', $review->id)  }}">
+                            <i class="fa fa-edit" style="color: darkblue; font-size: 15px"></i>
+                        </a>
+                        &nbsp;
+                        <form action="{{ route('home-reviews.destroy', $review->id) }}" method="POST" class="delete-review-form" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="swal-delete-button" style="background: none; border: none; padding: 0;">
+                                <i class="fa fa-trash" style="color: maroon; font-size: 15px"></i>
+                            </button>
+                        </form>
+                    </div>
                 </td>
-{{--                <td><span class="badge badge-success">{{ $order->orderStatus }}</span></td>--}}
-                <td><span class="badge badge-success">{!! (getCampaign($order->campaignUuid))['data']['data']['active'] == 1 ? "Active" : "Inactive" !!}</span></td>
-                <td>{{ date("F j, Y",strtotime($order->created_at)) }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</div>
-
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="viewCardModal" tabindex="-1" role="dialog" aria-labelledby="viewCardModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewCardModalLabel">Card Images</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalImagesContainer">
-                <!-- Images will be injected here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
@@ -104,86 +99,29 @@ $(document).ready(function() {
         }
     });
     /******** Pagination **********/
+});
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.swal-delete-button');
 
-    $('.delete-category').on('click', function(e) {
-        e.preventDefault();
-
-        const categoryId = $(this).data('id');
-        const categoryName = $(this).data('name');
-
-        Swal.fire({
-            title: "Are You Sure?",
-            text: "Do you really want to permanently remove this category? This action may affect other parts of the system where this category is used!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Delete Permanently",
-            cancelButtonText: "Cancel",
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "{{ route('delete-category') }}",
-                    method: 'POST',
-                    data: {
-                        id: categoryId,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        if(response.success) {
-                            Swal.fire({
-                                title: 'Deleted!',
-                                text: `Category "${categoryName}" has been deleted.`,
-                                icon: 'success'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: response.message || 'Could not delete the category.',
-                                icon: 'error'
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'An unexpected error occurred.',
-                            icon: 'error'
-                        });
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to undo this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the parent form
+                        button.closest('form').submit();
                     }
                 });
-            }
+            });
         });
     });
 
-    /********* View Card Model *********/
-    // Existing delete-category code...
-
-    // New code for viewing card images
-    $('.view-card').on('click', function() {
-        const images = $(this).data('images'); // Get the images data
-        const modalImagesContainer = $('#modalImagesContainer');
-
-        // Clear previous images
-        modalImagesContainer.empty();
-
-        // Check if images exist
-        if (images && images.length > 0) {
-            // Loop through images and append to modal
-            images.forEach(function(image) {
-                modalImagesContainer.append(`<img src="${image}" class="img-fluid" alt="Card Image">`);
-            });
-        } else {
-            modalImagesContainer.append('<p>No images available for this card.</p>');
-        }
-
-        // Show the modal
-        $('#viewCardModal').modal('show');
-    });
-    /********* View Card Model *********/
-});
 </script>

@@ -237,48 +237,64 @@
 
         <div class="MultiCarousel d-flex justify-content-center" data-items="1,3,5,6,1" data-slide="1" id="MultiCarousel" data-interval="1000">
             <div class="MultiCarousel-inner">
-                <div class="item">
-                    <div class="pad15">
-                        <div class="imagesec1">
-                            <img class="im-wd" src="img/one.png" alt="Book Image">
-                            <h3 class="lead main-heading">Sarah Chen</h3>
-                            <p>Teacher</p>
+                @if(count($data['reviews']) > 0)
+                    @foreach($data['reviews'] as $review)
+                        <div class="item">
+                            <div class="pad15">
+                                <div class="imagesec1">
+                                    <img class="im-wd" src="{{ asset('storage/' . $review->avatar) }}" alt="Book Image">
+                                    <h3 class="lead main-heading">{!! $review->name !!}</h3>
+                                    <p>{!! $review->role !!}</p>
+                                </div>
+                                <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"{!! $review->textDescription !!}"
+                                </div>
+                            </div>
                         </div>
-                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"Having parents create an online library of books has been a game-changer for my classroom. My students can access a huge variety of books, from classic novels to latest nonfiction titles. Plus, the search function makes it so easy to find exactly what I'm looking for. My students love that they can borrow books for a fraction of the cost and it's encouraged a whole new level of engagement with reading in our school."
-                        </div>
-                    </div>
-                </div>
+                    @endforeach
+                @endif
+
+{{--                <div class="item">--}}
+{{--                    <div class="pad15">--}}
+{{--                        <div class="imagesec1">--}}
+{{--                            <img class="im-wd" src="img/one.png" alt="Book Image">--}}
+{{--                            <h3 class="lead main-heading">Sarah Chen</h3>--}}
+{{--                            <p>Teacher</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"Having parents create an online library of books has been a game-changer for my classroom. My students can access a huge variety of books, from classic novels to latest nonfiction titles. Plus, the search function makes it so easy to find exactly what I'm looking for. My students love that they can borrow books for a fraction of the cost and it's encouraged a whole new level of engagement with reading in our school."--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
-                <div class="item">
-                    <div class="pad15">
-                        <div class="imagesec1">
-                            <img class="im-wd" src="img/three.png" alt="Book Image">
-                            <h3 class="lead main-heading">David Ramirez</h3>
-                            <p>Software Developer</p>
-                        </div>
-                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"As a busy professional, I don’t always have time to go to the library. With our virtual library at work, I was able to search and borrow books from my colleagues for a new project initiative. It was a perfect way to upskill my team at a fraction of the cost. The selection was fantastic, and I loved being able to send thank you with reward points."
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="item">--}}
+{{--                    <div class="pad15">--}}
+{{--                        <div class="imagesec1">--}}
+{{--                            <img class="im-wd" src="img/three.png" alt="Book Image">--}}
+{{--                            <h3 class="lead main-heading">David Ramirez</h3>--}}
+{{--                            <p>Software Developer</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"As a busy professional, I don’t always have time to go to the library. With our virtual library at work, I was able to search and borrow books from my colleagues for a new project initiative. It was a perfect way to upskill my team at a fraction of the cost. The selection was fantastic, and I loved being able to send thank you with reward points."--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div class="item">
-                    <div class="pad15">
-                        <div class="imagesec1">
-                            <img class="im-wd" src="img/two.png" alt="Book Image">
-                            <h3 class="lead main-heading">Asim Khan</h3>
-                            <p>Book Blogger</p>
-                        </div>
-                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"I'm a voracious reader,
-                            and the online library has become
-                            my new best friend. It's given me access to so many books that I wouldn't have been able to
-                            find otherwise, from independent
-                            presses to international bestsellers. The online format is also great for me because I can
-                            easily switch between reading on
-                            my phone, tablet, or laptop. It's a fantastic resource for any book lover."
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="item">--}}
+{{--                    <div class="pad15">--}}
+{{--                        <div class="imagesec1">--}}
+{{--                            <img class="im-wd" src="img/two.png" alt="Book Image">--}}
+{{--                            <h3 class="lead main-heading">Asim Khan</h3>--}}
+{{--                            <p>Book Blogger</p>--}}
+{{--                        </div>--}}
+{{--                        <div class="carousel-date" style="font-size: 14px; font-weight: 400;">"I'm a voracious reader,--}}
+{{--                            and the online library has become--}}
+{{--                            my new best friend. It's given me access to so many books that I wouldn't have been able to--}}
+{{--                            find otherwise, from independent--}}
+{{--                            presses to international bestsellers. The online format is also great for me because I can--}}
+{{--                            easily switch between reading on--}}
+{{--                            my phone, tablet, or laptop. It's a fantastic resource for any book lover."--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
             <button class="leftLst"><</button>
             <button class="rightLst">></button>

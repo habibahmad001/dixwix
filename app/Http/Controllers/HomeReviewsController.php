@@ -14,7 +14,7 @@ class HomeReviewsController extends Controller
     {
         try {
 
-            $data['title'] = 'Reviews';
+            $data['title'] = 'Home Page reviews';
             $data['template'] = 'admin.reviews.home.list';
 
             $reviews = HomeReviews::latest()->get();
@@ -26,29 +26,45 @@ class HomeReviewsController extends Controller
         }
     }
 
+    public function create()
+    {
+        try {
+            $data['title'] = 'Create Reviews';
+            $data['template'] = 'admin.reviews.home.add';
+
+            return view('with_login_common', compact('data'));
+        } catch (\Exception $e) {
+            \Log::error('Error showing review: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Review not found.');
+        }
+    }
+
     /**
      * Store a newly created review in storage.
      */
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'name' => 'nullable|string|max:256',
-                'role' => 'nullable|string|max:256',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'textDescription' => 'nullable|string',
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'role' => 'required|string|max:255',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
-            // Handle avatar upload if present
+            $review = new HomeReviews();
+            $review->name = $request->name;
+            $review->role = $request->role;
+
             if ($request->hasFile('avatar')) {
-                $avatarPath = $request->file('avatar')->store('homeavatar');
-                $validated['avatar'] = $avatarPath;
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                $review->avatar = $avatarPath;
             }
 
-            // Store review in DB
-            $review = HomeReviews::create($validated);
+            $review->textDescription = $request->textDescription;
 
-            return redirect()->back()->with('success', 'Review submitted successfully.');
+            $review->save();
+
+            return redirect("/home-reviews")->with('success', 'Review submitted successfully.');
         } catch (\Exception $e) {
             \Log::error('Error storing Review: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to submit review.');
@@ -61,10 +77,12 @@ class HomeReviewsController extends Controller
     public function show(HomeReviews $homeReview)
     {
         try {
-            $data['title'] = 'Reviews';
-            $data['template'] = 'admin.reviews.home.show';
+            $data['title'] = 'Edit Reviews';
+            $data['template'] = 'admin.reviews.home.add';
 
-            return view('with_login_common', compact('data', 'homeReview'));
+            $reviews = HomeReviews::findOrFail($homeReview->id);
+
+            return view('with_login_common', compact('data', "reviews"));
         } catch (\Exception $e) {
             \Log::error('Error showing review: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Review not found.');
@@ -77,22 +95,26 @@ class HomeReviewsController extends Controller
     public function update(Request $request, HomeReviews $homeReview)
     {
         try {
-            $validated = $request->validate([
-                'name' => 'nullable|string|max:256',
-                'role' => 'nullable|string|max:256',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'textDescription' => 'nullable|string',
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'role' => 'required|string|max:255',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
-            // Handle avatar upload if a new file is provided
+            $review = HomeReviews::findOrFail($homeReview->id);
+            $review->name = $request->name;
+            $review->role = $request->role;
+
             if ($request->hasFile('avatar')) {
-                $avatarPath = $request->file('avatar')->store('homeavatar');
-                $validated['avatar'] = $avatarPath;
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                $review->avatar = $avatarPath;
             }
 
-            $homeReview->update($validated);
+            $review->textDescription = $request->textDescription;
 
-            return redirect()->back()->with('success', 'Review updated successfully.');
+            $review->save();
+
+            return redirect("/home-reviews")->with('success', 'Review updated successfully.');
         } catch (\Exception $e) {
             \Log::error('Error updating review: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update review.');
@@ -102,11 +124,17 @@ class HomeReviewsController extends Controller
     /**
      * Remove the specified review from storage.
      */
-    public function destroy(HomeReviews $homeReview)
+    public function destroy(string $id)
     {
-        $homeReview->delete();
+        try {
+            $homeReviews = HomeReviews::findOrFail($id);
+            $homeReviews->delete();
 
-        return response()->json(['message' => 'Review deleted successfully.']);
+            return redirect()->back()->with('success', 'Review deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting Redeem request: '.$e->getMessage());
+            return response()->json(['error' => 'Failed to delete Review.'], 500);
+        }
     }
 }
 
