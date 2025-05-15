@@ -96,7 +96,7 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
     <div class="tab d-flex flex-column w-100 flex-md-row">
         <button id="manual_entry_btn" class="tablinks w-100" onclick="openEntryTab(this, 'manual_tab')">Manual entry</button>
         @if ($mode == "add")
-        <button id="csv_entry_btn" class="tablinks w-100" onclick="openEntryTab(this, 'csv_tab')">CSV import</button>
+        <button id="csv_entry_btn" class="tablinks w-100" onclick="openEntryTab(this, 'csv_tab')">Bulk CSV import</button>
         <button id="amazon_entry_btn" class="tablinks w-100" onclick="openEntryTab(this, 'amazon_tab')">Amazon import</button>
         @endif
     </div>
@@ -490,20 +490,20 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
                     <div class="form-group mb-3">
                         <h3 class="lead main-heading">Select Import Method</h3>
                         <label>
-                            <input type="radio" name="import_method" value="file" checked> Upload File
+                            <input type="radio" name="import_method" value="file"> Upload File
                         </label>
                         <label>
-                            <input type="radio" name="import_method" value="url"> Bulk Import
+                            <input type="radio" name="import_method" value="url" checked> Bulk Import
                         </label>
                     </div>
-                    <div class="form-group mb-3" id="file-input-container">
+                    <div class="form-group mb-3" id="file-input-container" style="display: none;">
                         <label for="csv_file">Upload CSV File</label>
                         <input class="form-control" id="csv_file" accept=".csv" type="file" name="csv_file" />
                         @error('csv_file')
                         <div class="error_msg">*{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group mb-3" id="url-input-container" style="display: none;">
+                    <div class="form-group mb-3" id="url-input-container">
                         <label for="csv_url">Enter CSV/Excel File URL</label>
 {{--                        <input class="form-control" id="csv_url" type="url" name="csv_url" placeholder="https://docs.google.com/spreadsheets/d/{sheet_id}/edit?gid={sheet_tab_id} or direct file URL" />--}}
                         <input class="form-control" id="csv_url" type="url" name="csv_url" value="https://docs.google.com/spreadsheets/d/1xg08TwpolWDYyrNMlOGOjQrsSDOS_oEwckJYm0DgSI8/edit?gid=0#gid=0" placeholder="https://docs.google.com/spreadsheets/d/1xg08TwpolWDYyrNMlOGOjQrsSDOS_oEwckJYm0DgSI8/edit?gid=0#gid=0" />
@@ -535,7 +535,7 @@ if ($mode == 'edit' && !empty($book['created_by'])) {
                 <img src="{{ url('assets/media/information-circle.png') }}">
                 <h3>Please note:</h3>
                 <p>Format of file should be like following sample file:</p>
-                <a href="{{ url('book_import_sample_new.csv') }}" download="Sample File.csv">Sample File</a>
+                <a href="{{ url('book_import_sample.xlsx') }}" download="Sample File.xlsx">Sample File</a>
             </div>
         </div>
     </div>

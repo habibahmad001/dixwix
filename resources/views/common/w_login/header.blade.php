@@ -610,14 +610,14 @@
                     <span>Backup</span>
                 </a>
             </li>
-            @endif
-
             <li class="nav-item">
                 <a href="{{ url('/home-reviews') }}" {!! ($data['title']==="Home Page reviews" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
                     <i class="fa fa-bullseye" aria-hidden="true" style="color: #db5f3e"></i>
-                    <span>Home Page reviews {!! ($data['title'] === "Home Page reviews" || $data['title'] === "Create Reviews" || $data['title'] === "Edit Reviews" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                    <span>Reviews {!! ($data['title'] === "Home Page reviews" || $data['title'] === "Create Reviews" || $data['title'] === "Edit Reviews" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
                 </a>
             </li>
+            @endif
+
             <li class="nav-item">
                 <a href="<?= route('logout') ?>" class="nav-link">
                     <img src="<?= url('assets/media/log-out-outline.png') ?>">

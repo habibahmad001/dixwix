@@ -27,22 +27,23 @@
                     @endif
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 d-flex justify-content-center align-content-center">
                 <select class="form-control" name="category">
-                    <option value="">Select category</option>
+                    <option value="">Select category</option>+*-
                     @if(!empty($data['categories']))
                     @foreach ($data['categories'] as $category)
                     <option value="{{ $category['name'] }}" {{ request('category') == $category['name'] ? 'selected' : '' }}>{{ $category['name'] }}</option>
                     @endforeach
                     @endif
                 </select>
+                &nbsp;&nbsp;
+                <button type="submit" class="dark-btn btn link_with_img text-nowrap">Filter items</button>
             </div>
             <div class="col-md-5 d-flex justify-content-end">
                 <button type="button" class="btn btn-success mr-1 text-nowrap" id="select-allselect-all">Select All</button>
                 <button type="button" class="btn btn-primary mr-1 text-nowrap" id="bulk-delete-btn">Bulk Delete</button>
                 <button type="button" class="btn btn-info mr-1 text-nowrap" id="bulk-qrcode-btn">Print Bulk QR Codes</button>
                 <button type="button" class="btn btn-warning mr-1 text-nowrap" id="bulk-edit-btn">Bulk Edit</button>
-                <button type="submit" class="dark-btn btn link_with_img text-nowrap">Filter items</button>
             </div>
         </div>
     </form>

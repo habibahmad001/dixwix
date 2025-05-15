@@ -26,6 +26,10 @@
                         <span class="item_meta_tag">Price:</span>
                         <span class="item_meta_details">$ {{ $item->price }}</span>
                     </div>
+                    <div class="item_meta">
+                        <span class="item_meta_tag">User Name:</span>
+                        <span class="item_meta_details">{{ Auth::user()->name }}</span>
+                    </div>
                 </div>
             </div>
             <div class="form-group mt-3">
