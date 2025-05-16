@@ -28,17 +28,17 @@ class HomeReviews extends Model
 
     protected static function booted()
     {
-//        static::creating(function ($model) {
-//            if (Auth::check()) {
-//                $model->created_by = Auth::id();
-//                $model->updated_by = Auth::id();
-//            }
-//        });
-//
-//        static::updating(function ($model) {
-//            if (Auth::check()) {
-//                $model->updated_by = Auth::id();
-//            }
-//        });
+        static::creating(function ($model) {
+            if (Auth::check()) {
+                $model->created_by = Auth::id();
+                $model->updated_by = Auth::id();
+            }
+        });
+
+        static::updating(function ($model) {
+            if (Auth::check()) {
+                $model->updated_by = Auth::id();
+            }
+        });
     }
 }
