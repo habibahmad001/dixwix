@@ -142,7 +142,7 @@ class HomeReviewsController extends Controller
     }
 
     /**
-     * Remove the specified review from storage. he
+     * Remove the specified review from storage.
      */
     public function destroy(string $id)
     {
