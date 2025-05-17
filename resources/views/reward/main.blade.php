@@ -172,34 +172,14 @@
                         <div class="tabsArea col-12 stayOne" style="display: none;">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true">Withdraw Request</a>
+                                    <a class="nav-link active" id="gift-tab" data-bs-toggle="tab" href="#gift" role="tab" aria-controls="gift" aria-selected="false">Send Gift Card</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="gift-tab" data-bs-toggle="tab" href="#gift" role="tab" aria-controls="gift" aria-selected="false">Send Gift Card</a>
+                                    <a class="nav-link" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true">Withdraw Request</a>
                                 </li>
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
-                                <!-- Withdraw Request Tab -->
-                                <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
-                                    <div class="row" id="dixwix_purchase">
-                                        <div class="modal-body" id="modal_body" >
-                                            <div class="container mt-5">
-                                                <div class="form-group">
-                                                    <label for="withdrawPoints">Input Points for Withdraw</label>
-                                                    <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
-                                                    <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
-                                                    <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
-                                                    <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
-                                                </div>
-                                                <div class="form-group text-right">
-                                                    <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
-                                                    {{--                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>--}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <!-- Send Gift Card Tab -->
                                 <div class="tab-pane fade show active" id="gift" role="tabpanel" aria-labelledby="gift-tab">
@@ -337,6 +317,27 @@
                                         </div>
                                         {{--            </div>--}}
                                         {{--/*********** gifto model ***********/--}}
+                                    </div>
+                                </div>
+
+                                <!-- Withdraw Request Tab -->
+                                <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                                    <div class="row" id="dixwix_purchase">
+                                        <div class="modal-body" id="modal_body" >
+                                            <div class="container mt-5">
+                                                <div class="form-group">
+                                                    <label for="withdrawPoints">Input Points for Withdraw</label>
+                                                    <input id="withdrawPoints" type="number" placeholder="Enter points to withdraw" class="form-control">
+                                                    <p style="display: none">Your current points: <strong id="currentPoints">{{ $reward_balance }}</strong></p>
+                                                    <p>Your Amount: <strong id="dollarAmount">$ 0.00</strong></p>
+                                                    <div id="validationMessage" class="text-danger" style="display: none;"></div> <!-- Validation message -->
+                                                </div>
+                                                <div class="form-group text-right">
+                                                    <button class="btn btn-success" id="confirmWithdrawButton">Proceed</button>
+                                                    {{--                                <button id="close-modal" class="btn btn-danger" onclick="javascript: $('#dixwix_purchase').hide();" data-dismiss="modal">Close</button>--}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -33,35 +33,45 @@
     <div class="divider">
         <hr>
     </div>
-    <form class="main-form" name="add-review-form" enctype="multipart/form-data" id="add-review-form" method="post" action="{{ isset($reviews) ? route('home-reviews.update', $reviews->id) : route('home-reviews.store') }}">
+    <form class="main-form" name="add-review-form" enctype="multipart/form-data" id="add-review-form" method="post" action="{{ isset($reviews) ? route('home-reviews-update', $reviews->id) : route('home-reviews-store') }}">
         @csrf
         @if(isset($reviews))
             @method('PUT')
             <input type="hidden" name="rid" id="rid" value="{!! $reviews->id !!}" />
         @endif
+        <input type="hidden" name="uid" id="uid" value="{!! request()->id !!}" />
         <div class="form-group">
-            <input type="text" required class="form-control" id="name" name="name" value="{{ isset($reviews) ? $reviews->name : old('name') }}" placeholder="Your Name">
+            <input type="text" required class="form-control" id="name" name="name" value="{{ isset($reviews) ? $reviews->name : Auth::user()->name }}" placeholder="Your Name" readonly>
             @error('name')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group">
-            <input type="text" required class="form-control" id="role" name="role" value="{{ isset($reviews) ? $reviews->role : old('role') }}" placeholder="Your Role">
+            <input type="text" required class="form-control" id="role" name="role" value="{{ isset($reviews) ? $reviews->role : Auth::user()->getRoleNames()->first() }}" placeholder="Your Role" readonly>
             @error('role')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+        @php
+            $user = Auth::user();
+            $avatarUrl = $user && $user->profile_pic ? asset('storage/' . $user->profile_pic) : asset('default-avatar.png'); // fallback if needed
+        @endphp
+
         <div class="form-group">
-            <label for="avatar" class="custom-file-upload">
-                <i class="fas fa-upload"></i> Choose Avatar
-            </label>
-            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" style="display: none;" onchange="previewImage(event)">
-            <img id="avatar-preview" src="#" alt="Avatar Preview" style="display: none; max-width: 150px; margin-top: 10px; border-radius: 25px;">
-            <small class="form-text text-muted">Accepted formats: jpg, jpeg, png.</small>
-            @error('avatar')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <label>Current Avatar</label>
+            <br>
+            <img
+                src="{{ $avatarUrl }}"
+                alt="User Avatar"
+                style="max-width: 150px; margin-top: 10px; border-radius: 25px;"
+            >
+
+            {{-- Hidden input to include avatar filename in the form --}}
+            <input type="hidden" name="avatar" value="{{ $user->avatar }}">
+
+            <small class="form-text text-muted">This avatar is linked to your profile.</small>
         </div>
+
         <div class="form-group textarea">
             <label for="textDescription">Review Description</label>
             <textarea name="textDescription" class="form-control" id="summernote" placeholder="Write your review here">{!! isset($reviews) ? $reviews->textDescription : "" !!}</textarea>
@@ -69,19 +79,6 @@
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group">
-            <label for="status">Status</label>
-            <select name="status" id="status" class="form-control">
-                <option value="" disabled {{ old('status', $reviews->status ?? '') === '' ? 'selected' : '' }}>-- Select Status --</option>
-                <option value="approved" {{ old('status', $reviews->status ?? '') === 'approved' ? 'selected' : '' }}>Approved</option>
-                <option value="unapproved" {{ old('status', $reviews->status ?? '') === 'unapproved' ? 'selected' : '' }}>Unapproved</option>
-            </select>
-
-            @error('status')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
         <div class="form-group">
             <button type="submit" class="btn lastbtn submit_btn">Submit</button>
         </div>

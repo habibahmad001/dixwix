@@ -419,10 +419,23 @@
 
             @if (\Auth::user()->hasRole('user') && \Auth::user()->can("my-rewards"))
             <li class="nav-item">
-                <a href="{{ route('my-account') }}" {!! ($data['title']==="My Account" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
-                    <img src="<?= url('assets/media/my-account.png') ?>">
-                    <span>Account {!! ($data['title'] === "My Account" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                <a href="#account_sub_menu" aria-controls="account_sub_menu" data-toggle="collapse" {!! ($data['title']==="My Account" || $data['title'] === "Create Reviews" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"' ) !!}>
+                    <img src="{!! url('assets/media/my-account.png') !!}">
+                    <span>Account</span>
+                    <i class="fa fa-chevron-down"></i>
                 </a>
+                <ul class="sub-menu collapse {!! (($data['title'] === "My Account" || $data['title'] === "Create Reviews") ? "show" : "") !!}" id="account_sub_menu">
+                    <li>
+                        <a href="{{ route('my-account') }}" {!! ($data['title'] === "My Account" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"') !!}>
+                            <span>My Account {!! ($data['title'] === "My Account" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{!! route('add-review') !!}?id={!! Auth::user()->id !!}" {!! ($data['title'] === "Create Reviews" ? 'class="nav-link active" aria-current="page"' : 'class="nav-link"') !!}>
+                            <span>Add Reviews {!! ($data['title'] === "Create Reviews" ? '<i class="fa fa-solid fa-angle-right"></i>' : '') !!}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             @endif
 

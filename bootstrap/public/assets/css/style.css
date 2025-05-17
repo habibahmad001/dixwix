@@ -812,6 +812,12 @@ input[type='checkbox'] {
     background-color: var(--green-dark-01);
 }
 
+.btn:hover {
+    color: #212529;
+    text-decoration: none;
+    background-color: #ccc;
+}
+
 .item_summary_actions {
     display: flex;
     justify-content: flex-end;

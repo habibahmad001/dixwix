@@ -118,6 +118,8 @@ Route::get('/support', [PageController::class, 'Support'])->name('support');
 
 Route::get('/getting-started', [PageController::class, 'gettingStarted'])->name('getting-started');
 
+Route::get('/mission', [PageController::class, 'missionPage'])->name('mission');
+
 Route::get('/test-env', function () {
     dd([
         'APP_NAME' => env('APP_NAME'),
@@ -262,6 +264,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/update-reward-requests-user/{id}', [RewardController::class, 'userUpdate'])->name("update-reward-requests-user");
     Route::any('/delete-reward-requests-user/{id}', [RewardController::class, 'destroy'])->name('delete-reward-requests-user');
     /******* Gifto Orders **********/
+
+    Route::any('user-add-review', [HomeReviewsController::class, "create"])->name("add-review");
+    Route::any('home-reviews-store', [HomeReviewsController::class, "store"])->name("home-reviews-store");
+    Route::any('home-reviews-update', [HomeReviewsController::class, "update"])->name("home-reviews-update");
 
     Route::middleware('isAdmin')->group(function () {
 

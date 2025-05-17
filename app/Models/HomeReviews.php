@@ -17,6 +17,7 @@ class HomeReviews extends Model
         'role',
         'avatar',
         'textDescription',
+        'status',
     ];
 
     protected $casts = [

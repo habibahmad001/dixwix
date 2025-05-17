@@ -26,11 +26,11 @@ class HomeReviewsController extends Controller
         }
     }
 
-    public function create()
+    public function create(Request $request)
     {
         try {
             $data['title'] = 'Create Reviews';
-            $data['template'] = 'admin.reviews.home.add';
+            $data['template'] = (isset($request->id)) ? 'admin.reviews.home.user.add' : 'admin.reviews.home.add';
 
             return view('with_login_common', compact('data'));
         } catch (\Exception $e) {
@@ -60,7 +60,17 @@ class HomeReviewsController extends Controller
                 $review->avatar = $avatarPath;
             }
 
+            if(isset($request->uid)) {
+                $review->avatar = \Auth::user()->profile_pic;
+                $review->textDescription = $request->textDescription;
+
+                $review->save();
+
+                return redirect()->back()->with('success', 'Review updated successfully.');
+            }
+
             $review->textDescription = $request->textDescription;
+            $review->status = $request->status;
 
             $review->save();
 
@@ -110,7 +120,17 @@ class HomeReviewsController extends Controller
                 $review->avatar = $avatarPath;
             }
 
+            if(isset($request->uid)) {
+                $review->avatar = \Auth::user()->profile_pic;
+                $review->textDescription = $request->textDescription;
+
+                $review->save();
+
+                return redirect()->back()->with('success', 'Review updated successfully.');
+            }
+
             $review->textDescription = $request->textDescription;
+            $review->status = $request->status;
 
             $review->save();
 

@@ -26,7 +26,7 @@ class PageController extends Controller
         $data['is_banner'] = true;
         //$data['banner_heading'] = 'DixWix helps users share<br>resources and expertise with<br>friends and neighbors';
         $data['banner_heading'] = 'The Private Peer-to-Peer Rental Platform';
-        $data['reviews'] = HomeReviews::latest()->get();
+        $data['reviews'] = HomeReviews::where("status", "approved")->latest()->get();
         $data['is_banner_link'] = true;
         $data['banner_link'] = route('signup');
         $data['banner_text'] = "Let's get started";
@@ -292,6 +292,20 @@ class PageController extends Controller
         $data['is_banner_link'] = false;
         $data['banner_link'] = route('signup');
         $data['banner_heading'] = 'How can we help?';
+        $data['banner_text'] = "";
+        $data['background-class'] = "header";
+
+        return view('without_login_common', compact('data'));
+    }
+
+    public function missionPage()
+    {
+        $data['title'] = 'Mission';
+        $data['template'] = 'mission';
+        $data['is_banner'] = true;
+        $data['is_banner_link'] = false;
+        $data['banner_link'] = route('home');
+        $data['banner_heading'] = 'Our Mission';
         $data['banner_text'] = "";
         $data['background-class'] = "header";
 

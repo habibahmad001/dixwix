@@ -1992,7 +1992,7 @@ class BookController extends Controller
         $query  = $request->input('query');
         $typeId = $request->input('type_id');
 
-        $dbItems = Book::when($typeId != 'all', function ($query) use ($typeId) {
+        $dbItems = Book::with(["user"])->when($typeId != 'all', function ($query) use ($typeId) {
             $query->where('type_id', $typeId);
         })
             ->where('created_by', "!=", auth()->id())
@@ -2000,7 +2000,9 @@ class BookController extends Controller
                 $q->where('name', 'LIKE', "%$query%")
                     ->orWhere('keyword', 'LIKE', "%$query%");
             })
-            ->get();
+            ->get()
+            ->unique('name') // or 'id' or any other column you want to de-duplicate by
+            ->values(); // reindex the collection
 
         $view = view('book.amazon_searched', compact('dbItems'))->render();
 

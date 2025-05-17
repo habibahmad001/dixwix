@@ -28,7 +28,7 @@
                     </div>
                     <div class="item_meta">
                         <span class="item_meta_tag">User Name:</span>
-                        <span class="item_meta_details">{{ Auth::user()->name }}</span>
+                        <span class="item_meta_details">{{ $item->user->name }}</span>
                     </div>
                 </div>
             </div>
