@@ -46,7 +46,7 @@
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: none">
             <input type="text" required class="form-control" id="role" name="role" value="{{ isset($reviews) ? $reviews->role : Auth::user()->getRoleNames()->first() }}" placeholder="Your Role" readonly>
             @error('role')
             <div class="text-danger">{{ $message }}</div>
@@ -54,7 +54,7 @@
         </div>
         @php
             $user = Auth::user();
-            $avatarUrl = $user && $user->profile_pic ? asset('storage/' . $user->profile_pic) : asset('default-avatar.png'); // fallback if needed
+            $avatarUrl = $user && !is_null($user->profile_pic) ? asset('storage/' . $user->profile_pic) : asset('assets/media/userimg.png'); // fallback if needed
         @endphp
 
         <div class="form-group">
