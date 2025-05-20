@@ -76,7 +76,7 @@ class RewardController extends Controller
         $campaigns = $this->giftoGramService->getCampaigns();
 //        dd($campaigns);
 
-        $gifto_funds = $funding["data"]["data"]["credit_available"];
+        $gifto_funds = isset($funding["data"]["data"]["credit_available"]) ? $funding["data"]["data"]["credit_available"] : null;
 
         $orders = GiftoOrder::where('user_id', Auth::user()->id)->latest()->get();
 
@@ -183,6 +183,8 @@ class RewardController extends Controller
                 'price' => $price,
                 'client_secret' => $paymentIntent->client_secret,
                 'payment_intent_id' => $paymentIntent->id,
+//                'tabs' => "third#pageStarts",
+                'tabs' => "third",
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -393,7 +395,6 @@ class RewardController extends Controller
         }
 
         /******* Notification ********/
-        $user = Auth::user();
         $entryNotification = [
             'only_database' => true,
             'title'         => 'Points transfer successfully 🎉',

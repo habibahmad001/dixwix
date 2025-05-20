@@ -167,7 +167,7 @@
 
             <div class="tab-content" id="mainTabContent">
                 <!-- Withdraw Request Tab -->
-                <div class="tab-pane fade show active" id="radeemtab" role="tabpanel" aria-labelledby="withdraw-tab">
+                <div class="tab-pane fade {!! request()->tabs == "one" ? "show active" : (!isset(request()->tabs) ? "show active" : "") !!}" id="radeemtab" role="tabpanel" aria-labelledby="withdraw-tab">
                     <div class="row mt-5">
                         <div class="tabsArea col-12 stayOne" style="display: none;">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -402,7 +402,7 @@
                                             <a href="javascript:void(0);" class="view-card" data-images="{{ $order->cardPath }}">View Card</a>
                                         </td>
                                         {{--                <td><span class="badge badge-success">{{ $order->orderStatus }}</span></td>--}}
-                                        <td><span class="badge badge-success">{!! (getCampaign($order->campaignUuid))['data']['data']['active'] == 1 ? "Active" : "Inactive" !!}</span></td>
+                                        <td><span class="badge badge-success">{!! is_array((getCampaign($order->campaignUuid))) ? ((getCampaign($order->campaignUuid))['data']['data']['active'] == 1 ? "Active" : "Inactive") : "" !!}</span></td>
                                         <td>{{ date("F j, Y",strtotime($order->created_at)) }}</td>
                                     </tr>
                                 @endforeach
@@ -413,7 +413,7 @@
                 </div>
 
                 <!-- Send Gift Card Tab -->
-                <div class="tab-pane fade" id="membertab" role="tabpanel" aria-labelledby="gift-tab">
+                <div class="tab-pane fade {!! request()->tabs == "two" ? "show active" : "" !!}" id="membertab" role="tabpanel" aria-labelledby="gift-tab">
                     <div class="row mt-5">
                         <div class="row col-12 stayOne" id="dixwix_modal1" style="display: none">
                             {{--            <div class="modal" id="dixwix_modal1" tabindex="-1" role="dialog">--}}
@@ -515,7 +515,7 @@
                 </div>
 
                 <!-- Purchase Points Tab -->
-                <div class="tab-pane fade" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
+                <div class="tab-pane fade {!! request()->tabs == "third" ? "show active" : "" !!}" id="purchasepointstab" role="tabpanel" aria-labelledby="purchasepoints-tab">
                     <div class="row mt-5">
                         @if(!empty($client_secret))
                             <div class="item col-12 stayOne">

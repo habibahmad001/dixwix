@@ -1789,6 +1789,7 @@ class BookController extends Controller
 
             $group = $book->group;
             dispatch(new SendGroupNotification($group, $book));
+//            SendGroupNotification::dispatch($group, $book);
 //            if($group->status == 1 && count($group->members)>0){
 //                dispatch(new SendGroupNotification($group, $book));
 //            }else{
