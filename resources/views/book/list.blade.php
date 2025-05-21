@@ -75,7 +75,7 @@
                         <div class="item_meta_2">
                             @if (!empty($book["ean_isbn_no"]))
                             <div class="item_meta">
-                                <span class="item_meta_tag">EAN/ISBN:</span>
+                                <span class="item_meta_tag">EAN/ISBN13:</span>
                                 <span class="item_meta_details">{{ $book["ean_isbn_no"] }}</span>
                             </div>
                             @endif

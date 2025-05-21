@@ -313,7 +313,7 @@ class RewardController extends Controller
 
             DB::commit();
 
-            return redirect()->route('my-rewards')->with('success', 'Points purchased successfully!');
+            return redirect("/my-rewards?tabs=third#pageStarts")->with('success', 'Points purchased successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('my-rewards')->with('error', 'An error occurred: ' . $e->getMessage());
@@ -369,18 +369,29 @@ class RewardController extends Controller
             ]);
         }
 
+        $sumOfPoints = TransferRequest::where("from_user_id", $authUser->id)->sum('points');
+        $sumOfPoints = $authUser->reward_balance - ($sumOfPoints + $request->points);
+        if($sumOfPoints < 0){
+            return response()->json([
+                'success' => false,
+                'message' =>"You don't have sufficient points to send gift.",
+            ]);
+        }
+
+
         if ($request->points > $transferCoinLimit) {
 
-            $checkExistsReq = $authUser->transferPointRequestFromUser()
-                ->where('to_user_id',$request->user_id)
-                ->where('status', TransferRequest::PENDING)
-                ->exists();
-            if($checkExistsReq){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Your gift points request is already pending admin approval. You can\'t submit a new request until the previous one is completed.',
-                ]);
-            }
+//            $checkExistsReq = $authUser->transferPointRequestFromUser()
+//                ->where('to_user_id',$request->user_id)
+//                ->where('status', TransferRequest::PENDING)
+//                ->exists();
+//            if($checkExistsReq){
+//                return response()->json([
+//                    'success' => false,
+//                    'message' => 'Your gift points request is already pending admin approval. You can\'t submit a new request until the previous one is completed.',
+//                ]);
+//            }
+
 
             TransferRequest::create([
                 'from_user_id' => $authUser->id,
