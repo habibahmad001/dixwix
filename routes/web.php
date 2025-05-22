@@ -173,7 +173,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/update-item-api/{id}', [BookController::class, 'UpdateBookAPI'])->name("update-item-api");
     Route::delete('/delete-item', [BookController::class, 'DeleteBook'])->name("delete-item");
     Route::get('/show-item/{id?}', [BookController::class, 'ShowBook'])->name("show-item");
-    Route::post('/search-item', [BookController::class, 'ShowSearchItems'])->name("search-item");
+    Route::post('/search-item', [BookController::class, 'ShowGlobalSearchItems'])->name("search-item");
+    Route::post('/global-search', [BookController::class, 'ShowGlobalSearchItems'])->name("global-search");
     Route::post('/import-item', [BookController::class, 'ImportFromCSV'])->name("import-item-csv");
     Route::post('/set-book-status', [BookController::class, 'SetBookStatus']);
     Route::post('/renew-book-status', [BookController::class, 'RenewBookStatus']);

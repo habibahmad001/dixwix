@@ -430,6 +430,7 @@ protected function validateRecaptcha($recaptchaResponse)
             'view_type'         => $request->get('view_type', 'title'),
             'group_filter'      => $request->get('group_filter', ''),
             'type_filter'       => $request->get('type_filter', ''),
+            'search_action'     => 'type-users',
         ];
 
         $user   = auth()->user();

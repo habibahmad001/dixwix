@@ -110,7 +110,7 @@
                                 <h2>Admin Dashboard</h2>
                             </div>
                             <?php } else { ?>
-                            <form id="search-form" method="post" action="<?= route('search-item') ?>">
+                            <form id="search-form" method="post" action="<?= route('global-search') ?>">
                                 @csrf
                                 <input type="hidden" name="search_action" value="{{ $search_action }}">
                                 <div class="serach_input d-flex flex-row">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendBulkItemGroupNotification;
 use App\Jobs\SendGroupNotification;
+use App\Mail\GeneralMail;
 use App\Mail\MailService;
 use App\Models\Book;
 use App\Models\Entries;
@@ -861,6 +862,105 @@ class BookController extends Controller
             $data['search-item']   = $search_data;
             return view('with_login_common', compact('data'));
         }
+        if ($search_action == 'my-groups') {
+            $groups                = Group::where('status', "!=", "0")->with(['addedmembers', 'groupmembers'])->where("title", "like", "%$search_data%")->where('created_by', Auth::user()->id)->get();
+            $data['title']         = 'Searched Groups';
+            $data['template']      = 'group.mylist';
+            $data['script_file']   = 'group_listing';
+            $data['my_groups']     = $groups;
+            $data['search_action'] = 'my-groups';
+            $data['search-item']   = $search_data;
+            return view('with_login_common', compact('data'));
+        }
+        if ($search_action == 'join-group') {
+            $retdata    = [];
+            $endDate    = date("Y-m-d 23:59:59");
+            $startDate  = date('Y-m-d 00:00:01', strtotime('-7 days'));
+            $week_group = Group::where('status', "!=", "0")->select('group.*')
+                ->join('users', 'group.created_by', '=', 'users.id')
+                ->with(['addedmembers', 'groupmembers'])
+                ->where("group.created_by", "!=", Auth::user()->id)
+                ->where("title", "like", "%$search_data%")->get()->toArray();
+            $retdata["week_group"] = $week_group;
+            $data                  = [];
+            $data['title']         = 'Searched Groups';
+            $data['template']      = 'group.join';
+            $data['script_file']   = 'join';
+            $data['search_action'] = 'join-group';
+            $data['search-item']   = $search_data;
+            return view('with_login_common', compact('data', 'retdata'));
+        }
+
+        $data['books']       = $books;
+        $data['groups']      = $groups;
+        $data['search-item'] = $search_data;
+        $data['script_file'] = 'listing';
+        return view('with_login_common', compact('data'));
+    }
+
+    public function ShowGlobalSearchItems(Request $request)
+    {
+        $search_action        = $request->search_action;
+        $data['title']        = 'Search Items';
+        $data['search_group'] = 'Search Group';
+        $data['template']     = 'book.search';
+        $search_data          = $request->input('search-item');
+        if (! empty($search_data)) {
+            $books = Book::where('status_options', '!=', 'disable')->with(['availableentries', 'group', 'category'])
+                ->where(function ($query) use ($search_data) {
+                    $parts = explode(' ', $search_data);
+                    foreach ($parts as $part) {
+                        $query->orWhere('name', 'like', "%{$part}%")
+                            ->orWhere('locations', 'like', "%{$part}%");
+                    }
+                })
+                ->get();
+            $groups = Group::where('status', "!=", "0")->with(['addedmembers', 'groupmembers'])->where("title", "like", "%$search_data%")->get();
+        } else {
+            $books = Book::where('status_options', '!=', 'disable')->get();
+            if (! is_null(Auth::user()->group_type)) {
+                $grp_type = Auth::user()->group_type;
+                $books    = Book::where('status_options', '!=', 'disable')->whereHas("group", function ($q) use ($grp_type) {
+                    $q->where("group_type_id", $grp_type);
+                })->get();
+            }
+        }
+
+        if ($search_action == 'my-items') {
+            $books = Book::where('status_options', '!=', 'disable')->with(['availableentries', 'group', 'category'])
+                ->where(function ($query) use ($search_data) {
+                    $parts = explode(' ', $search_data);
+                    foreach ($parts as $part) {
+                        $query->orWhere('name', 'like', "%{$part}%")
+                            ->orWhere('locations', 'like', "%{$part}%");
+                    }
+                })
+                ->where('created_by', Auth::user()->id)->get();
+            $data['title']         = 'Searched Items';
+            $data['template']      = 'book.list';
+            $data['script_file']   = 'listing';
+            $data['books']         = $books->unique('name')->values(); // 👈 fixed here
+            $data['search_action'] = 'my-items';
+            $data['search-item']   = $search_data;
+            return view('with_login_common', compact('data'));
+        }
+
+        if ($search_action == 'type-users') {
+            $users = User::where('zipcode', $search_data)
+                ->orwhere('state', $search_data)
+                ->orwhere('name', "LIKE", "%$search_data%")
+                ->get();
+
+            $data['title']         = 'Searched User';
+            $data['template']      = 'user.search.list';
+            $data['script_file']   = 'listing';
+            $data['users']         = $users->unique('name')->values(); // 👈 fixed here
+            $data['search_action'] = 'type-users';
+            $data['search-item']   = $search_data;
+            return view('with_login_common', compact('data'));
+        }
+
+
         if ($search_action == 'my-groups') {
             $groups                = Group::where('status', "!=", "0")->with(['addedmembers', 'groupmembers'])->where("title", "like", "%$search_data%")->where('created_by', Auth::user()->id)->get();
             $data['title']         = 'Searched Groups';
@@ -1788,7 +1888,58 @@ class BookController extends Controller
             }
 
             $group = $book->group;
-            dispatch(new SendGroupNotification($group, $book));
+            $groupM = Groupmember::where("group_id", $group->id)->get();
+            if(count($groupM) > 0) {
+                foreach ($groupM as $member) {
+                    // Send Notification
+                    $users = User::find($member->member_id);
+                    if ($users) { // Check if user exists
+                        $notification = [
+                            'title'   => 'Item Add',
+                            'type'    => 'group_item_add',
+                            'subject' => 'Item added in the ' . $group->title . ' group',
+                            'message' => 'Item added: ' . $data["name"] . '.',
+                            'url'     => '/',
+                            'action'  => 'View Item',
+                        ];
+
+                        $users->notify(new GeneralNotification($notification));
+
+                        // Log member information for debugging
+                        Log::info('Notification sent to member:', ['member' => $member]);
+
+                        $data = [
+                            'group_id' => $group->id,
+                            'group_name' => $group->title,
+                            'member_name' => $users->name,
+                            'subject' => 'New item added to group:' . $group->title . " with the name: " . $data["name"],
+                            'email' => 'New item created!',
+                            'item_name' => $data["name"],
+                            'name' => $data["name"],
+                            'item_description' => $book->description,
+                            'creator_name' => $book->user->name,
+                            'view' => 'emails.add-item',
+                        ];
+
+
+                        // Send Email
+                        Mail::to($users->email)->send(new GeneralMail($data));
+                    } else {
+                        Log::warning('User  not found for member ID:', ['member_id' => $member]);
+                    }
+                }
+            }
+
+
+            // Check if group and book are valid
+//            if ($group && $book) {
+//                dispatch(new SendGroupNotification($groupUsers, $book, $group->id, $group->title));
+//            } else {
+//                Log::warning('Group or Book not found', [
+//                    'group_id' => $data['group_id'],
+//                    'book_id' => $book->id ?? null,
+//                ]);
+//            }
 //            SendGroupNotification::dispatch($group, $book);
 //            if($group->status == 1 && count($group->members)>0){
 //                dispatch(new SendGroupNotification($group, $book));
@@ -2012,6 +2163,8 @@ class BookController extends Controller
             'view'   => $view,
         ]);
     }
+
+
 
     public function addToGroup(Request $request)
     {
