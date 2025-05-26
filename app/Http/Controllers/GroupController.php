@@ -125,7 +125,7 @@ class GroupController extends Controller
 
 
         if ($request->hasFile('group_picture')) {
-            $path                  = $request->file('group_picture')->store('group_pictures');
+            $path                  = $request->file('group_picture')->store('group_pictures', 'public');
             $data["group_picture"] = $path;
         }
 

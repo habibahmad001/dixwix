@@ -82,7 +82,7 @@ class BookController extends Controller
                 return $this->ReturnToAddPage($retdata);
             }
         } else {
-            $path               = $request->file('cover_page')->store('cover_pages');
+            $path               = $request->file('cover_page')->store('cover_pages', 'public');
             $data["cover_page"] = $path;
         }
         $book  = null;
@@ -438,7 +438,7 @@ class BookController extends Controller
 
         // Handle file upload or URL-based CSV import
         if ($request->import_method === 'file') {
-            $filePath = $request->file('csv_file')->store('imported_csvs');
+            $filePath = $request->file('csv_file')->store('imported_csvs', 'public');
         } elseif ($request->import_method === 'url') {
             $csvUrl = $request->input('csv_url');
 
@@ -1839,7 +1839,7 @@ class BookController extends Controller
 
         // Default cover image if not provided
         if ($request->hasFile('cover_page')) {
-            $path = $request->file('cover_page')->store('cover_pages');
+            $path = $request->file('cover_page')->store('cover_pages', 'public');
             $data['cover_page'] = $path;
         } else {
             // Set a default image (for example, logo.png)
@@ -2014,7 +2014,7 @@ class BookController extends Controller
             }
 
             // Store the new image
-            $path               = $request->file('cover_page')->store('cover_pages');
+            $path               = $request->file('cover_page')->store('cover_pages','public');
             $data['cover_page'] = $path;
         }
 

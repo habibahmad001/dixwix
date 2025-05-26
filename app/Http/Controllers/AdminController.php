@@ -79,7 +79,7 @@ class AdminController extends Controller
         }
 
         if ($request->profile_pic) {
-            $formData['profile_pic'] = $request->file('profile_pic')->store('profile_pictures');
+            $formData['profile_pic'] = $request->file('profile_pic')->store('profile_pictures','public');
         }
 
         $formData['email_verified_at'] = now();
@@ -174,7 +174,7 @@ class AdminController extends Controller
             if ($user->profile_pic && Storage::exists($user->profile_pic)) {
                 Storage::delete($user->profile_pic);
             }
-            $formData['profile_pic'] = $request->file('profile_pic')->store('profile_pictures');
+            $formData['profile_pic'] = $request->file('profile_pic')->store('profile_pictures','public');
         }
 
         unset($formData['roles']);
