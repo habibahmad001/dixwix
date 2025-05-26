@@ -164,10 +164,10 @@
                                 <span id="togglePassword" class="toggle-password">
                                     <i class="fa fa-eye"></i>
                                 </span>
-                                <small id="password_error" style="color: red; display: none;">
-                                    Password must be at least 6 characters long, include 1 capital letter, 1 number, and 1 special character.
-                                </small>
                             </div>
+                            <small id="password_error" style="color: red; display: none; margin: 5% 0;">
+                                Password must be at least 6 characters long, include 1 capital letter, 1 number, and 1 special character.
+                            </small>
                             <div class="remember_wrap">
                                 <span class="checkbox">
                                     <input class="form-check input me-2" type="checkbox" value="1" id="remember_me" name="remember_me" />
