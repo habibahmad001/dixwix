@@ -20,15 +20,15 @@
                     </div>
                     <div class="item_meta">
                         <span class="item_meta_tag">Category:</span>
-                        <span class="item_meta_details">{{ $item->category->name }}</span>
+                        <span class="item_meta_details">{{ $item?->category?->name }}</span>
                     </div>
                     <div class="item_meta">
                         <span class="item_meta_tag">Price:</span>
-                        <span class="item_meta_details">$ {{ $item->price }}</span>
+                        <span class="item_meta_details">$ {{ $item?->price }}</span>
                     </div>
                     <div class="item_meta">
                         <span class="item_meta_tag">User Name:</span>
-                        <span class="item_meta_details">{{ $item->user->name }}</span>
+                        <span class="item_meta_details">{{ $item?->user?->name }}</span>
                     </div>
                 </div>
             </div>
