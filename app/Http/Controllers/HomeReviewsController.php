@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\HomeReviews;
+use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HomeReviewsController extends Controller
 {
@@ -66,7 +69,28 @@ class HomeReviewsController extends Controller
 
                 $review->save();
 
-                return redirect()->back()->with('success', 'Review updated successfully.');
+                /******** Notification ***********/
+                $user = \App\Models\User::find(1);
+                $notificationMessage = [
+                    'only_database' => true,
+                    'title'         => 'New review request received!',
+                    'type'          => 'New_review_request_received',
+                    'subject'       => 'New review request received',
+                    'message'       => "New review request received for the approval",
+                    'action'        => 'Review request received Successfully',
+                    'user_id'       => $user->id,
+                    'url'           => url("home-reviews"),
+                ];
+                try {
+                    $user->notify(new GeneralNotification($notificationMessage));
+                    logger()->info('Notification sent successfully', ['user_id' => $user->id, 'book_id' => $user->id]);
+                } catch (Exception $e) {
+                    logger()->error('Failed to send notification', ['error' => $e->getMessage(), 'user_id' => $user->id, 'book_id' => $user->id]);
+                    return json_encode(["success" => false, "message" => "Notification could not be sent."]);
+                }
+                /******** Notification ***********/
+
+                return redirect()->back()->with('success', 'Review update submitted for admin approval.');
             }
 
             $review->textDescription = $request->textDescription;
@@ -74,7 +98,7 @@ class HomeReviewsController extends Controller
 
             $review->save();
 
-            return redirect("/home-reviews")->with('success', 'Review submitted successfully.');
+            return redirect("/home-reviews")->with('success', 'Review submitted for admin approval.');
         } catch (\Exception $e) {
             \Log::error('Error storing Review: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to submit review.');

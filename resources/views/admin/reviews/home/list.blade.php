@@ -40,10 +40,11 @@
         <tbody>
             @foreach($reviews as $review)
             <tr>
-                <td><img src="{{ asset('storage/' . $review->avatar) }}" style="width: 100px; height: 100px; border-radius: 5%" alt="View Group" class="icon"></td>
+{{--                <td><img src="{{ asset('storage/' . $review->avatar) }}" style="width: 100px; height: 100px; border-radius: 5%" alt="View Group" class="icon"></td>--}}
+                <td><img src="{{ !is_null($review->avatar) ? asset('storage/' . $review->avatar) : asset('assets/media/userimg.png') }}" style="width: 100px; height: 100px; border-radius: 5%" alt="View Group" class="icon"></td>
                 <td>{{ $review->name }}</td>
                 <td>{{ $review->role }}</td>
-                <td>{{ $review->textDescription }}</td>
+                <td>{{ strip_tags($review->textDescription) }}</td>
                 <td>{{ date("F j, Y",strtotime($review->created_at)) }}</td>
                 <td>
                     <div class="d-flex justify-content-center">

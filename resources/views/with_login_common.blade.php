@@ -79,7 +79,6 @@
             let totalCount = parseInt(notifyTitleCounter.textContent) || 0;
             notifyTitleCounter.textContent = totalCount + 1;
         });
-
     </script>
 </head>
 <body>
@@ -300,3 +299,18 @@
     }
 
 </style>
+
+
+<script language="JavaScript">
+    //Receive messages
+    channel.bind('my-event', function (data) {
+
+        $.post("/receive", {
+            _token:  '{{csrf_token()}}',
+            message: data.message,
+        })
+            .done(function (res) {
+                alert(res);
+            });
+    });
+</script>

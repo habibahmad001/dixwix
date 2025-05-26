@@ -150,6 +150,9 @@ Route::get('/quickbooks/connect', [\App\Http\Controllers\QuickBookController::cl
 Route::get('/qb/customer/store', [\App\Http\Controllers\QuickBookController::class, 'store']);
 Route::get('/quickbooks/callback', [\App\Http\Controllers\QuickBookController::class, 'callback'])->name('quickbooks.callback');
 
+Route::any('/broadcast', [App\Http\Controllers\PusherController::class, 'broadcast']);
+Route::any('/receive', [App\Http\Controllers\PusherController::class, 'receive']);
+
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', function () {
         return redirect('dashboard');
