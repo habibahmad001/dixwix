@@ -15,7 +15,7 @@ class PusherController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        return view('index');
+        return view('chating.index');
     }
 
     /**
@@ -25,13 +25,11 @@ class PusherController extends Controller
      */
     public function broadcast(Request $request): Factory|View|Application
     {
+//        $pusher = new Pusher\Pusher("3f2e5ae628ca52fd09af", "7f1f128b5eaeb0b383c8", "1659970", array('cluster' => 'ap2'));
+//        $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world 111'));
 //        if(broadcast(new PusherBroadcast($request->get('message')))->toOthers()) {
         if(broadcast(new PusherBroadcast('hello world !'))->toOthers()) {
-            $data = [
-                'title'    => "{}'s reviews",
-                'template' => 'review.list',
-            ];
-            return view('with_login_common', ['message' => $request->get('message'), 'data' => $data]);
+            return view('chating.broadcast', ['message' => $request->get('message')]);
         } else {
             dd(broadcast(new PusherBroadcast($request->get('message')))->toOthers());
         }
@@ -46,10 +44,6 @@ class PusherController extends Controller
      */
     public function receive(Request $request): Factory|View|Application
     {
-        $data = [
-            'title'    => "{}'s reviews",
-            'template' => 'review.list',
-        ];
-        return view('with_login_common', ['message' => $request->get('message'), 'data' => $data]);
+        return view('chating.receive', ['message' => $request->get('message')]);
     }
 }
